@@ -20,10 +20,7 @@
       var fingers = {};
       var spheres = {};
 	  
-	  controller = new Leap.Controller(); //new Leap.Controller({enableGestures:true});
-	  controller.connect();
-	  
-      controller.on('frame', function(frame) {
+      Leap.loop(function(frame) {
 	  
         var fingerIds = {};
         var handIds = {};

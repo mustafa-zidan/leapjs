@@ -1,7 +1,7 @@
 <!doctype html>
 <style>
 html, body {
-  margin: 30px auto;
+  margin: 30px auto 80px;
   width: 960px;
   font-family: Helvetica, Arial, sans-serif;
 }
@@ -12,11 +12,12 @@ html, body {
   float: left;
   width: 300px;
   margin: 30px 15px;
-  height: 130px;
+  height: 160px;
 }
 .item img {
   width: 300px;
-  height: 90px;
+  height: 150px;
+  border: 1px solid #ddd;
 }
 .item a { 
   text-decoration: none;
@@ -44,41 +45,66 @@ dd {
 <dl id="examples">
   <div class="item">
     <a href="dom-visualizer.html">
+      <img src="images/dom-visualizer.png"/>
       <dt>DOM based visualizer</dt>
-      <dd>DOM based visualizer of the data</dd>
     </a>
+    <dd>DOM based visualizer of the data</dd>
   </div>
   <div class="item">
-    <dt><a href="earthRotation/index.html">3D Globe</a></dt>
+    <a href="earthRotation/index.html">
+      <img src="images/earth.png"/>
+      <dt>3D Globe</dt>
+    </a>
     <dd>3D Spinnable globe</dt>
   </div>
   <div class="item">
-    <dt><a href="visualizer.html">Three.js visualizer</a></dt>
-    <dd>Very basic visualizer of data using <a href="http://mrdoob.github.com/three.js/">Three.js</a></dd>
+    <a href="visualizer.html">
+      <img src="images/three.png"/>
+      <dt>Three.js visualizer</dt>
+    </a>
+    <dd>Basic visualizer of data using <a href="http://mrdoob.github.com/three.js/">Three.js</a></dd>
   </div>
   <div class="item">
-    <dt><a href="dumper.html">Dumper</a></dt>
+    <a href="dumper.html">
+      <img src="images/dumper.png"/>
+      <dt>Dumper</dt>
+    </a>
     <dd>Displays JSON data coming from websocket</dd>
   </div>
   <div class="item">
-    <dt><a href="camera.html">Camera manipulation demo</a></dt>
-    <dd>Allow movement of cube through grasping actions</dd>
+    <a href="camera.html">
+      <img src="images/camera.png"/>
+      <dt>Camera manipulation demo</dt>
+    </a>
+    <dd>Movement the scene through grasping actions</dd>
   </div>
   <div class="item">
-    <img src="images/hsl.png"/>
-    <dt><a href="hue-saturation.html">Hue Saturation Color Space</a></dt>
-    <dd>Move through hue-saturation colorspace with palm position</dd>
+    <a href="hue-saturation.html">
+      <img src="images/hsl.png"/>
+      <dt>Hue Saturation Color Space</dt>
+    </a>
+    <dd>Move through color space with palm position</dd>
   </div>
   <div class="item">
-    <dt><a href="canvas-fingers.html">Canvas Fingers</a></dt>
-    <dd>Show finger positions in the plane of the screen on an HTML5 canvas element</dd>
+    <a href="canvas-fingers.html">
+      <img src="images/fingers.png"/>
+      <dt>Canvas Fingers</dt>
+    </a>
+    <dd>Finger positions in the plane of the screen</dd>
   </div>
   <div class="item">
-    <dt><a href="canvas-spiral.html">Canvas Spiral</a></dt>
-    <dd>Creates a spiral with canvas coordinate transformations using palm normal</dd>
+    <a href="canvas-spiral.html">
+      <img src="images/spiral.png"/>
+      <dt>Canvas Spiral</dt>
+    </a>
+    <dd>Using palm normal</dd>
   </div>
   <div class="item">
-    <dt><a href="gestures-dump.html">Gesture JSON Print Out</a></dt>
+    <a href="gestures-dump.html">
+      <img src="images/gestures.png"/>
+      <dt>Gesture JSON Print Out</dt>
+    </a>
     <dd>Prints out gesture data in JSON</dd>
   </div>
 </dl>
+<div style="clear: both;"></div>
