@@ -13,7 +13,7 @@ a:hover {
   text-decoration: underline;
 }
 #examples {
-  margin: 0 -15px;
+  margin: 0px -15px 80px;
 }
 .item {
   float: left;
@@ -52,11 +52,11 @@ dd {
 
 <p>Here are a few examples using the <a href="https://github.com/leapmotion/leapjs">javascript api</a></p>
 
-<dl id="examples">
+<div id="examples">
   <div class="item">
     <a href="dom-visualizer.html">
       <img src="images/dom-visualizer.png"/>
-      <dt>DOM based visualizer</dt>
+      <dt>Hand and Finger 3D Visualizer</dt>
     </a>
     <dd>DOM based visualizer of the data</dd>
     <div class="credit"><a href="https://github.com/juliangarnier">@juliangarnier</a></div>
@@ -74,7 +74,7 @@ dd {
       <img src="images/three.png"/>
       <dt>Three.js visualizer</dt>
     </a>
-    <dd>Basic visualizer of data using <a href="http://mrdoob.github.com/three.js/">Three.js</a></dd>
+    <dd>Finger visualizer using <a href="http://mrdoob.github.com/three.js/">Three.js</a></dd>
   </div>
   <div class="item">
     <a href="dumper.html">
@@ -88,7 +88,7 @@ dd {
       <img src="images/camera.png"/>
       <dt>Camera manipulation demo</dt>
     </a>
-    <dd>Movement the scene through grasping actions</dd>
+    <dd>Move the scene through grasping actions</dd>
   </div>
   <div class="item">
     <a href="hue-saturation.html">
@@ -116,8 +116,16 @@ dd {
       <img src="images/gestures.png"/>
       <dt>Gesture JSON Print Out</dt>
     </a>
-    <dd>Prints out gesture data in JSON</dd>
+    <dd>Prints out gesture data as JSON</dd>
   </div>
-</dl>
-<div style="clear: both;"></div>
+  <div class="item">
+    <a href="recorder.html">
+      <img src="images/recorder.png"/>
+      <dt>Leap Motion Recorder</dt>
+    </a>
+    <dd>Record motion data as JSON</dd>
+    <div class="credit"><a href="https://github.com/syntagmatic">@syntagmatic</a></div>
+  </div>
+  <div style="clear: both;"></div>
+</div>
 <p>Copyright &copy; 2013, Leap Motion, Inc</p>
