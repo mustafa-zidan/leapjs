@@ -5,6 +5,13 @@ html, body {
   width: 960px;
   font-family: Helvetica, Arial, sans-serif;
 }
+a {
+  color: #07a;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
 #examples {
   margin: 0 -15px;
 }
@@ -12,7 +19,7 @@ html, body {
   float: left;
   width: 300px;
   margin: 30px 15px;
-  height: 160px;
+  height: 170px;
 }
 .item img {
   width: 300px;
@@ -20,7 +27,6 @@ html, body {
   border: 1px solid #ddd;
 }
 .item a { 
-  text-decoration: none;
   color: inherit;
 }
 dt {
@@ -37,6 +43,10 @@ dd {
   font-size: 13px;
   color: #666;
 }
+.credit {
+  font-size: 13px;
+  color: #07a;
+}
 </style>
 <h1>LeapJS Examples</h1>
 
@@ -49,13 +59,15 @@ dd {
       <dt>DOM based visualizer</dt>
     </a>
     <dd>DOM based visualizer of the data</dd>
+    <div class="credit"><a href="https://github.com/juliangarnier">@juliangarnier</a></div>
   </div>
   <div class="item">
     <a href="earthRotation/index.html">
       <img src="images/earth.png"/>
       <dt>3D Globe</dt>
     </a>
-    <dd>3D Spinnable globe</dt>
+    <dd>3D Spinnable globe</dd>
+    <div class="credit"><a href="https://github.com/rtilton1">@rtilton1</a></div>
   </div>
   <div class="item">
     <a href="visualizer.html">
@@ -108,3 +120,4 @@ dd {
   </div>
 </dl>
 <div style="clear: both;"></div>
+<p>Copyright &copy; 2013, Leap Motion, Inc</p>
