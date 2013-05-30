@@ -1,9 +1,28 @@
-<html>
+<!doctype html>
   <head>
-    <title>DOM Visualizer - Leap</title>
+    <title>Leap Motion Replayer</title>
+    <meta charset="utf-8">
     <script src="../leap.js"></script>
+    <script src="http://d3js.org/d3.v3.js"></script>
     <script>
-    
+      var leap = new Leap.Controller({});
+
+      function simulateGesture(data) {
+        var last = data.length-1;
+        var i = 0;
+        var duration = (data[last].timestamp - data[0].timestamp)/1000;
+        var step = duration/data.length;
+
+        function run() {
+          if (i == last) return;
+          var frame = new Leap.Frame(data[i]);
+          leap.processFrame(frame);
+          i++;
+          setTimeout(run, step);
+        };
+        run();
+      };
+
       function moveFinger(Finger, posX, posY, posZ, dirX, dirY, dirZ) {
         Finger.style.webkitTransform = "translateX("+posX+"px) translateY("+posY+"px) translateZ("+posZ+"px) rotateX("+dirX+"deg) rotateY(0deg) rotateZ("+dirZ+"deg)";
       }
@@ -14,7 +33,7 @@
 
       var fingers = {};
       var spheres = {};
-      Leap.loop(function(frame) {
+      leap.on("frame", function(frame) {
         var fingerIds = {};
         var handIds = {};
         if (frame.hands === undefined ) { 
@@ -84,14 +103,13 @@
             delete fingers[fingerId];
           }
         }
-        document.getElementById('showHands').addEventListener('mousedown', function() {
-          document.getElementById('app').setAttribute('class','show-hands');
-        }, false);
-        document.getElementById('hideHands').addEventListener('mousedown', function() {
-          document.getElementById('app').setAttribute('class','');
-        }, false);
       });
 
+
+      d3.json("data/frolic-5.json", function(error, data) {
+        simulateGesture(data);
+      });
+    
     </script>
     <style>
       *,*:before,*:after { 
@@ -196,16 +214,7 @@
   </head>
   <body>
     <div id="app" class="show-hands">
-      <button id="showHands">Show Hands</button>
-      <button id="hideHands">hide Hands</button>
       <div id="scene">
-        <div id="cube" class="cube">
-          <div class="face tp"></div>
-          <div class="face lt"></div>
-          <div class="face rt"></div>
-          <div class="face ft"></div>
-          <div class="face bk"></div>
-        </div>
         <div id="finger" class="cube finger">
           <div class="face tp"></div>
           <div class="face lt"></div>
