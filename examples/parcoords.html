@@ -54,7 +54,6 @@ var pointParcoords = d3.parcoords()("#pointables")
   .alpha(1)
   .color(function(d) { return color(d.handId);})
   .render()
-  .brushable()
   .reorderable();
 
 var handParcoords = d3.parcoords()("#hands")
@@ -104,7 +103,6 @@ var handParcoords = d3.parcoords()("#hands")
   .alpha(1)
   .color(function(d) { return color(d.id);})
   .render()
-  .brushable()
   .reorderable();
 
 pointParcoords.ctx.foreground.lineWidth = 3.5;
@@ -154,8 +152,8 @@ Leap.loop(function(obj) {
     }
   });
 
-  pointParcoords.data(pointables).brush();
-  handParcoords.data(hands).brush();
+  pointParcoords.data(pointables).render();
+  handParcoords.data(hands).render();
 });
 
 function average(arr, key) {
