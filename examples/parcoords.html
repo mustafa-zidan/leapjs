@@ -155,12 +155,4 @@ Leap.loop(function(obj) {
   pointParcoords.data(pointables).render();
   handParcoords.data(hands).render();
 });
-
-function average(arr, key) {
-  var sum = 0;
-  for(var i = 0; i < arr.length; i++){
-    sum += arr[i][key];
-  }
-  return sum/arr.length;
-};
 </script>
