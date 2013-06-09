@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	  <script src="js/prettify/prettify.js"> </script>
+    <script src="js/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+		<link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
+		<title>leapjs Documentation</title>
+	</head>
+	<body id="class" onload="prettyPrint();">
+
+		<header>
+			<div class="header">
+				<script type="text/javascript" src="js/jQuery.172.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var header = $('.header'),
+		content = $('.content')
+		footer = $('footer')
+	;
+
+	function mtn(str){
+		if(
+			'' === str
+			|| undefined === str
+			|| null === str
+		){
+			return 0;
+		}else{
+			var a = parseInt(str.replace(/px|ex|em/, ''), 10);
+			if(isNaN(a)){
+				a = 0;
+			}
+			return a;
+		}
+	}
+	
+	function resize(){
+		var availableHeight = $(window).height() - (header.outerHeight() + footer.outerHeight()),
+			availableWidth = $(window).width(),
+			contentOffsetH = mtn(content.css('borderTopWidth')) + 
+				mtn(content.css('marginTop')) +
+				mtn(content.css('paddingTop')) +
+				
+				mtn(content.css('paddingBottom')) +
+				mtn(content.css('marginBottom')) +
+				mtn(content.css('borderBottomWidth')),
+			contentOffsetW = mtn(content.css('borderLeftWidth')) + 
+				mtn(content.css('marginLeft')) +
+				mtn(content.css('paddingLeft')) +
+				
+				mtn(content.css('paddingRight')) +
+				mtn(content.css('marginRight')) +
+				mtn(content.css('borderRightWidth'))
+		;
+		content.height(availableHeight - contentOffsetH);
+		content.width(availableWidth - contentOffsetW);
+	}
+	resize();
+	$(window).resize(resize);
+});
+</script>
+
+<ul>
+	
+	<li><a href="class_index.html">Classes</a></li>
+	
+	
+	
+	
+	<li><a href="namespace_index.html">Namespaces</a></li>
+	
+	
+	
+	
+	
+	
+	<li><a href="function_index.html">Methods</a></li>
+	
+	
+	
+	<li><a href="doc-index.html">Index</a></li>
+</ul>
+
+<div id="title">
+	
+  <span class="jumbo">
+		LeapJS API Reference
+  </span>
+		
+</div>
+
+				<div class="type">Class</div>
+				<h1>
+					<a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>.KeyTapGesture
+				</h1>
+			</div>
+		</header>
+
+		<div class="content">
+
+			<div class="anchor_list">
+	<h2>Contents</h2>
+	<ul>
+		
+		
+		
+		
+		
+
+		
+
+		
+
+		
+		<li><a href="#properties">Properties</a></li>
+		
+
+		
+
+		
+
+			
+	</ul>
+</div>
+			
+			<!-- CLASS SIGNATURE -->
+			<p class="PrincipalTitle">
+				<span> </span>
+				<span>class </span>
+				<strong>
+					<a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>.KeyTapGesture
+				</strong>
+
+				
+				<span> extends <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></span>
+				
+
+				
+
+				
+			</p>
+
+
+			<!-- CLASS DESCRIPTION -->
+			<div class="description"><p><p>The KeyTapGesture class represents a tapping gesture by a finger or tool.</p>
+<p>A key tap gesture is recognized when the tip of a finger rotates down toward the
+palm and then springs back to approximately the original postion, as if
+tapping. The tapping finger must pause briefly before beginning the tap.</p>
+<p><img src="images/Leap_Gesture_Tap.png" alt="KeyTap"></p>
+<p>Key tap gestures are discrete. The KeyTapGesture object representing a tap always
+has the state, STATE_STOP. Only one KeyTapGesture object is created for each
+key tap gesture recognized.</p></p></div>
+
+
+			<!-- CLASS CONSTRUCTOR SUMMARY -->
+			<h2>
+				<a name='constructor'></a>
+				Constructor
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+				<tbody>
+					<tr>
+						<td class="type">&nbsp;</td>
+						<td class="last">
+							<a href="#KeyTapGesture">KeyTapGesture</a>
+							<span>()</span>
+							
+						<td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+
+
+			<!-- CLASS REQUIRES -->
+
+			<!-- NAMESPACE SUB-NAMESPACES -->
+						
+
+			<!-- CLASS CONSTANTS SUMMARY -->
+			
+
+
+			<!-- CLASS STATIC PROPERTIES & ENUMERATIONS SUMMARY -->
+			
+
+			<!-- CLASS PROPERTIES SUMMARY -->
+			
+			<h2>
+				<a name='properties'></a>
+				Properties
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+  <tbody>
+  
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#direction">
+        	<abbr title="Leap.KeyTapGesture#direction">
+        		direction
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public inherited">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Number
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#duration">
+        	<abbr title="Leap.KeyTapGesture#duration">
+        		duration
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	<small>inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></small>
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public inherited">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Array
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#handIds">
+        	<abbr title="Leap.KeyTapGesture#handIds">
+        		handIds
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	<small>inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></small>
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public inherited">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Number
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#id">
+        	<abbr title="Leap.KeyTapGesture#id">
+        		id
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	<small>inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></small>
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public inherited">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Array
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#pointableIds">
+        	<abbr title="Leap.KeyTapGesture#pointableIds">
+        		pointableIds
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	<small>inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></small>
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#position">
+        	<abbr title="Leap.KeyTapGesture#position">
+        		position
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Number
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#progress">
+        	<abbr title="Leap.KeyTapGesture#progress">
+        		progress
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public inherited">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        String
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#state">
+        	<abbr title="Leap.KeyTapGesture#state">
+        		state
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	<small>inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></small>
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public inherited">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        String
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#type">
+        	<abbr title="Leap.KeyTapGesture#type">
+        		type
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	<small>inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></small>
+      </td>
+    </tr>
+    
+    
+    
+  </tbody>
+</table>
+			
+
+			<!-- CLASS STATIC METHODS SUMMARY -->
+			
+
+			<!-- CLASS METHODS SUMMARY -->
+			
+
+
+			<!-- CLASS EVENTS SUMMARY -->
+			
+
+			<!--
+			################################################################################
+			## DETAILS
+			################################################################################
+			-->
+
+			<!-- CLASS CONSTRUCTOR DETAILS -->
+			<h2>
+				<a name='constructor_details'></a>
+				Constructor details
+				<small><a href="#">Top</a></small>
+				<h3 id="KeyTapGesture"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno352">gesture.js</a> at line 352
+
+  </div>
+	
+	<div class="signature">
+		
+  
+		<strong>KeyTapGesture</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Constructs a new KeyTapGesture object.</p>
+<p>An uninitialized KeyTapGesture object is considered invalid. Get valid instances
+of the KeyTapGesture class from a Frame object.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+
+			</h2>
+
+
+			<!-- CLASS STATIC PROPERTIES & ENUMERATIONS DETAIL -->
+			
+
+
+			<!-- CLASS STATIC METHODS DETAIL -->
+			
+
+
+			<!-- CLASS PROPERTIES DETAIL -->
+			
+			<h2>
+				<a name='properties_details'></a>
+				Properties Detail
+				<small><a href="#">Top</a></small>
+			</h2>
+			<h3 id="direction" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno383">gesture.js</a> at line 383
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>direction</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The direction of finger tip motion.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="duration" class="public inherited">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno107">gesture.js</a> at line 107
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Number
+    </span>
+	  
+  
+		<strong>duration</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description inherited"><p><p>The elapsed duration of the recognized movement up to the
+frame containing this Gesture object, in microseconds.</p>
+<p>The duration reported for the first Gesture in the sequence (with the
+start state) will typically be a small positive number since
+the movement must progress far enough for the Leap to recognize it as
+an intentional gesture.</p></p><p>Inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></p></div>
+
+
+<div class="details inherited">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="handIds" class="public inherited">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno87">gesture.js</a> at line 87
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Array
+    </span>
+	  
+  
+		<strong>handIds</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description inherited"><p><p>The list of hands associated with this Gesture, if any.</p>
+<p>If no hands are related to this gesture, the list is empty.</p></p><p>Inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></p></div>
+
+
+<div class="details inherited">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="id" class="public inherited">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno75">gesture.js</a> at line 75
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Number
+    </span>
+	  
+  
+		<strong>id</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description inherited"><p><p>The gesture ID.</p>
+<p>All Gesture objects belonging to the same recognized movement share the
+same ID value. Use the ID value with the Frame::gesture() method to
+find updates related to this Gesture object in subsequent frames.</p></p><p>Inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></p></div>
+
+
+<div class="details inherited">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="pointableIds" class="public inherited">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno97">gesture.js</a> at line 97
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Array
+    </span>
+	  
+  
+		<strong>pointableIds</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description inherited"><p><p>The list of fingers and tools associated with this Gesture, if any.</p>
+<p>If no Pointable objects are related to this gesture, the list is empty.</p></p><p>Inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></p></div>
+
+
+<div class="details inherited">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="position" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno375">gesture.js</a> at line 375
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>position</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The position where the key tap is registered.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="progress" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno391">gesture.js</a> at line 391
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Number
+    </span>
+	  
+  
+		<strong>progress</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The progess value is always 1.0 for a key tap gesture.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="state" class="public inherited">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno121">gesture.js</a> at line 121
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      String
+    </span>
+	  
+  
+		<strong>state</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description inherited"><p><p>The gesture ID.</p>
+<p>Recognized movements occur over time and have a beginning, a middle,
+and an end. The 'state()' attribute reports where in that sequence this
+Gesture object falls.</p>
+<p>Possible values for the state field are:</p>
+<ul>
+<li>start</li>
+<li>update</li>
+<li>stop</li>
+</ul></p><p>Inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></p></div>
+
+
+<div class="details inherited">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="type" class="public inherited">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno139">gesture.js</a> at line 139
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      String
+    </span>
+	  
+  
+		<strong>type</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description inherited"><p><p>The gesture type.</p>
+<p>Possible values for the type field are:</p>
+<ul>
+<li>circle</li>
+<li>swipe</li>
+<li>screentap</li>
+<li>keyTap</li>
+</ul></p><p>Inherited from <a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a></p></div>
+
+
+<div class="details inherited">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div>
+			
+
+
+			<!-- CLASS METHODS DETAIL -->
+			
+
+
+			<!-- CLASS EVENTS DETAIL -->
+			
+
+		</div>
+
+		<footer>
+<span>
+Copyright &copy; 2012-2013 <a href="https://developer.leapmotion.com" target="_top">Leap Motion</a>
+</span>
+</footer>
+
+
+	</body>
+</html>

@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	  <script src="js/prettify/prettify.js"> </script>
+    <script src="js/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+		<link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
+		<title>leapjs Documentation</title>
+	</head>
+	<body id="class" onload="prettyPrint();">
+
+		<header>
+			<div class="header">
+				<script type="text/javascript" src="js/jQuery.172.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var header = $('.header'),
+		content = $('.content')
+		footer = $('footer')
+	;
+
+	function mtn(str){
+		if(
+			'' === str
+			|| undefined === str
+			|| null === str
+		){
+			return 0;
+		}else{
+			var a = parseInt(str.replace(/px|ex|em/, ''), 10);
+			if(isNaN(a)){
+				a = 0;
+			}
+			return a;
+		}
+	}
+	
+	function resize(){
+		var availableHeight = $(window).height() - (header.outerHeight() + footer.outerHeight()),
+			availableWidth = $(window).width(),
+			contentOffsetH = mtn(content.css('borderTopWidth')) + 
+				mtn(content.css('marginTop')) +
+				mtn(content.css('paddingTop')) +
+				
+				mtn(content.css('paddingBottom')) +
+				mtn(content.css('marginBottom')) +
+				mtn(content.css('borderBottomWidth')),
+			contentOffsetW = mtn(content.css('borderLeftWidth')) + 
+				mtn(content.css('marginLeft')) +
+				mtn(content.css('paddingLeft')) +
+				
+				mtn(content.css('paddingRight')) +
+				mtn(content.css('marginRight')) +
+				mtn(content.css('borderRightWidth'))
+		;
+		content.height(availableHeight - contentOffsetH);
+		content.width(availableWidth - contentOffsetW);
+	}
+	resize();
+	$(window).resize(resize);
+});
+</script>
+
+<ul>
+	
+	<li><a href="class_index.html">Classes</a></li>
+	
+	
+	
+	
+	<li><a href="namespace_index.html">Namespaces</a></li>
+	
+	
+	
+	
+	
+	
+	<li><a href="function_index.html">Methods</a></li>
+	
+	
+	
+	<li><a href="doc-index.html">Index</a></li>
+</ul>
+
+<div id="title">
+	
+  <span class="jumbo">
+		LeapJS API Reference
+  </span>
+		
+</div>
+
+				<div class="type">Class</div>
+				<h1>
+					<a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>.Matrix
+				</h1>
+			</div>
+		</header>
+
+		<div class="content">
+
+			<div class="anchor_list">
+	<h2>Contents</h2>
+	<ul>
+		
+		
+		
+		
+		
+
+		
+
+		
+		<li><a href="#static_properties">Static Properties & Enumerations</a></li>
+		
+
+		
+		<li><a href="#properties">Properties</a></li>
+		
+
+		
+
+		
+		<li><a href="#methods">Methods</a></li>
+		
+
+			
+	</ul>
+</div>
+			
+			<!-- CLASS SIGNATURE -->
+			<p class="PrincipalTitle">
+				<span> </span>
+				<span>class </span>
+				<strong>
+					<a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>.Matrix
+				</strong>
+
+				
+
+				
+
+				
+			</p>
+
+
+			<!-- CLASS DESCRIPTION -->
+			<div class="description"><p><p>The Matrix object represents a transformation matrix. </p>
+<p>To use this object to transform a Vector, construct a matrix 
+containing the desired transformation and then use the 
+<a href="Leap.Matrix.html#transformPoint">Matrix.transformPoint</a>() or 
+<a href="Leap.Matrix.html#transformDirection">Matrix.transformDirection</a>() functions 
+to apply the transform.</p>
+<p>Transforms can be combined by multiplying two or more transform 
+matrices using the times function.</p></p></div>
+
+
+			<!-- CLASS CONSTRUCTOR SUMMARY -->
+			<h2>
+				<a name='constructor'></a>
+				Constructor
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+				<tbody>
+					<tr>
+						<td class="type">&nbsp;</td>
+						<td class="last">
+							<a href="#Matrix">Matrix</a>
+							<span>()</span>
+							
+						<td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+
+
+			<!-- CLASS REQUIRES -->
+
+			<!-- NAMESPACE SUB-NAMESPACES -->
+						
+
+			<!-- CLASS CONSTANTS SUMMARY -->
+			
+
+
+			<!-- CLASS STATIC PROPERTIES & ENUMERATIONS SUMMARY -->
+			
+			<h2>
+				<a name='static_properties'></a>
+				Static Properties & Enumerations
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+  <tbody>
+  
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#identity">
+        	<abbr title="Leap.Matrix.identity">
+        		identity
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+    
+  </tbody>
+</table>
+			
+
+			<!-- CLASS PROPERTIES SUMMARY -->
+			
+			<h2>
+				<a name='properties'></a>
+				Properties
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+  <tbody>
+  
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#[0]">
+        	<abbr title="Leap.Matrix#[0]">
+        		[0]
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#[1]">
+        	<abbr title="Leap.Matrix#[1]">
+        		[1]
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#[2]">
+        	<abbr title="Leap.Matrix#[2]">
+        		[2]
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#[3]">
+        	<abbr title="Leap.Matrix#[3]">
+        		[3]
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#origin">
+        	<abbr title="Leap.Matrix#origin">
+        		origin
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#xBasis">
+        	<abbr title="Leap.Matrix#xBasis">
+        		xBasis
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#yBasis">
+        	<abbr title="Leap.Matrix#yBasis">
+        		yBasis
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#zBasis">
+        	<abbr title="Leap.Matrix#zBasis">
+        		zBasis
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+    
+  </tbody>
+</table>
+			
+
+			<!-- CLASS STATIC METHODS SUMMARY -->
+			
+
+			<!-- CLASS METHODS SUMMARY -->
+			
+			<h2>
+				<a name='methods'></a>
+				Methods
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+  <tbody>
+  
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	Boolean
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#compare">
+				<abbr title="Leap.Matrix#compare">
+					compare
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		()
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#rigidInverse">
+				<abbr title="Leap.Matrix#rigidInverse">
+					rigidInverse
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		()
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	void
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#setRotation">
+				<abbr title="Leap.Matrix#setRotation">
+					setRotation
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a> _axis, float angleRadians)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#times">
+				<abbr title="Leap.Matrix#times">
+					times
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(Matrix other)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	Array
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#toArray3x3">
+				<abbr title="Leap.Matrix#toArray3x3">
+					toArray3x3
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		()
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	Array
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#toArray4x4">
+				<abbr title="Leap.Matrix#toArray4x4">
+					toArray4x4
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		()
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	String
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#toString">
+				<abbr title="Leap.Matrix#toString">
+					toString
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		()
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#transformDirection">
+				<abbr title="Leap.Matrix#transformDirection">
+					transformDirection
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a> in)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#transformPoint">
+				<abbr title="Leap.Matrix#transformPoint">
+					transformPoint
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a> in)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+  </tbody>
+</table>
+
+			
+
+
+			<!-- CLASS EVENTS SUMMARY -->
+			
+
+			<!--
+			################################################################################
+			## DETAILS
+			################################################################################
+			-->
+
+			<!-- CLASS CONSTRUCTOR DETAILS -->
+			<h2>
+				<a name='constructor_details'></a>
+				Constructor details
+				<small><a href="#">Top</a></small>
+				<h3 id="Matrix"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno4">matrix.js</a> at line 4
+
+  </div>
+	
+	<div class="signature">
+		
+  
+		<strong>Matrix</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Constructs a Matrix object.</p>
+<p>Creates a new Matrix from the specified Array of Vectors or Matrix. 
+The default constructor creates an identity matrix.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+
+			</h2>
+
+
+			<!-- CLASS STATIC PROPERTIES & ENUMERATIONS DETAIL -->
+			
+			<h2>
+				<a name='static_properties_details'></a>
+				Static Properties & Enumerations Detail
+				<small><a href="#">Top</a></small>
+			</h2>
+			<h3 id="identity" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno293">matrix.js</a> at line 293
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    static
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+    </span>
+	  
+  
+		<strong>identity</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>Returns the identity matrix specifying no translation, rotation, and scale.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div>
+			
+
+
+			<!-- CLASS STATIC METHODS DETAIL -->
+			
+
+
+			<!-- CLASS PROPERTIES DETAIL -->
+			
+			<h2>
+				<a name='properties_details'></a>
+				Properties Detail
+				<small><a href="#">Top</a></small>
+			</h2>
+			<h3 id="[0]" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno54">matrix.js</a> at line 54
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>[0]</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The rotation and scale factors for the x-axis.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="[1]" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno68">matrix.js</a> at line 68
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>[1]</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The rotation and scale factors for the y-axis.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="[2]" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno82">matrix.js</a> at line 82
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>[2]</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The rotation and scale factors for the z-axis.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="[3]" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno96">matrix.js</a> at line 96
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>[3]</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The translation factors for all three axes.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="origin" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno95">matrix.js</a> at line 95
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>origin</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The translation factors for all three axes.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="xBasis" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno53">matrix.js</a> at line 53
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>xBasis</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The rotation and scale factors for the x-axis.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="yBasis" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno67">matrix.js</a> at line 67
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>yBasis</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The rotation and scale factors for the y-axis.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="zBasis" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno81">matrix.js</a> at line 81
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>zBasis</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The rotation and scale factors for the z-axis.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div>
+			
+
+
+			<!-- CLASS METHODS DETAIL -->
+			
+			<h2>
+				<a name='methods_details'></a>
+				Methods Detail
+				<small><a href="#">Top</a></small>
+			</h2>
+			<h3 id="compare"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno275">matrix.js</a> at line 275
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Boolean
+    </span>
+	  
+  
+		<strong>compare</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Compare Matrix equality component-wise.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				Boolean
+			</span>
+    </td>
+    
+    <td class="last">
+    
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+<h3 id="rigidInverse"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno185">matrix.js</a> at line 185
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+    </span>
+	  
+  
+		<strong>rigidInverse</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Performs a matrix inverse if the matrix consists entirely of 
+rigid transformations (translations and rotations). </p>
+<p>If the matrix is not rigid, this operation will not represent an inverse.</p>
+<p>Note that all matricies that are directly returned by the API are rigid.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>The rigid inverse of the matrix.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+<h3 id="setRotation"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno112">matrix.js</a> at line 112
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      void
+    </span>
+	  
+  
+		<strong>setRotation</strong>
+		
+    <span class="params">
+      (<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a> _axis, float angleRadians)
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Sets this transformation matrix to represent a rotation around 
+the specified vector.</p>
+<p>This function erases any previous rotation and scale transforms 
+applied to this matrix, but does not affect translation.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>_axis</a><p><p>A Vector specifying the axis of rotation.</p></p>
+    </td>
+    
+  
+  <tr>
+    <td class="type">
+			<span>
+				float
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>angleRadians</a><p><p>The amount of rotation in radians.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				void
+			</span>
+    </td>
+    
+    <td class="last">
+    
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+<h3 id="times"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno166">matrix.js</a> at line 166
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+    </span>
+	  
+  
+		<strong>times</strong>
+		
+    <span class="params">
+      (Matrix other)
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Multiply transform matrices.</p>
+<p>Combines two transformations into a single equivalent transformation.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				Matrix
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>other</a><p><p>A Matrix to multiply on the right hand side.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>A new Matrix representing the transformation 
+equivalent to applying the other transformation followed by this transformation.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+<h3 id="toArray3x3"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno206">matrix.js</a> at line 206
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Array
+    </span>
+	  
+  
+		<strong>toArray3x3</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Writes the 3x3 Matrix object to a 9 element row-major float array. </p>
+<p>Translation factors are discarded.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				Array
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>The rotation Matrix as a flattened array.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+<h3 id="toArray4x4"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno230">matrix.js</a> at line 230
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Array
+    </span>
+	  
+  
+		<strong>toArray4x4</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Convert a 4x4 Matrix object to a 16 element row-major float array. </p>
+<p>Translation factors are discarded.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				Array
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>The entire Matrix as a flattened array.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+<h3 id="toString"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno261">matrix.js</a> at line 261
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      String
+    </span>
+	  
+  
+		<strong>toString</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Write the matrix to a string in a human readable format.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				String
+			</span>
+    </td>
+    
+    <td class="last">
+    
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+<h3 id="transformDirection"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno150">matrix.js</a> at line 150
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>transformDirection</strong>
+		
+    <span class="params">
+      (<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a> in)
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Transforms a vector with this matrix by transforming its 
+rotation and scale only.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>in</a><p><p>The Vector to transform.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>A new Vector representing the transformed original.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+<h3 id="transformPoint"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno135">matrix.js</a> at line 135
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>transformPoint</strong>
+		
+    <span class="params">
+      (<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a> in)
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Transforms a vector with this matrix by transforming its 
+rotation, scale, and translation. </p>
+<p>Translation is applied after rotation and scale.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>in</a><p><p>The Vector to transform.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>A new Vector representing the transformed original.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+
+			
+
+
+			<!-- CLASS EVENTS DETAIL -->
+			
+
+		</div>
+
+		<footer>
+<span>
+Copyright &copy; 2012-2013 <a href="https://developer.leapmotion.com" target="_top">Leap Motion</a>
+</span>
+</footer>
+
+
+	</body>
+</html>

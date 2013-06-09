@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
+		<title>leapjs Documentation</title>
+	</head>
+	<body id="overview">
+
+		<header>
+			<div class="header">
+				<script type="text/javascript" src="js/jQuery.172.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var header = $('.header'),
+		content = $('.content')
+		footer = $('footer')
+	;
+
+	function mtn(str){
+		if(
+			'' === str
+			|| undefined === str
+			|| null === str
+		){
+			return 0;
+		}else{
+			var a = parseInt(str.replace(/px|ex|em/, ''), 10);
+			if(isNaN(a)){
+				a = 0;
+			}
+			return a;
+		}
+	}
+	
+	function resize(){
+		var availableHeight = $(window).height() - (header.outerHeight() + footer.outerHeight()),
+			availableWidth = $(window).width(),
+			contentOffsetH = mtn(content.css('borderTopWidth')) + 
+				mtn(content.css('marginTop')) +
+				mtn(content.css('paddingTop')) +
+				
+				mtn(content.css('paddingBottom')) +
+				mtn(content.css('marginBottom')) +
+				mtn(content.css('borderBottomWidth')),
+			contentOffsetW = mtn(content.css('borderLeftWidth')) + 
+				mtn(content.css('marginLeft')) +
+				mtn(content.css('paddingLeft')) +
+				
+				mtn(content.css('paddingRight')) +
+				mtn(content.css('marginRight')) +
+				mtn(content.css('borderRightWidth'))
+		;
+		content.height(availableHeight - contentOffsetH);
+		content.width(availableWidth - contentOffsetW);
+	}
+	resize();
+	$(window).resize(resize);
+});
+</script>
+
+<ul>
+	
+	<li><a href="class_index.html">Classes</a></li>
+	
+	
+	
+	
+	<li><a href="namespace_index.html">Namespaces</a></li>
+	
+	
+	
+	
+	
+	
+	<li><a href="function_index.html">Methods</a></li>
+	
+	
+	
+	<li><a href="doc-index.html">Index</a></li>
+</ul>
+
+<div id="title">
+	
+  <span class="jumbo">
+		LeapJS API Reference
+  </span>
+		
+</div>
+
+
+				<h1>Function</h1>
+			</div>
+		</header>
+		<div class="content">
+			<table>
+				<tbody>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#AngleTo">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#AngleTo">
+								<strong><a href="Leap.Vector.html#AngleTo" ><abbr title="Leap.Vector#AngleTo">AngleTo</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The angle between this vector and the specified vector in radians.</p>
+<p>The angle is measured in the plane formed by the two vectors. 
+The angle returned is always the smaller of the two conjugate angles. 
+Thus A.angleTo(B) == B.angleTo(A) and is always a positive value less 
+than or equal to pi radians (180 degrees).</p>
+<p>If either vector has zero length, then this function returns zero.</p>
+<p><img src="images/Math_AngleTo.png" alt="Vector AngleTo"></p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno85">vector.js</a> at line 85
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#Cross">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#Cross">
+								<strong><a href="Leap.Vector.html#Cross" ><abbr title="Leap.Vector#Cross">Cross</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The cross product of this vector and the specified vector.</p>
+<p>The cross product is a vector orthogonal to both original vectors. 
+It has a magnitude equal to the area of a parallelogram having the 
+two vectors as sides. The direction of the returned vector is 
+determined by the right-hand rule. Thus A.cross(B) == -B.cross(A).</p>
+<p><img src="images/Math_Cross.png" alt="Vector Cross"></p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno109">vector.js</a> at line 109
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#compare">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#compare">
+								<strong><a href="Leap.Matrix.html#compare" ><abbr title="Leap.Matrix#compare">compare</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Compare Matrix equality component-wise.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno275">matrix.js</a> at line 275
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#compare">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#compare">
+								<strong><a href="Leap.Vector.html#compare" ><abbr title="Leap.Vector#compare">compare</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Compare Vector equality component-wise.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno345">vector.js</a> at line 345
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#distanceTo">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#distanceTo">
+								<strong><a href="Leap.Vector.html#distanceTo" ><abbr title="Leap.Vector#distanceTo">distanceTo</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The distance between the point represented by this Vector object 
+and a point represented by the specified Vector object.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno132">vector.js</a> at line 132
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#dividedBy">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#dividedBy">
+								<strong><a href="Leap.Vector.html#dividedBy" ><abbr title="Leap.Vector#dividedBy">dividedBy</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Divide vector by a scalar.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno198">vector.js</a> at line 198
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#dot">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#dot">
+								<strong><a href="Leap.Vector.html#dot" ><abbr title="Leap.Vector#dot">dot</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The dot product of this vector with another vector.</p>
+<p>The dot product is the magnitude of the projection of this vector onto 
+the specified vector.</p>
+<p><img src="images/Math_Dot.png" alt="Vector Dot"></p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno145">vector.js</a> at line 145
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#dump">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#dump">
+								<strong><a href="Leap.Frame.html#dump" ><abbr title="Leap.Frame#dump">dump</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Returns a JSON-formatted string containing the hands, pointables and gestures
+in this frame.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno390">frame.js</a> at line 390
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#finger">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#finger">
+								<strong><a href="Leap.Frame.html#finger" ><abbr title="Leap.Frame#finger">finger</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The finger with the specified ID in this frame.</p>
+<p>Use the Frame finger() function to retrieve the finger from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Finger object, but if no finger
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a finger is lost and subsequently
+regained, the new Pointable object representing that physical finger may have
+a different ID than that representing the finger in an earlier frame.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno198">frame.js</a> at line 198
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Hand#finger">
+								<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Hand#finger">
+								<strong><a href="Leap.Hand.html#finger" ><abbr title="Leap.Hand#finger">finger</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The finger with the specified ID attached to this hand.</p>
+<p>Use this function to retrieve a Pointable object representing a finger
+attached to this hand using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no finger
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that the ID values assigned to fingers persist across frames, but only
+until tracking of a particular finger is lost. If tracking of a finger is
+lost and subsequently regained, the new Finger object representing that
+finger may have a different ID than that representing the finger in an
+earlier frame.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno154">hand.js</a> at line 154
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Controller#frame">
+								<a href="Leap.Controller.html" ><abbr title="Leap.Controller">Leap.Controller</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Controller#frame">
+								<strong><a href="Leap.Controller.html#frame" ><abbr title="Leap.Controller#frame">frame</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Returns a frame of tracking data from the Leap.</p>
+<p>Use the optional history parameter to specify which frame to retrieve. 
+Call frame() or frame(0) to access the most recent frame; call frame(1) to 
+access the previous frame, and so on. If you use a history value greater 
+than the number of stored frames, then the controller returns an invalid frame.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_controller_js.html#lineno93">controller.js</a> at line 93
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#hand">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#hand">
+								<strong><a href="Leap.Frame.html#hand" ><abbr title="Leap.Frame#hand">hand</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The Hand object with the specified ID in this frame.</p>
+<p>Use the Frame hand() function to retrieve the Hand object from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Hand object, but if no hand
+with the specified ID is present, an invalid Hand object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a hand is lost and subsequently
+regained, the new Hand object representing that physical hand may have
+a different ID than that representing the physical hand in an earlier frame.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno223">frame.js</a> at line 223
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#isValid">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#isValid">
+								<strong><a href="Leap.Vector.html#isValid" ><abbr title="Leap.Vector#isValid">isValid</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Returns true if all of the vector's components are finite.</p>
+<p>If any component is NaN or infinite, then this returns false.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno357">vector.js</a> at line 357
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.loop">
+								<a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.loop">
+								<strong><a href="Leap.html#loop" ><abbr title="Leap.loop">loop</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The Leap.loop() function passes a frame of Leap data to your
+callback function and then calls window.requestAnimationFrame() after
+executing your callback function.</p>
+<p>Leap.loop() sets up the Leap controller and WebSocket connection for you.
+You do not need to create your own controller when using this method.</p>
+<p>Your callback function is called on an interval determined by the client
+browser. Typically, this is on an interval of 60 frames/second. The most
+recent frame of Leap data is passed to your callback function. If the Leap
+is producing frames at a slower rate than the browser frame rate, the same
+frame of Leap data can be passed to your function in successive animation
+updates.</p>
+<p>As an alternative, you can create your own Controller object and use a
+Controller#onFrame onFrame callback to process the data at
+the frame rate of the Leap device. See Controller for an
+example.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_index_js.html#lineno19">index.js</a> at line 19
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#magnitude">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#magnitude">
+								<strong><a href="Leap.Vector.html#magnitude" ><abbr title="Leap.Vector#magnitude">magnitude</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The magnitude, or length, of this vector.</p>
+<p>The magnitude is the L2 norm, or Euclidean distance between the 
+origin and the point represented by the (x, y, z) components of 
+this Vector object.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno210">vector.js</a> at line 210
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#magnitudeSquared">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#magnitudeSquared">
+								<strong><a href="Leap.Vector.html#magnitudeSquared" ><abbr title="Leap.Vector#magnitudeSquared">magnitudeSquared</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The square of the magnitude, or length, of this vector.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno225">vector.js</a> at line 225
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#minus">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#minus">
+								<strong><a href="Leap.Vector.html#minus" ><abbr title="Leap.Vector#minus">minus</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Subtract vectors component-wise.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno174">vector.js</a> at line 174
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#multiply">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#multiply">
+								<strong><a href="Leap.Vector.html#multiply" ><abbr title="Leap.Vector#multiply">multiply</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Multiply vector by a scalar.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno186">vector.js</a> at line 186
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#normalized">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#normalized">
+								<strong><a href="Leap.Vector.html#normalized" ><abbr title="Leap.Vector#normalized">normalized</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>A normalized copy of this vector.</p>
+<p>A normalized vector has the same direction as the original 
+vector, but with a length of one.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno236">vector.js</a> at line 236
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#pitch">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#pitch">
+								<strong><a href="Leap.Vector.html#pitch" ><abbr title="Leap.Vector#pitch">pitch</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The pitch angle in radians.</p>
+<p>Pitch is the angle between the negative z-axis and the projection 
+of the vector onto the y-z plane. In other words, pitch represents 
+rotation around the x-axis. If the vector points upward, the 
+returned angle is between 0 and pi radians (180 degrees); if it 
+points downward, the angle is between 0 and -pi radians.</p>
+<p><img src="images/Math_Pitch_Angle.png" alt="Vector Pitch"></p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno253">vector.js</a> at line 253
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#plus">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#plus">
+								<strong><a href="Leap.Vector.html#plus" ><abbr title="Leap.Vector#plus">plus</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Add vectors component-wise.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno162">vector.js</a> at line 162
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#pointable">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#pointable">
+								<strong><a href="Leap.Frame.html#pointable" ><abbr title="Leap.Frame#pointable">pointable</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The Pointable object with the specified ID in this frame.</p>
+<p>Use the Frame pointable() function to retrieve the Pointable object from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no finger or tool
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a finger or tool is lost and subsequently
+regained, the new Pointable object representing that finger or tool may have
+a different ID than that representing the finger or tool in an earlier frame.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno149">frame.js</a> at line 149
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#pointable">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#pointable">
+								<strong><a href="Leap.Frame.html#pointable" ><abbr title="Leap.Frame#pointable">pointable</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The Pointable object with the specified ID in this frame.</p>
+<p>Use the Frame pointable() function to retrieve the Pointable object from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no finger or tool
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a finger or tool is lost and subsequently
+regained, the new Pointable object representing that finger or tool may have
+a different ID than that representing the finger or tool in an earlier frame.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno174">frame.js</a> at line 174
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#rigidInverse">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#rigidInverse">
+								<strong><a href="Leap.Matrix.html#rigidInverse" ><abbr title="Leap.Matrix#rigidInverse">rigidInverse</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Performs a matrix inverse if the matrix consists entirely of 
+rigid transformations (translations and rotations). </p>
+<p>If the matrix is not rigid, this operation will not represent an inverse.</p>
+<p>Note that all matricies that are directly returned by the API are rigid.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno185">matrix.js</a> at line 185
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#roll">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#roll">
+								<strong><a href="Leap.Vector.html#roll" ><abbr title="Leap.Vector#roll">roll</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The roll angle in radians.</p>
+<p>Roll is the angle between the y-axis and the projection of 
+the vector onto the x-y plane. In other words, roll represents 
+rotation around the z-axis. If the vector points to the left 
+of the y-axis, then the returned angle is between 0 and pi 
+radians (180 degrees); if it points to the right, the angle is 
+between 0 and -pi radians.</p>
+<p><img src="images/Math_Roll_Angle.png" alt="Vector Roll"></p>
+<p>Use this function to get roll angle of the plane to which this 
+vector is a normal. For example, if this vector represents the 
+normal to the palm, then this function returns the tilt or roll 
+of the palm plane compared to the horizontal (x-z) plane.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno273">vector.js</a> at line 273
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#rotationAngle">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#rotationAngle">
+								<strong><a href="Leap.Frame.html#rotationAngle" ><abbr title="Leap.Frame#rotationAngle">rotationAngle</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The angle of rotation around the rotation axis derived from the overall 
+rotational motion between the current frame and the specified frame.</p>
+<p>The returned angle is expressed in radians measured clockwise around 
+the rotation axis (using the right-hand rule) between the start and end frames. 
+The value is always between 0 and pi radians (0 and 180 degrees).</p>
+<p>The Leap derives frame rotation from the relative change in position and 
+orientation of all objects detected in the field of view.</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, then the 
+angle of rotation is zero.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno246">frame.js</a> at line 246
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Hand#rotationAngle">
+								<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Hand#rotationAngle">
+								<strong><a href="Leap.Hand.html#rotationAngle" ><abbr title="Leap.Hand#rotationAngle">rotationAngle</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The angle of rotation around the rotation axis derived from the change in 
+orientation of this hand, and any associated fingers and tools, between the 
+current frame and the specified frame.</p>
+<p>The returned angle is expressed in radians measured clockwise around the 
+rotation axis (using the right-hand rule) between the start and end frames. 
+The value is always between 0 and pi radians (0 and 180 degrees).</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then the angle of rotation is zero.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno180">hand.js</a> at line 180
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#rotationAxis">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#rotationAxis">
+								<strong><a href="Leap.Frame.html#rotationAxis" ><abbr title="Leap.Frame#rotationAxis">rotationAxis</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The axis of rotation derived from the overall rotational motion between 
+the current frame and the specified frame.</p>
+<p>The returned direction vector is normalized.</p>
+<p>The Leap derives frame rotation from the relative change in position and 
+orientation of all objects detected in the field of view.</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, or if no 
+rotation is detected between the two frames, a zero vector is returned.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno275">frame.js</a> at line 275
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Hand#rotationAxis">
+								<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Hand#rotationAxis">
+								<strong><a href="Leap.Hand.html#rotationAxis" ><abbr title="Leap.Hand#rotationAxis">rotationAxis</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The axis of rotation derived from the change in orientation of this hand, and 
+any associated fingers and tools, between the current frame and the specified frame.</p>
+<p>The returned direction vector is normalized.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then this method returns a zero vector.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno211">hand.js</a> at line 211
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#rotationMatrix">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#rotationMatrix">
+								<strong><a href="Leap.Frame.html#rotationMatrix" ><abbr title="Leap.Frame#rotationMatrix">rotationMatrix</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The transform matrix expressing the rotation derived from the overall 
+rotational motion between the current frame and the specified frame.</p>
+<p>The Leap derives frame rotation from the relative change in position and 
+orientation of all objects detected in the field of view.</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, then 
+this method returns an identity matrix.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno302">frame.js</a> at line 302
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Hand#rotationMatrix">
+								<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Hand#rotationMatrix">
+								<strong><a href="Leap.Hand.html#rotationMatrix" ><abbr title="Leap.Hand#rotationMatrix">rotationMatrix</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The transform matrix expressing the rotation derived from the change in 
+orientation of this hand, and any associated fingers and tools, between 
+the current frame and the specified frame.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then this method returns 
+an identity matrix.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno238">hand.js</a> at line 238
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#scaleFactor">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#scaleFactor">
+								<strong><a href="Leap.Frame.html#scaleFactor" ><abbr title="Leap.Frame#scaleFactor">scaleFactor</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The scale factor derived from the overall motion between the current frame and the specified frame.</p>
+<p>The scale factor is always positive. A value of 1.0 indicates no scaling took place. 
+Values between 0.0 and 1.0 indicate contraction and values greater than 1.0 indicate expansion.</p>
+<p>The Leap derives scaling from the relative inward or outward motion of all 
+objects detected in the field of view (independent of translation and rotation).</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, then this method returns 1.0.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno327">frame.js</a> at line 327
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Hand#scaleFactor">
+								<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Hand#scaleFactor">
+								<strong><a href="Leap.Hand.html#scaleFactor" ><abbr title="Leap.Hand#scaleFactor">scaleFactor</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The scale factor derived from the hand's motion between the current frame and the specified frame.</p>
+<p>The scale factor is always positive. A value of 1.0 indicates no scaling took place. 
+Values between 0.0 and 1.0 indicate contraction and values greater than 1.0 indicate expansion.</p>
+<p>The Leap derives scaling from the relative inward or outward motion of a hand 
+and its associated fingers and tools (independent of translation and rotation).</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either this frame or sinceFrame 
+are invalid Frame objects, then this method returns 1.0.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno265">hand.js</a> at line 265
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#setRotation">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#setRotation">
+								<strong><a href="Leap.Matrix.html#setRotation" ><abbr title="Leap.Matrix#setRotation">setRotation</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Sets this transformation matrix to represent a rotation around 
+the specified vector.</p>
+<p>This function erases any previous rotation and scale transforms 
+applied to this matrix, but does not affect translation.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno112">matrix.js</a> at line 112
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#times">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#times">
+								<strong><a href="Leap.Matrix.html#times" ><abbr title="Leap.Matrix#times">times</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Multiply transform matrices.</p>
+<p>Combines two transformations into a single equivalent transformation.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno166">matrix.js</a> at line 166
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#toArray">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#toArray">
+								<strong><a href="Leap.Vector.html#toArray" ><abbr title="Leap.Vector#toArray">toArray</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Returns the vector as a float array.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno320">vector.js</a> at line 320
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#toArray3x3">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#toArray3x3">
+								<strong><a href="Leap.Matrix.html#toArray3x3" ><abbr title="Leap.Matrix#toArray3x3">toArray3x3</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Writes the 3x3 Matrix object to a 9 element row-major float array. </p>
+<p>Translation factors are discarded.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno206">matrix.js</a> at line 206
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#toArray4x4">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#toArray4x4">
+								<strong><a href="Leap.Matrix.html#toArray4x4" ><abbr title="Leap.Matrix#toArray4x4">toArray4x4</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Convert a 4x4 Matrix object to a 16 element row-major float array. </p>
+<p>Translation factors are discarded.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno230">matrix.js</a> at line 230
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#toString">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#toString">
+								<strong><a href="Leap.Frame.html#toString" ><abbr title="Leap.Frame#toString">toString</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>A string containing a brief, human readable description of the Frame object.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno376">frame.js</a> at line 376
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Hand#toString">
+								<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Hand#toString">
+								<strong><a href="Leap.Hand.html#toString" ><abbr title="Leap.Hand#toString">toString</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>A string containing a brief, human readable description of the Hand object.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno317">hand.js</a> at line 317
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#toString">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#toString">
+								<strong><a href="Leap.Matrix.html#toString" ><abbr title="Leap.Matrix#toString">toString</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Write the matrix to a string in a human readable format.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno261">matrix.js</a> at line 261
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Pointable#toString">
+								<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Pointable#toString">
+								<strong><a href="Leap.Pointable.html#toString" ><abbr title="Leap.Pointable#toString">toString</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>A string containing a brief, human readable description of the Pointable
+object.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_pointable_js.html#lineno120">pointable.js</a> at line 120
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#toString">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#toString">
+								<strong><a href="Leap.Vector.html#toString" ><abbr title="Leap.Vector#toString">toString</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Returns a string containing this vector in a human readable 
+format: (x, y, z).</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno331">vector.js</a> at line 331
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#transformDirection">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#transformDirection">
+								<strong><a href="Leap.Matrix.html#transformDirection" ><abbr title="Leap.Matrix#transformDirection">transformDirection</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Transforms a vector with this matrix by transforming its 
+rotation and scale only.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno150">matrix.js</a> at line 150
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Matrix#transformPoint">
+								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Matrix#transformPoint">
+								<strong><a href="Leap.Matrix.html#transformPoint" ><abbr title="Leap.Matrix#transformPoint">transformPoint</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>Transforms a vector with this matrix by transforming its 
+rotation, scale, and translation. </p>
+<p>Translation is applied after rotation and scale.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_matrix_js.html#lineno135">matrix.js</a> at line 135
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Frame#translation">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#translation">
+								<strong><a href="Leap.Frame.html#translation" ><abbr title="Leap.Frame#translation">translation</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The change of position derived from the overall linear motion between the 
+current frame and the specified frame.</p>
+<p>The returned translation vector provides the magnitude and direction of the 
+movement in millimeters.</p>
+<p>The Leap derives frame translation from the linear motion of all objects 
+detected in the field of view.</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, then this 
+method returns a zero vector.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno349">frame.js</a> at line 349
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Hand#translation">
+								<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Hand#translation">
+								<strong><a href="Leap.Hand.html#translation" ><abbr title="Leap.Hand#translation">translation</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The change of position of this hand between the current frame and the specified frame</p>
+<p>The returned translation vector provides the magnitude and direction of the 
+movement in millimeters.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either this frame or 
+sinceFrame are invalid Frame objects, then this method returns a zero vector.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno291">hand.js</a> at line 291
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
+							<abbr title="Leap.Vector#yaw">
+								<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Vector#yaw">
+								<strong><a href="Leap.Vector.html#yaw" ><abbr title="Leap.Vector#yaw">yaw</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The yaw angle in radians. </p>
+<p>Yaw is the angle between the negative z-axis and the projection 
+of the vector onto the x-z plane. In other words, yaw represents 
+rotation around the y-axis. If the vector points to the right 
+of the negative z-axis, then the returned angle is between 0 and 
+pi radians (180 degrees); if it points to the left, the angle 
+is between 0 and -pi radians.</p>
+<p><img src="images/Math_Yaw_Angle.png" alt="Vector Roll"></p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_vector_js.html#lineno299">vector.js</a> at line 299
+							
+							</div> 
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+
+		<footer>
+<span>
+Copyright &copy; 2012-2013 <a href="https://developer.leapmotion.com" target="_top">Leap Motion</a>
+</span>
+</footer>
+
+
+	</body>
+</html>

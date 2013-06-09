@@ -1,545 +1,804 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Class: Gesture</title>
-    
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+	<head>
+	  <script src="js/prettify/prettify.js"> </script>
+    <script src="js/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
+		<link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
+		<title>leapjs Documentation</title>
+	</head>
+	<body id="class" onload="prettyPrint();">
 
-<body>
+		<header>
+			<div class="header">
+				<script type="text/javascript" src="js/jQuery.172.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var header = $('.header'),
+		content = $('.content')
+		footer = $('footer')
+	;
 
-<div id="main">
-    
-    <h1 class="page-title">Class: Gesture</h1>
-    
-    
+	function mtn(str){
+		if(
+			'' === str
+			|| undefined === str
+			|| null === str
+		){
+			return 0;
+		}else{
+			var a = parseInt(str.replace(/px|ex|em/, ''), 10);
+			if(isNaN(a)){
+				a = 0;
+			}
+			return a;
+		}
+	}
+	
+	function resize(){
+		var availableHeight = $(window).height() - (header.outerHeight() + footer.outerHeight()),
+			availableWidth = $(window).width(),
+			contentOffsetH = mtn(content.css('borderTopWidth')) + 
+				mtn(content.css('marginTop')) +
+				mtn(content.css('paddingTop')) +
+				
+				mtn(content.css('paddingBottom')) +
+				mtn(content.css('marginBottom')) +
+				mtn(content.css('borderBottomWidth')),
+			contentOffsetW = mtn(content.css('borderLeftWidth')) + 
+				mtn(content.css('marginLeft')) +
+				mtn(content.css('paddingLeft')) +
+				
+				mtn(content.css('paddingRight')) +
+				mtn(content.css('marginRight')) +
+				mtn(content.css('borderRightWidth'))
+		;
+		content.height(availableHeight - contentOffsetH);
+		content.width(availableWidth - contentOffsetW);
+	}
+	resize();
+	$(window).resize(resize);
+});
+</script>
+
+<ul>
+	
+	<li><a href="class_index.html">Classes</a></li>
+	
+	
+	
+	
+	<li><a href="namespace_index.html">Namespaces</a></li>
+	
+	
+	
+	
+	
+	
+	<li><a href="function_index.html">Methods</a></li>
+	
+	
+	
+	<li><a href="doc-index.html">Index</a></li>
+</ul>
+
+<div id="title">
+	
+  <span class="jumbo">
+		LeapJS API Reference
+  </span>
+		
+</div>
+
+				<div class="type">Class</div>
+				<h1>
+					Gesture
+				</h1>
+			</div>
+		</header>
+
+		<div class="content">
+
+			<div class="anchor_list">
+	<h2>Contents</h2>
+	<ul>
+		
+		
+		
+		
+		
+
+		
+
+		
+
+		
+		<li><a href="#properties">Properties</a></li>
+		
+
+		
+
+		
+
+			
+	</ul>
+</div>
+			
+			<!-- CLASS SIGNATURE -->
+			<p class="PrincipalTitle">
+				<span> </span>
+				<span>class </span>
+				<strong>
+					Gesture
+				</strong>
+
+				
+
+				
+
+				
+			</p>
 
 
-
-<section>
-    
-<header>
-    <h2>
-    Gesture
-    </h2>
-    
-        <div class="class-description"><p>The Gesture class represents a recognized movement by the user.</p>
-
+			<!-- CLASS DESCRIPTION -->
+			<div class="description"><p><p>The Gesture class represents a recognized movement by the user.</p>
 <p>The Leap watches the activity within its field of view for certain movement
 patterns typical of a user gesture or command. For example, a movement from side to
 side with the hand can indicate a swipe gesture, while a finger poking forward
 can indicate a screen tap gesture.</p>
-
 <p>When the Leap recognizes a gesture, it assigns an ID and adds a
 Gesture object to the frame gesture list. For continuous gestures, which
 occur over many frames, the Leap updates the gesture by adding
 a Gesture object having the same ID and updated properties in each
 subsequent frame.</p>
-
-<p><strong>Important:</strong> Recognition for each type of gesture must be enabled; 
+<p><strong>Important:</strong> Recognition for each type of gesture must be enabled;
 otherwise <strong>no gestures are recognized or reported</strong>.</p>
-
 <p>Subclasses of Gesture define the properties for the specific movement patterns
 recognized by the Leap.</p>
-
 <p>The Gesture subclasses for include:</p>
-
 <ul>
 <li>CircleGesture -- A circular movement by a finger.</li>
 <li>SwipeGesture -- A straight line movement by the hand with fingers extended.</li>
 <li>ScreenTapGesture -- A forward tapping movement by a finger.</li>
 <li>KeyTapGesture -- A downward tapping movement by a finger.</li>
 </ul>
-
 <p>Circle and swipe gestures are continuous and these objects can have a
 state of start, update, and stop.</p>
-
 <p>The screen tap gesture is a discrete gesture. The Leap only creates a single
 ScreenTapGesture object appears for each tap and it always has a stop state.</p>
-
 <p>Get valid Gesture instances from a Frame object. You can get a list of gestures
-from the Frame gestures array. You can also use the Frame gesture() method 
-to find a gesture in the current frame using an ID value obtained in a 
+from the Frame gestures array. You can also use the Frame gesture() method
+to find a gesture in the current frame using an ID value obtained in a
 previous frame.</p>
-
 <p>Gesture objects can be invalid. For example, when you get a gesture by ID
 using Frame.gesture(), and there is no gesture with that ID in the current
 frame, then gesture() returns an Invalid Gesture object (rather than a null
 value). Always check object validity in situations where a gesture might be
-invalid.</p></div>
-    
-</header>  
+invalid.</p></p></div>
 
-<article>
-    <div class="container-overview">
+
+			<!-- CLASS CONSTRUCTOR SUMMARY -->
+			<h2>
+				<a name='constructor'></a>
+				Constructor
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+				<tbody>
+					<tr>
+						<td class="type">&nbsp;</td>
+						<td class="last">
+							<a href="#Gesture">Gesture</a>
+							<span>()</span>
+							
+						<td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+
+
+			<!-- CLASS REQUIRES -->
+
+			<!-- NAMESPACE SUB-NAMESPACES -->
+						
+
+			<!-- CLASS CONSTANTS SUMMARY -->
+			
+
+
+			<!-- CLASS STATIC PROPERTIES & ENUMERATIONS SUMMARY -->
+			
+
+			<!-- CLASS PROPERTIES SUMMARY -->
+			
+			<h2>
+				<a name='properties'></a>
+				Properties
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+  <tbody>
+  
     
-    
-    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Number
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#duration">
+        	<abbr title="Gesture#duration">
+        		duration
+        	</abbr>
+        </a>
         
-<dt>
-    <h4 class="name" id="Gesture"><span class="type-signature"></span>new Gesture<span class="signature">()</span><span class="type-signature"></span></h4>
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
     
     
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Constructs a new Gesture object.</p>
 
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Array
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#handIds">
+        	<abbr title="Gesture#handIds">
+        		handIds
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Number
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#id">
+        	<abbr title="Gesture#id">
+        		id
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Array
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#pointableIds">
+        	<abbr title="Gesture#pointableIds">
+        		pointableIds
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        String
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#state">
+        	<abbr title="Gesture#state">
+        		state
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        String
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#type">
+        	<abbr title="Gesture#type">
+        		type
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+    
+  </tbody>
+</table>
+			
+
+			<!-- CLASS STATIC METHODS SUMMARY -->
+			
+
+			<!-- CLASS METHODS SUMMARY -->
+			
+
+
+			<!-- CLASS EVENTS SUMMARY -->
+			
+
+			<!--
+			################################################################################
+			## DETAILS
+			################################################################################
+			-->
+
+			<!-- CLASS CONSTRUCTOR DETAILS -->
+			<h2>
+				<a name='constructor_details'></a>
+				Constructor details
+				<small><a href="#">Top</a></small>
+				<h3 id="Gesture"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno3">gesture.js</a> at line 3
+
+  </div>
+	
+	<div class="signature">
+		
+  
+		<strong>Gesture</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Constructs a new Gesture object.</p>
 <p>An uninitialized Gesture object is considered invalid. Get valid instances
 of the Gesture class, which will be one of the Gesture subclasses, from a
-Frame object.</p>
-    </div>
+Frame object.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
     
 
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
+    <!-- RETURN VALUE -->
     
 
+    <!-- EXCEPTIONS -->
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        gesture.js, line 1
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
+	</div>
+</div>
 
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
+			</h2>
 
-    
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="duration"><span class="type-signature"></span>duration<span class="type-signature"> :Number</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The elapsed duration of the recognized movement up to the
+
+			<!-- CLASS STATIC PROPERTIES & ENUMERATIONS DETAIL -->
+			
+
+
+			<!-- CLASS STATIC METHODS DETAIL -->
+			
+
+
+			<!-- CLASS PROPERTIES DETAIL -->
+			
+			<h2>
+				<a name='properties_details'></a>
+				Properties Detail
+				<small><a href="#">Top</a></small>
+			</h2>
+			<h3 id="duration" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno102">gesture.js</a> at line 102
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Number
+    </span>
+	  
+  
+		<strong>duration</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The elapsed duration of the recognized movement up to the
 frame containing this Gesture object, in microseconds.</p>
-
 <p>The duration reported for the first Gesture in the sequence (with the
 start state) will typically be a small positive number since
 the movement must progress far enough for the Leap to recognize it as
-an intentional gesture.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
+an intentional gesture.</p></p></div>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        gesture.js, line 100
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
 
-    
-    
-</dd>
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="handIds" class="public">
+  
+  <div class="location">
 
-        
-            
-<dt>
-    <h4 class="name" id="handIds"><span class="type-signature"></span>handIds<span class="type-signature"> :Array</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The list of hands associated with this Gesture, if any.</p>
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno84">gesture.js</a> at line 84
 
-<p>If no hands are related to this gesture, the list is empty.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Array
+    </span>
+	  
+  
+		<strong>handIds</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        gesture.js, line 82
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
+<div class="description "><p><p>The list of hands associated with this Gesture, if any.</p>
+<p>If no hands are related to this gesture, the list is empty.</p></p></div>
 
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :Number</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The gesture ID.</p>
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="id" class="public">
+  
+  <div class="location">
 
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno73">gesture.js</a> at line 73
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Number
+    </span>
+	  
+  
+		<strong>id</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The gesture ID.</p>
 <p>All Gesture objects belonging to the same recognized movement share the
 same ID value. Use the ID value with the Frame::gesture() method to
-find updates related to this Gesture object in subsequent frames.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
+find updates related to this Gesture object in subsequent frames.</p></p></div>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        gesture.js, line 71
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
 
-    
-    
-</dd>
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="pointableIds" class="public">
+  
+  <div class="location">
 
-        
-            
-<dt>
-    <h4 class="name" id="pointableIds"><span class="type-signature"></span>pointableIds<span class="type-signature"> :Array</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The list of fingers and tools associated with this Gesture, if any.</p>
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno93">gesture.js</a> at line 93
 
-<p>If no Pointable objects are related to this gesture, the list is empty.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Array
+    </span>
+	  
+  
+		<strong>pointableIds</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        gesture.js, line 91
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
+<div class="description "><p><p>The list of fingers and tools associated with this Gesture, if any.</p>
+<p>If no Pointable objects are related to this gesture, the list is empty.</p></p></div>
 
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id="state"><span class="type-signature"></span>state<span class="type-signature"> :String</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The gesture ID.</p>
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="state" class="public">
+  
+  <div class="location">
 
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno115">gesture.js</a> at line 115
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      String
+    </span>
+	  
+  
+		<strong>state</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The gesture ID.</p>
 <p>Recognized movements occur over time and have a beginning, a middle,
 and an end. The 'state()' attribute reports where in that sequence this
 Gesture object falls.</p>
-
 <p>Possible values for the state field are:</p>
-
 <ul>
 <li>start</li>
 <li>update</li>
 <li>stop</li>
-</ul>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
+</ul></p></div>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        gesture.js, line 113
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
 
-    
-    
-</dd>
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="type" class="public">
+  
+  <div class="location">
 
-        
-            
-<dt>
-    <h4 class="name" id="type"><span class="type-signature"></span>type<span class="type-signature"> :String</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The gesture type.</p>
+  	<a href="_home_jared_GitHub_test_leapjs_lib_gesture_js.html#lineno132">gesture.js</a> at line 132
 
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      String
+    </span>
+	  
+  
+		<strong>type</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The gesture type.</p>
 <p>Possible values for the type field are:</p>
-
 <ul>
 <li>circle</li>
 <li>swipe</li>
 <li>screentap</li>
 <li>keyTap</li>
-</ul>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        gesture.js, line 130
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
-    
-    
-    
-    
-    
-    
-</article>
-
-</section>  
+</ul></p></div>
 
 
-
-
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
 </div>
+			
 
-<nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="CircleGesture.html">CircleGesture</a></li><li><a href="Frame.html">Frame</a></li><li><a href="Gesture.html">Gesture</a></li><li><a href="Hand.html">Hand</a></li><li><a href="KeyTapGesture.html">KeyTapGesture</a></li><li><a href="Pointable.html">Pointable</a></li><li><a href="ScreenTapGesture.html">ScreenTapGesture</a></li><li><a href="SwipeGesture.html">SwipeGesture</a></li></ul>
-</nav>
 
-<br clear="both">
+			<!-- CLASS METHODS DETAIL -->
+			
 
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Mar 01 2013 18:36:19 GMT-0800 (PST)
+
+			<!-- CLASS EVENTS DETAIL -->
+			
+
+		</div>
+
+		<footer>
+<span>
+Copyright &copy; 2012-2013 <a href="https://developer.leapmotion.com" target="_top">Leap Motion</a>
+</span>
 </footer>
 
-<script> prettyPrint(); </script>
-</body>
+
+	</body>
 </html>

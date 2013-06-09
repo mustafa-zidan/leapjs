@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
+		<title>leapjs Documentation</title>
+	</head>
+	<body id="overview">
+
+		<header>
+			<div class="header">
+				<script type="text/javascript" src="js/jQuery.172.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var header = $('.header'),
+		content = $('.content')
+		footer = $('footer')
+	;
+
+	function mtn(str){
+		if(
+			'' === str
+			|| undefined === str
+			|| null === str
+		){
+			return 0;
+		}else{
+			var a = parseInt(str.replace(/px|ex|em/, ''), 10);
+			if(isNaN(a)){
+				a = 0;
+			}
+			return a;
+		}
+	}
+	
+	function resize(){
+		var availableHeight = $(window).height() - (header.outerHeight() + footer.outerHeight()),
+			availableWidth = $(window).width(),
+			contentOffsetH = mtn(content.css('borderTopWidth')) + 
+				mtn(content.css('marginTop')) +
+				mtn(content.css('paddingTop')) +
+				
+				mtn(content.css('paddingBottom')) +
+				mtn(content.css('marginBottom')) +
+				mtn(content.css('borderBottomWidth')),
+			contentOffsetW = mtn(content.css('borderLeftWidth')) + 
+				mtn(content.css('marginLeft')) +
+				mtn(content.css('paddingLeft')) +
+				
+				mtn(content.css('paddingRight')) +
+				mtn(content.css('marginRight')) +
+				mtn(content.css('borderRightWidth'))
+		;
+		content.height(availableHeight - contentOffsetH);
+		content.width(availableWidth - contentOffsetW);
+	}
+	resize();
+	$(window).resize(resize);
+});
+</script>
+
+<ul>
+	
+	<li><a href="class_index.html">Classes</a></li>
+	
+	
+	
+	
+	<li><a href="namespace_index.html">Namespaces</a></li>
+	
+	
+	
+	
+	
+	
+	<li><a href="function_index.html">Methods</a></li>
+	
+	
+	
+	<li><a href="doc-index.html">Index</a></li>
+</ul>
+
+<div id="title">
+	
+  <span class="jumbo">
+		LeapJS API Reference
+  </span>
+		
+</div>
+
+
+				<h1>Classes</h1>
+			</div>
+		</header>
+
+		<div class="content">
+			<table>
+				<tbody>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.CircleGesture.html" ><abbr title="Leap.CircleGesture">Leap.CircleGesture</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The CircleGesture classes represents a circular finger movement.</p>
+<p>A circle movement is recognized when the tip of a finger draws a circle
+within the Leap field of view.</p>
+<p><img src="images/Leap_Gesture_Circle.png" alt="CircleGesture"></p>
+<p>Circle gestures are continuous. The CircleGesture objects for the gesture have
+three possible states:</p>
+<ul>
+<li>start -- The circle gesture has just started. The movement has
+progressed far enough for the recognizer to classify it as a circle.</li>
+<li>update -- The circle gesture is continuing.</li>
+<li>stop -- The circle gesture is finished.</li>
+</ul>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.Controller.html" ><abbr title="Leap.Controller">Leap.Controller</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The Controller class is your main interface to the Leap Motion Controller.</p>
+<p>Create an instance of this Controller class to access frames of tracking data 
+and configuration information. Frame data can be polled at any time using the 
+<a href="Leap.Controller.html#frame">Controller.frame</a>() function. Call frame() or frame(0) to get the most recent 
+frame. Set the history parameter to a positive integer to access previous frames. 
+A controller stores up to 60 frames in its frame history.</p>
+<p>Polling is an appropriate strategy for applications which already have an 
+intrinsic update loop, such as a game.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The Frame class represents a set of hand and finger tracking data detected
+in a single frame.</p>
+<p>The Leap detects hands, fingers and tools within the tracking area, reporting
+their positions, orientations and motions in frames at the Leap frame rate.</p>
+<p>Access Frame objects using the <a href="Leap.Controller.html#frame">Controller.frame</a>() function.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							<em>
+							<a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Leap.Gesture</abbr></a>
+							</em>
+						</td>
+						<td>
+						  <p>The Gesture class represents a recognized movement by the user.</p>
+<p>The Leap watches the activity within its field of view for certain movement
+patterns typical of a user gesture or command. For example, a movement from side to
+side with the hand can indicate a swipe gesture, while a finger poking forward
+can indicate a screen tap gesture.</p>
+<p>When the Leap recognizes a gesture, it assigns an ID and adds a
+Gesture object to the frame gesture list. For continuous gestures, which
+occur over many frames, the Leap updates the gesture by adding
+a Gesture object having the same ID and updated properties in each
+subsequent frame.</p>
+<p><strong>Important:</strong> Recognition for each type of gesture must be enabled;
+otherwise <strong>no gestures are recognized or reported</strong>.</p>
+<p>Subclasses of Gesture define the properties for the specific movement patterns
+recognized by the Leap.</p>
+<p>The Gesture subclasses for include:</p>
+<ul>
+<li>CircleGesture -- A circular movement by a finger.</li>
+<li>SwipeGesture -- A straight line movement by the hand with fingers extended.</li>
+<li>ScreenTapGesture -- A forward tapping movement by a finger.</li>
+<li>KeyTapGesture -- A downward tapping movement by a finger.</li>
+</ul>
+<p>Circle and swipe gestures are continuous and these objects can have a
+state of start, update, and stop.</p>
+<p>The screen tap gesture is a discrete gesture. The Leap only creates a single
+ScreenTapGesture object appears for each tap and it always has a stop state.</p>
+<p>Get valid Gesture instances from a Frame object. You can get a list of gestures
+from the Frame gestures array. You can also use the Frame gesture() method
+to find a gesture in the current frame using an ID value obtained in a
+previous frame.</p>
+<p>Gesture objects can be invalid. For example, when you get a gesture by ID
+using Frame.gesture(), and there is no gesture with that ID in the current
+frame, then gesture() returns an Invalid Gesture object (rather than a null
+value). Always check object validity in situations where a gesture might be
+invalid.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The Hand class reports the physical characteristics of a detected hand.</p>
+<p>Hand tracking data includes a palm position and velocity; vectors for
+the palm normal and direction to the fingers; properties of a sphere fit
+to the hand; and lists of the attached fingers and tools.</p>
+<p>Note that Hand objects can be invalid, which means that they do not contain
+valid tracking data and do not correspond to a physical entity. Invalid Hand
+objects can be the result of asking for a Hand object using an ID from an
+earlier frame when no Hand objects with that ID exist in the current frame.
+A Hand object created from the Hand constructor is also invalid.
+Test for validity with the <a href="Leap.Hand.html#valid">Hand.valid</a> property.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.KeyTapGesture.html" ><abbr title="Leap.KeyTapGesture">Leap.KeyTapGesture</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The KeyTapGesture class represents a tapping gesture by a finger or tool.</p>
+<p>A key tap gesture is recognized when the tip of a finger rotates down toward the
+palm and then springs back to approximately the original postion, as if
+tapping. The tapping finger must pause briefly before beginning the tap.</p>
+<p><img src="images/Leap_Gesture_Tap.png" alt="KeyTap"></p>
+<p>Key tap gestures are discrete. The KeyTapGesture object representing a tap always
+has the state, STATE_STOP. Only one KeyTapGesture object is created for each
+key tap gesture recognized.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The Matrix object represents a transformation matrix. </p>
+<p>To use this object to transform a Vector, construct a matrix 
+containing the desired transformation and then use the 
+<a href="Leap.Matrix.html#transformPoint">Matrix.transformPoint</a>() or 
+<a href="Leap.Matrix.html#transformDirection">Matrix.transformDirection</a>() functions 
+to apply the transform.</p>
+<p>Transforms can be combined by multiplying two or more transform 
+matrices using the times function.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The Pointable class reports the physical characteristics of a detected
+finger or tool.</p>
+<p>Both fingers and tools are classified as Pointable objects. Use the
+Pointable.tool property to determine whether a Pointable object represents a
+tool or finger. The Leap classifies a detected entity as a tool when it is
+thinner, straighter, and longer than a typical finger.</p>
+<p>Note that Pointable objects can be invalid, which means that they do not
+contain valid tracking data and do not correspond to a physical entity.
+Invalid Pointable objects can be the result of asking for a Pointable object
+using an ID from an earlier frame when no Pointable objects with that ID
+exist in the current frame. A Pointable object created from the Pointable
+constructor is also invalid. Test for validity with the Pointable.valid
+property.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.ScreenTapGesture.html" ><abbr title="Leap.ScreenTapGesture">Leap.ScreenTapGesture</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The ScreenTapGesture class represents a tapping gesture by a finger or tool.</p>
+<p>A screen tap gesture is recognized when the tip of a finger pokes forward
+and then springs back to approximately the original postion, as if
+tapping a vertical screen. The tapping finger must pause briefly before beginning the tap.</p>
+<p><img src="images/Leap_Gesture_Tap2.png" alt="ScreenTap"></p>
+<p>ScreenTap gestures are discrete. The ScreenTapGesture object representing a tap always
+has the state, STATE_STOP. Only one ScreenTapGesture object is created for each
+screen tap gesture recognized.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.SwipeGesture.html" ><abbr title="Leap.SwipeGesture">Leap.SwipeGesture</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The SwipeGesture class represents a swiping motion of a finger or tool.</p>
+<p><img src="images/Leap_Gesture_Swipe.png" alt="SwipeGesture"></p>
+<p>Swipe gestures are continuous.</p>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							
+							<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+							
+						</td>
+						<td>
+						  <p>The Vector object represents a three-component mathematical vector or point 
+such as a direction or position in three-dimensional space.</p>
+<p>The Leap software employs a right-handed Cartesian coordinate system. 
+Values given are in units of real-world millimeters. The origin is 
+centered at the center of the Leap device. The x- and z-axes lie in the 
+horizontal plane, with the x-axis running parallel to the long edge of 
+the device. The y-axis is vertical, with positive values increasing upwards 
+(in contrast to the downward orientation of most computer graphics 
+coordinate systems). The z-axis has positive values increasing away from the 
+computer screen.</p>
+						</td>
+					</tr>
+					
+
+				</tbody>
+			</table>
+		</div>
+
+		<footer>
+<span>
+Copyright &copy; 2012-2013 <a href="https://developer.leapmotion.com" target="_top">Leap Motion</a>
+</span>
+</footer>
+
+
+	</body>
+</html>

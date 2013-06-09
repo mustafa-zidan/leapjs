@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
+		<title>leapjs Documentation</title>
+	</head>
+	<body id="overview">
+
+		<header>
+			<div class="header">
+				<script type="text/javascript" src="js/jQuery.172.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var header = $('.header'),
+		content = $('.content')
+		footer = $('footer')
+	;
+
+	function mtn(str){
+		if(
+			'' === str
+			|| undefined === str
+			|| null === str
+		){
+			return 0;
+		}else{
+			var a = parseInt(str.replace(/px|ex|em/, ''), 10);
+			if(isNaN(a)){
+				a = 0;
+			}
+			return a;
+		}
+	}
+	
+	function resize(){
+		var availableHeight = $(window).height() - (header.outerHeight() + footer.outerHeight()),
+			availableWidth = $(window).width(),
+			contentOffsetH = mtn(content.css('borderTopWidth')) + 
+				mtn(content.css('marginTop')) +
+				mtn(content.css('paddingTop')) +
+				
+				mtn(content.css('paddingBottom')) +
+				mtn(content.css('marginBottom')) +
+				mtn(content.css('borderBottomWidth')),
+			contentOffsetW = mtn(content.css('borderLeftWidth')) + 
+				mtn(content.css('marginLeft')) +
+				mtn(content.css('paddingLeft')) +
+				
+				mtn(content.css('paddingRight')) +
+				mtn(content.css('marginRight')) +
+				mtn(content.css('borderRightWidth'))
+		;
+		content.height(availableHeight - contentOffsetH);
+		content.width(availableWidth - contentOffsetW);
+	}
+	resize();
+	$(window).resize(resize);
+});
+</script>
+
+<ul>
+	
+	<li><a href="class_index.html">Classes</a></li>
+	
+	
+	
+	
+	<li><a href="namespace_index.html">Namespaces</a></li>
+	
+	
+	
+	
+	
+	
+	<li><a href="function_index.html">Methods</a></li>
+	
+	
+	
+	<li><a href="doc-index.html">Index</a></li>
+</ul>
+
+<div id="title">
+	
+  <span class="jumbo">
+		LeapJS API Reference
+  </span>
+		
+</div>
+
+
+				<div class="type">Index</div>
+
+				<a href="#letterA">A</a>&nbsp;B&nbsp;<a href="#letterC">C</a>&nbsp;<a href="#letterD">D</a>&nbsp;E&nbsp;<a href="#letterF">F</a>&nbsp;<a href="#letterG">G</a>&nbsp;<a href="#letterH">H</a>&nbsp;<a href="#letterI">I</a>&nbsp;J&nbsp;<a href="#letterK">K</a>&nbsp;<a href="#letterL">L</a>&nbsp;<a href="#letterM">M</a>&nbsp;<a href="#letterN">N</a>&nbsp;O&nbsp;<a href="#letterP">P</a>&nbsp;Q&nbsp;<a href="#letterR">R</a>&nbsp;<a href="#letterS">S</a>&nbsp;<a href="#letterT">T</a>&nbsp;U&nbsp;<a href="#letterV">V</a>&nbsp;W&nbsp;X&nbsp;<a href="#letterY">Y</a>&nbsp;Z&nbsp;
+			</div>
+		</header>
+
+		<div class="content">
+			
+			 
+			
+
+			<h2 id="letterA">
+				A
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#AngleTo" ><abbr title="Leap.Vector#AngleTo">AngleTo</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The angle between this vector and the specified vector in radians.</p>
+<p>The angle is measured in the plane formed by the two vectors. 
+The angle returned is always the smaller of the two conjugate angles. 
+Thus A.angleTo(B) == B.angleTo(A) and is always a positive value less 
+than or equal to pi radians (180 degrees).</p>
+<p>If either vector has zero length, then this function returns zero.</p>
+<p><img src="images/Math_AngleTo.png" alt="Vector AngleTo"></p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterC">
+				C
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.CircleGesture.html" ><abbr title="Leap.CircleGesture">CircleGesture</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The CircleGesture classes represents a circular finger movement.</p>
+<p>A circle movement is recognized when the tip of a finger draws a circle
+within the Leap field of view.</p>
+<p><img src="images/Leap_Gesture_Circle.png" alt="CircleGesture"></p>
+<p>Circle gestures are continuous. The CircleGesture objects for the gesture have
+three possible states:</p>
+<ul>
+<li>start -- The circle gesture has just started. The movement has
+progressed far enough for the recognizer to classify it as a circle.</li>
+<li>update -- The circle gesture is continuing.</li>
+<li>stop -- The circle gesture is finished.</li>
+</ul>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#compare" ><abbr title="Leap.Matrix#compare">compare</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Compare Matrix equality component-wise.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#compare" ><abbr title="Leap.Vector#compare">compare</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Compare Vector equality component-wise.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Controller.html" ><abbr title="Leap.Controller">Controller</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Controller class is your main interface to the Leap Motion Controller.</p>
+<p>Create an instance of this Controller class to access frames of tracking data 
+and configuration information. Frame data can be polled at any time using the 
+<a href="Leap.Controller.html#frame">Controller.frame</a>() function. Call frame() or frame(0) to get the most recent 
+frame. Set the history parameter to a positive integer to access previous frames. 
+A controller stores up to 60 frames in its frame history.</p>
+<p>Polling is an appropriate strategy for applications which already have an 
+intrinsic update loop, such as a game.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#Cross" ><abbr title="Leap.Vector#Cross">Cross</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The cross product of this vector and the specified vector.</p>
+<p>The cross product is a vector orthogonal to both original vectors. 
+It has a magnitude equal to the area of a parallelogram having the 
+two vectors as sides. The direction of the returned vector is 
+determined by the right-hand rule. Thus A.cross(B) == -B.cross(A).</p>
+<p><img src="images/Math_Cross.png" alt="Vector Cross"></p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterD">
+				D
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#distanceTo" ><abbr title="Leap.Vector#distanceTo">distanceTo</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The distance between the point represented by this Vector object 
+and a point represented by the specified Vector object.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#dividedBy" ><abbr title="Leap.Vector#dividedBy">dividedBy</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Divide vector by a scalar.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#dot" ><abbr title="Leap.Vector#dot">dot</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The dot product of this vector with another vector.</p>
+<p>The dot product is the magnitude of the projection of this vector onto 
+the specified vector.</p>
+<p><img src="images/Math_Dot.png" alt="Vector Dot"></p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#dump" ><abbr title="Leap.Frame#dump">dump</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Returns a JSON-formatted string containing the hands, pointables and gestures
+in this frame.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterF">
+				F
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#finger" ><abbr title="Leap.Frame#finger">finger</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The finger with the specified ID in this frame.</p>
+<p>Use the Frame finger() function to retrieve the finger from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Finger object, but if no finger
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a finger is lost and subsequently
+regained, the new Pointable object representing that physical finger may have
+a different ID than that representing the finger in an earlier frame.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Hand.html#finger" ><abbr title="Leap.Hand#finger">finger</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The finger with the specified ID attached to this hand.</p>
+<p>Use this function to retrieve a Pointable object representing a finger
+attached to this hand using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no finger
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that the ID values assigned to fingers persist across frames, but only
+until tracking of a particular finger is lost. If tracking of a finger is
+lost and subsequently regained, the new Finger object representing that
+finger may have a different ID than that representing the finger in an
+earlier frame.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Frame</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Frame class represents a set of hand and finger tracking data detected
+in a single frame.</p>
+<p>The Leap detects hands, fingers and tools within the tracking area, reporting
+their positions, orientations and motions in frames at the Leap frame rate.</p>
+<p>Access Frame objects using the <a href="Leap.Controller.html#frame">Controller.frame</a>() function.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Controller.html#frame" ><abbr title="Leap.Controller#frame">frame</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Controller.html" ><abbr title="Leap.Controller">Leap.Controller</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Returns a frame of tracking data from the Leap.</p>
+<p>Use the optional history parameter to specify which frame to retrieve. 
+Call frame() or frame(0) to access the most recent frame; call frame(1) to 
+access the previous frame, and so on. If you use a history value greater 
+than the number of stored frames, then the controller returns an invalid frame.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterG">
+				G
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Gesture.html" ><abbr title="Leap.Gesture">Gesture</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					abstract  class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Gesture class represents a recognized movement by the user.</p>
+<p>The Leap watches the activity within its field of view for certain movement
+patterns typical of a user gesture or command. For example, a movement from side to
+side with the hand can indicate a swipe gesture, while a finger poking forward
+can indicate a screen tap gesture.</p>
+<p>When the Leap recognizes a gesture, it assigns an ID and adds a
+Gesture object to the frame gesture list. For continuous gestures, which
+occur over many frames, the Leap updates the gesture by adding
+a Gesture object having the same ID and updated properties in each
+subsequent frame.</p>
+<p><strong>Important:</strong> Recognition for each type of gesture must be enabled;
+otherwise <strong>no gestures are recognized or reported</strong>.</p>
+<p>Subclasses of Gesture define the properties for the specific movement patterns
+recognized by the Leap.</p>
+<p>The Gesture subclasses for include:</p>
+<ul>
+<li>CircleGesture -- A circular movement by a finger.</li>
+<li>SwipeGesture -- A straight line movement by the hand with fingers extended.</li>
+<li>ScreenTapGesture -- A forward tapping movement by a finger.</li>
+<li>KeyTapGesture -- A downward tapping movement by a finger.</li>
+</ul>
+<p>Circle and swipe gestures are continuous and these objects can have a
+state of start, update, and stop.</p>
+<p>The screen tap gesture is a discrete gesture. The Leap only creates a single
+ScreenTapGesture object appears for each tap and it always has a stop state.</p>
+<p>Get valid Gesture instances from a Frame object. You can get a list of gestures
+from the Frame gestures array. You can also use the Frame gesture() method
+to find a gesture in the current frame using an ID value obtained in a
+previous frame.</p>
+<p>Gesture objects can be invalid. For example, when you get a gesture by ID
+using Frame.gesture(), and there is no gesture with that ID in the current
+frame, then gesture() returns an Invalid Gesture object (rather than a null
+value). Always check object validity in situations where a gesture might be
+invalid.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterH">
+				H
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Hand.html" ><abbr title="Leap.Hand">Hand</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Hand class reports the physical characteristics of a detected hand.</p>
+<p>Hand tracking data includes a palm position and velocity; vectors for
+the palm normal and direction to the fingers; properties of a sphere fit
+to the hand; and lists of the attached fingers and tools.</p>
+<p>Note that Hand objects can be invalid, which means that they do not contain
+valid tracking data and do not correspond to a physical entity. Invalid Hand
+objects can be the result of asking for a Hand object using an ID from an
+earlier frame when no Hand objects with that ID exist in the current frame.
+A Hand object created from the Hand constructor is also invalid.
+Test for validity with the <a href="Leap.Hand.html#valid">Hand.valid</a> property.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#hand" ><abbr title="Leap.Frame#hand">hand</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Hand object with the specified ID in this frame.</p>
+<p>Use the Frame hand() function to retrieve the Hand object from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Hand object, but if no hand
+with the specified ID is present, an invalid Hand object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a hand is lost and subsequently
+regained, the new Hand object representing that physical hand may have
+a different ID than that representing the physical hand in an earlier frame.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterI">
+				I
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#isValid" ><abbr title="Leap.Vector#isValid">isValid</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Returns true if all of the vector's components are finite.</p>
+<p>If any component is NaN or infinite, then this returns false.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterK">
+				K
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.KeyTapGesture.html" ><abbr title="Leap.KeyTapGesture">KeyTapGesture</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The KeyTapGesture class represents a tapping gesture by a finger or tool.</p>
+<p>A key tap gesture is recognized when the tip of a finger rotates down toward the
+palm and then springs back to approximately the original postion, as if
+tapping. The tapping finger must pause briefly before beginning the tap.</p>
+<p><img src="images/Leap_Gesture_Tap.png" alt="KeyTap"></p>
+<p>Key tap gestures are discrete. The KeyTapGesture object representing a tap always
+has the state, STATE_STOP. Only one KeyTapGesture object is created for each
+key tap gesture recognized.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterL">
+				L
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 namespace
+				</em>
+				</dt>
+				<dd>
+					<p>Leap is the global namespace of the Leap API.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.html#loop" ><abbr title="Leap.loop">loop</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					static public  method in class <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Leap.loop() function passes a frame of Leap data to your
+callback function and then calls window.requestAnimationFrame() after
+executing your callback function.</p>
+<p>Leap.loop() sets up the Leap controller and WebSocket connection for you.
+You do not need to create your own controller when using this method.</p>
+<p>Your callback function is called on an interval determined by the client
+browser. Typically, this is on an interval of 60 frames/second. The most
+recent frame of Leap data is passed to your callback function. If the Leap
+is producing frames at a slower rate than the browser frame rate, the same
+frame of Leap data can be passed to your function in successive animation
+updates.</p>
+<p>As an alternative, you can create your own Controller object and use a
+Controller#onFrame onFrame callback to process the data at
+the frame rate of the Leap device. See Controller for an
+example.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterM">
+				M
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#magnitude" ><abbr title="Leap.Vector#magnitude">magnitude</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The magnitude, or length, of this vector.</p>
+<p>The magnitude is the L2 norm, or Euclidean distance between the 
+origin and the point represented by the (x, y, z) components of 
+this Vector object.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#magnitudeSquared" ><abbr title="Leap.Vector#magnitudeSquared">magnitudeSquared</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The square of the magnitude, or length, of this vector.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Matrix</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Matrix object represents a transformation matrix. </p>
+<p>To use this object to transform a Vector, construct a matrix 
+containing the desired transformation and then use the 
+<a href="Leap.Matrix.html#transformPoint">Matrix.transformPoint</a>() or 
+<a href="Leap.Matrix.html#transformDirection">Matrix.transformDirection</a>() functions 
+to apply the transform.</p>
+<p>Transforms can be combined by multiplying two or more transform 
+matrices using the times function.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#minus" ><abbr title="Leap.Vector#minus">minus</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Subtract vectors component-wise.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#multiply" ><abbr title="Leap.Vector#multiply">multiply</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Multiply vector by a scalar.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterN">
+				N
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#normalized" ><abbr title="Leap.Vector#normalized">normalized</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>A normalized copy of this vector.</p>
+<p>A normalized vector has the same direction as the original 
+vector, but with a length of one.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterP">
+				P
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#pitch" ><abbr title="Leap.Vector#pitch">pitch</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The pitch angle in radians.</p>
+<p>Pitch is the angle between the negative z-axis and the projection 
+of the vector onto the y-z plane. In other words, pitch represents 
+rotation around the x-axis. If the vector points upward, the 
+returned angle is between 0 and pi radians (180 degrees); if it 
+points downward, the angle is between 0 and -pi radians.</p>
+<p><img src="images/Math_Pitch_Angle.png" alt="Vector Pitch"></p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#plus" ><abbr title="Leap.Vector#plus">plus</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Add vectors component-wise.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Pointable</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Pointable class reports the physical characteristics of a detected
+finger or tool.</p>
+<p>Both fingers and tools are classified as Pointable objects. Use the
+Pointable.tool property to determine whether a Pointable object represents a
+tool or finger. The Leap classifies a detected entity as a tool when it is
+thinner, straighter, and longer than a typical finger.</p>
+<p>Note that Pointable objects can be invalid, which means that they do not
+contain valid tracking data and do not correspond to a physical entity.
+Invalid Pointable objects can be the result of asking for a Pointable object
+using an ID from an earlier frame when no Pointable objects with that ID
+exist in the current frame. A Pointable object created from the Pointable
+constructor is also invalid. Test for validity with the Pointable.valid
+property.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#pointable" ><abbr title="Leap.Frame#pointable">pointable</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Pointable object with the specified ID in this frame.</p>
+<p>Use the Frame pointable() function to retrieve the Pointable object from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no finger or tool
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a finger or tool is lost and subsequently
+regained, the new Pointable object representing that finger or tool may have
+a different ID than that representing the finger or tool in an earlier frame.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#pointable" ><abbr title="Leap.Frame#pointable">pointable</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Pointable object with the specified ID in this frame.</p>
+<p>Use the Frame pointable() function to retrieve the Pointable object from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no finger or tool
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a finger or tool is lost and subsequently
+regained, the new Pointable object representing that finger or tool may have
+a different ID than that representing the finger or tool in an earlier frame.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterR">
+				R
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#rigidInverse" ><abbr title="Leap.Matrix#rigidInverse">rigidInverse</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Performs a matrix inverse if the matrix consists entirely of 
+rigid transformations (translations and rotations). </p>
+<p>If the matrix is not rigid, this operation will not represent an inverse.</p>
+<p>Note that all matricies that are directly returned by the API are rigid.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#roll" ><abbr title="Leap.Vector#roll">roll</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The roll angle in radians.</p>
+<p>Roll is the angle between the y-axis and the projection of 
+the vector onto the x-y plane. In other words, roll represents 
+rotation around the z-axis. If the vector points to the left 
+of the y-axis, then the returned angle is between 0 and pi 
+radians (180 degrees); if it points to the right, the angle is 
+between 0 and -pi radians.</p>
+<p><img src="images/Math_Roll_Angle.png" alt="Vector Roll"></p>
+<p>Use this function to get roll angle of the plane to which this 
+vector is a normal. For example, if this vector represents the 
+normal to the palm, then this function returns the tilt or roll 
+of the palm plane compared to the horizontal (x-z) plane.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#rotationAngle" ><abbr title="Leap.Frame#rotationAngle">rotationAngle</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The angle of rotation around the rotation axis derived from the overall 
+rotational motion between the current frame and the specified frame.</p>
+<p>The returned angle is expressed in radians measured clockwise around 
+the rotation axis (using the right-hand rule) between the start and end frames. 
+The value is always between 0 and pi radians (0 and 180 degrees).</p>
+<p>The Leap derives frame rotation from the relative change in position and 
+orientation of all objects detected in the field of view.</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, then the 
+angle of rotation is zero.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Hand.html#rotationAngle" ><abbr title="Leap.Hand#rotationAngle">rotationAngle</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The angle of rotation around the rotation axis derived from the change in 
+orientation of this hand, and any associated fingers and tools, between the 
+current frame and the specified frame.</p>
+<p>The returned angle is expressed in radians measured clockwise around the 
+rotation axis (using the right-hand rule) between the start and end frames. 
+The value is always between 0 and pi radians (0 and 180 degrees).</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then the angle of rotation is zero.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#rotationAxis" ><abbr title="Leap.Frame#rotationAxis">rotationAxis</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The axis of rotation derived from the overall rotational motion between 
+the current frame and the specified frame.</p>
+<p>The returned direction vector is normalized.</p>
+<p>The Leap derives frame rotation from the relative change in position and 
+orientation of all objects detected in the field of view.</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, or if no 
+rotation is detected between the two frames, a zero vector is returned.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Hand.html#rotationAxis" ><abbr title="Leap.Hand#rotationAxis">rotationAxis</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The axis of rotation derived from the change in orientation of this hand, and 
+any associated fingers and tools, between the current frame and the specified frame.</p>
+<p>The returned direction vector is normalized.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then this method returns a zero vector.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#rotationMatrix" ><abbr title="Leap.Frame#rotationMatrix">rotationMatrix</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The transform matrix expressing the rotation derived from the overall 
+rotational motion between the current frame and the specified frame.</p>
+<p>The Leap derives frame rotation from the relative change in position and 
+orientation of all objects detected in the field of view.</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, then 
+this method returns an identity matrix.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Hand.html#rotationMatrix" ><abbr title="Leap.Hand#rotationMatrix">rotationMatrix</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The transform matrix expressing the rotation derived from the change in 
+orientation of this hand, and any associated fingers and tools, between 
+the current frame and the specified frame.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then this method returns 
+an identity matrix.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterS">
+				S
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#scaleFactor" ><abbr title="Leap.Frame#scaleFactor">scaleFactor</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The scale factor derived from the overall motion between the current frame and the specified frame.</p>
+<p>The scale factor is always positive. A value of 1.0 indicates no scaling took place. 
+Values between 0.0 and 1.0 indicate contraction and values greater than 1.0 indicate expansion.</p>
+<p>The Leap derives scaling from the relative inward or outward motion of all 
+objects detected in the field of view (independent of translation and rotation).</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, then this method returns 1.0.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Hand.html#scaleFactor" ><abbr title="Leap.Hand#scaleFactor">scaleFactor</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The scale factor derived from the hand's motion between the current frame and the specified frame.</p>
+<p>The scale factor is always positive. A value of 1.0 indicates no scaling took place. 
+Values between 0.0 and 1.0 indicate contraction and values greater than 1.0 indicate expansion.</p>
+<p>The Leap derives scaling from the relative inward or outward motion of a hand 
+and its associated fingers and tools (independent of translation and rotation).</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either this frame or sinceFrame 
+are invalid Frame objects, then this method returns 1.0.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.ScreenTapGesture.html" ><abbr title="Leap.ScreenTapGesture">ScreenTapGesture</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The ScreenTapGesture class represents a tapping gesture by a finger or tool.</p>
+<p>A screen tap gesture is recognized when the tip of a finger pokes forward
+and then springs back to approximately the original postion, as if
+tapping a vertical screen. The tapping finger must pause briefly before beginning the tap.</p>
+<p><img src="images/Leap_Gesture_Tap2.png" alt="ScreenTap"></p>
+<p>ScreenTap gestures are discrete. The ScreenTapGesture object representing a tap always
+has the state, STATE_STOP. Only one ScreenTapGesture object is created for each
+screen tap gesture recognized.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#setRotation" ><abbr title="Leap.Matrix#setRotation">setRotation</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Sets this transformation matrix to represent a rotation around 
+the specified vector.</p>
+<p>This function erases any previous rotation and scale transforms 
+applied to this matrix, but does not affect translation.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.SwipeGesture.html" ><abbr title="Leap.SwipeGesture">SwipeGesture</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The SwipeGesture class represents a swiping motion of a finger or tool.</p>
+<p><img src="images/Leap_Gesture_Swipe.png" alt="SwipeGesture"></p>
+<p>Swipe gestures are continuous.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterT">
+				T
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#times" ><abbr title="Leap.Matrix#times">times</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Multiply transform matrices.</p>
+<p>Combines two transformations into a single equivalent transformation.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#toArray" ><abbr title="Leap.Vector#toArray">toArray</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Returns the vector as a float array.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#toArray3x3" ><abbr title="Leap.Matrix#toArray3x3">toArray3x3</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Writes the 3x3 Matrix object to a 9 element row-major float array. </p>
+<p>Translation factors are discarded.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#toArray4x4" ><abbr title="Leap.Matrix#toArray4x4">toArray4x4</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Convert a 4x4 Matrix object to a 16 element row-major float array. </p>
+<p>Translation factors are discarded.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#toString" ><abbr title="Leap.Frame#toString">toString</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>A string containing a brief, human readable description of the Frame object.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Hand.html#toString" ><abbr title="Leap.Hand#toString">toString</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>A string containing a brief, human readable description of the Hand object.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#toString" ><abbr title="Leap.Matrix#toString">toString</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Write the matrix to a string in a human readable format.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Pointable.html#toString" ><abbr title="Leap.Pointable#toString">toString</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>A string containing a brief, human readable description of the Pointable
+object.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#toString" ><abbr title="Leap.Vector#toString">toString</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Returns a string containing this vector in a human readable 
+format: (x, y, z).</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#transformDirection" ><abbr title="Leap.Matrix#transformDirection">transformDirection</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Transforms a vector with this matrix by transforming its 
+rotation and scale only.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Matrix.html#transformPoint" ><abbr title="Leap.Matrix#transformPoint">transformPoint</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>Transforms a vector with this matrix by transforming its 
+rotation, scale, and translation. </p>
+<p>Translation is applied after rotation and scale.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#translation" ><abbr title="Leap.Frame#translation">translation</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The change of position derived from the overall linear motion between the 
+current frame and the specified frame.</p>
+<p>The returned translation vector provides the magnitude and direction of the 
+movement in millimeters.</p>
+<p>The Leap derives frame translation from the linear motion of all objects 
+detected in the field of view.</p>
+<p>If either this frame or sinceFrame is an invalid Frame object, then this 
+method returns a zero vector.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Hand.html#translation" ><abbr title="Leap.Hand#translation">translation</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The change of position of this hand between the current frame and the specified frame</p>
+<p>The returned translation vector provides the magnitude and direction of the 
+movement in millimeters.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either this frame or 
+sinceFrame are invalid Frame objects, then this method returns a zero vector.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterV">
+				V
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Vector</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					 class in namespace <a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The Vector object represents a three-component mathematical vector or point 
+such as a direction or position in three-dimensional space.</p>
+<p>The Leap software employs a right-handed Cartesian coordinate system. 
+Values given are in units of real-world millimeters. The origin is 
+centered at the center of the Leap device. The x- and z-axes lie in the 
+horizontal plane, with the x-axis running parallel to the long edge of 
+the device. The y-axis is vertical, with positive values increasing upwards 
+(in contrast to the downward orientation of most computer graphics 
+coordinate systems). The z-axis has positive values increasing away from the 
+computer screen.</p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		 
+			
+
+			<h2 id="letterY">
+				Y
+				<small><a href="#">Top</a></small>
+			</h2>
+			<dl>
+				
+				
+				<dt>
+				<a href="Leap.Vector.html#yaw" ><abbr title="Leap.Vector#yaw">yaw</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The yaw angle in radians. </p>
+<p>Yaw is the angle between the negative z-axis and the projection 
+of the vector onto the x-z plane. In other words, yaw represents 
+rotation around the y-axis. If the vector points to the right 
+of the negative z-axis, then the returned angle is between 0 and 
+pi radians (180 degrees); if it points to the left, the angle 
+is between 0 and -pi radians.</p>
+<p><img src="images/Math_Yaw_Angle.png" alt="Vector Roll"></p>
+				</dd>
+				
+			</dl>
+
+			
+
+		</dl>
+
+		
+		
+	</div>
+
+	<footer>
+<span>
+Copyright &copy; 2012-2013 <a href="https://developer.leapmotion.com" target="_top">Leap Motion</a>
+</span>
+</footer>
+
+
+</body>
+</html>

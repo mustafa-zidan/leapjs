@@ -1,1726 +1,2215 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Leap Motion JavaScript API Reference: Class: Hand</title>
-    
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+	<head>
+	  <script src="js/prettify/prettify.js"> </script>
+    <script src="js/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
+		<link rel="stylesheet" type="text/css" href="styles/stylesheet.css">
+		<title>leapjs Documentation</title>
+	</head>
+	<body id="class" onload="prettyPrint();">
 
-<body>
+		<header>
+			<div class="header">
+				<script type="text/javascript" src="js/jQuery.172.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var header = $('.header'),
+		content = $('.content')
+		footer = $('footer')
+	;
 
-<div id="main">
-    
-    <h1 class="page-title">Class: Hand</h1>
-    
-    
+	function mtn(str){
+		if(
+			'' === str
+			|| undefined === str
+			|| null === str
+		){
+			return 0;
+		}else{
+			var a = parseInt(str.replace(/px|ex|em/, ''), 10);
+			if(isNaN(a)){
+				a = 0;
+			}
+			return a;
+		}
+	}
+	
+	function resize(){
+		var availableHeight = $(window).height() - (header.outerHeight() + footer.outerHeight()),
+			availableWidth = $(window).width(),
+			contentOffsetH = mtn(content.css('borderTopWidth')) + 
+				mtn(content.css('marginTop')) +
+				mtn(content.css('paddingTop')) +
+				
+				mtn(content.css('paddingBottom')) +
+				mtn(content.css('marginBottom')) +
+				mtn(content.css('borderBottomWidth')),
+			contentOffsetW = mtn(content.css('borderLeftWidth')) + 
+				mtn(content.css('marginLeft')) +
+				mtn(content.css('paddingLeft')) +
+				
+				mtn(content.css('paddingRight')) +
+				mtn(content.css('marginRight')) +
+				mtn(content.css('borderRightWidth'))
+		;
+		content.height(availableHeight - contentOffsetH);
+		content.width(availableWidth - contentOffsetW);
+	}
+	resize();
+	$(window).resize(resize);
+});
+</script>
+
+<ul>
+	
+	<li><a href="class_index.html">Classes</a></li>
+	
+	
+	
+	
+	<li><a href="namespace_index.html">Namespaces</a></li>
+	
+	
+	
+	
+	
+	
+	<li><a href="function_index.html">Methods</a></li>
+	
+	
+	
+	<li><a href="doc-index.html">Index</a></li>
+</ul>
+
+<div id="title">
+	
+  <span class="jumbo">
+		LeapJS API Reference
+  </span>
+		
+</div>
+
+				<div class="type">Class</div>
+				<h1>
+					<a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>.Hand
+				</h1>
+			</div>
+		</header>
+
+		<div class="content">
+
+			<div class="anchor_list">
+	<h2>Contents</h2>
+	<ul>
+		
+		
+		
+		
+		
+
+		
+
+		
+		<li><a href="#static_properties">Static Properties & Enumerations</a></li>
+		
+
+		
+		<li><a href="#properties">Properties</a></li>
+		
+
+		
+
+		
+		<li><a href="#methods">Methods</a></li>
+		
+
+			
+	</ul>
+</div>
+			
+			<!-- CLASS SIGNATURE -->
+			<p class="PrincipalTitle">
+				<span> </span>
+				<span>class </span>
+				<strong>
+					<a href="Leap.html" ><abbr title="Leap">Leap</abbr></a>.Hand
+				</strong>
+
+				
+
+				
+
+				
+			</p>
 
 
+			<!-- CLASS DESCRIPTION -->
+			<div class="description"><p><p>The Hand class reports the physical characteristics of a detected hand.</p>
+<p>Hand tracking data includes a palm position and velocity; vectors for
+the palm normal and direction to the fingers; properties of a sphere fit
+to the hand; and lists of the attached fingers and tools.</p>
+<p>Note that Hand objects can be invalid, which means that they do not contain
+valid tracking data and do not correspond to a physical entity. Invalid Hand
+objects can be the result of asking for a Hand object using an ID from an
+earlier frame when no Hand objects with that ID exist in the current frame.
+A Hand object created from the Hand constructor is also invalid.
+Test for validity with the <a href="Leap.Hand.html#valid">Hand.valid</a> property.</p></p></div>
 
-<section>
-    
-<header>
-    <h2>
-    Hand
-    </h2>
-    
-        <div class="class-description"><p>The Hand class reports the physical characteristics of a detected hand.</p>
 
-<p>Hand tracking data includes a palm position and velocity; vectors for<br />the palm normal and direction to the fingers; properties of a sphere fit<br />to the hand; and lists of the attached fingers and tools.</p>
+			<!-- CLASS CONSTRUCTOR SUMMARY -->
+			<h2>
+				<a name='constructor'></a>
+				Constructor
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+				<tbody>
+					<tr>
+						<td class="type">&nbsp;</td>
+						<td class="last">
+							<a href="#Hand">Hand</a>
+							<span>()</span>
+							
+						<td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
 
-<p>Note that Hand objects can be invalid, which means that they do not contain<br />valid tracking data and do not correspond to a physical entity. Invalid Hand<br />objects can be the result of asking for a Hand object using an ID from an<br />earlier frame when no Hand objects with that ID exist in the current frame.<br />A Hand object created from the Hand constructor is also invalid.<br />Test for validity with the <a href="Leap.Hand.html#valid">Leap.Hand#valid</a> property.</p></div>
-    
-</header>  
 
-<article>
-    <div class="container-overview">
+			<!-- CLASS REQUIRES -->
+
+			<!-- NAMESPACE SUB-NAMESPACES -->
+						
+
+			<!-- CLASS CONSTANTS SUMMARY -->
+			
+
+
+			<!-- CLASS STATIC PROPERTIES & ENUMERATIONS SUMMARY -->
+			
+			<h2>
+				<a name='static_properties'></a>
+				Static Properties & Enumerations
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+  <tbody>
+  
     
-    
-    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#Invalid">
+        	<abbr title="Leap.Hand.Invalid">
+        		Invalid
+        	</abbr>
+        </a>
         
-<dt>
-    <h4 class="name" id="Hand"><span class="type-signature"></span>new Hand<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Constructs a Hand object.</p>
-
-<p>An uninitialized hand is considered invalid.<br />Get valid Hand objects from a Frame object.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
+        <span class="value">
         
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 1</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-    
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
+        </span>
         
-        <dl>
-            
-<dt>
-    <h4 class="name" id="Invalid"><span class="type-signature">&lt;static, constant> </span>Invalid<span class="type-signature"> :<a href="Leap.Hand.html">Leap.Hand</a></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>An invalid Hand object.</p>
-
-<p>You can use an invalid Hand object in comparisons testing<br />whether a given Hand instance is valid or invalid. (You can also use the<br />Hand valid property.)</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
         
-	
-	
-	
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+    
+  </tbody>
+</table>
+			
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 180</li></ul></dd>
-	
+			<!-- CLASS PROPERTIES SUMMARY -->
+			
+			<h2>
+				<a name='properties'></a>
+				Properties
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+  <tbody>
+  
     
-    
-	
-	
-	
-	
-</dl>
 
-    
-    
-</dd>
-
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#direction">
+        	<abbr title="Leap.Hand#direction">
+        		direction
+        	</abbr>
+        </a>
         
-            
-<dt>
-    <h4 class="name" id="direction"><span class="type-signature"></span>direction<span class="type-signature"> :Array: [x,y,z]</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The direction from the palm position toward the fingers.</p>
-
-<p>The direction is expressed as a unit vector pointing in the same<br />direction as the directed line from the palm position to the fingers.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
+        <span class="value">
         
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 50</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
+        </span>
         
-            
-<dt>
-    <h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :String</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>A unique ID assigned to this Hand object, whose value remains the same<br />across consecutive frames while the tracked hand remains visible. If<br />tracking is lost (for example, when a hand is occluded by another hand<br />or when it is withdrawn from or reaches the edge of the Leap field of view),<br />the Leap may assign a new ID when it detects the hand in a future frame.</p>
-
-<p>Use the ID value with the Leap.Frame.hand() function to find this<br />Hand object in future frames.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
         
-	
-	
-	
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 30</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#fingers[]">
+        	<abbr title="Leap.Hand#fingers[]">
+        		fingers[]
+        	</abbr>
+        </a>
         
-            
-<dt>
-    <h4 class="name" id="palmNormal"><span class="type-signature"></span>palmNormal<span class="type-signature"> :Array: [x,y,z]</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The normal vector to the palm. If your hand is flat, this vector will<br />point downward, or "out" of the front surface of your palm.</p>
-
-<p><img src="images/Leap_Palm_Vectors.png"/></p>
-
-<p>The direction is expressed as a unit vector pointing in the same<br />direction as the palm normal (that is, a vector orthogonal to the palm).</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
+        <span class="value">
         
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 67</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
+        </span>
         
-            
-<dt>
-    <h4 class="name" id="palmPosition"><span class="type-signature"></span>palmPosition<span class="type-signature"> :Array: [x,y,z]</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The center position of the palm in millimeters from the Leap origin.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
         
-	
-	
-	
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 44</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        String
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#id">
+        	<abbr title="Leap.Hand#id">
+        		id
+        	</abbr>
+        </a>
         
-            
-<dt>
-    <h4 class="name" id="palmVeclocity"><span class="type-signature"></span>palmVeclocity<span class="type-signature"> :Array: [Vx,Vy,Vz]</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The rate of change of the palm position in millimeters/second.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
+        <span class="value">
         
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 60</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
+        </span>
         
-            
-<dt>
-    <h4 class="name" id="pointables[]"><span class="type-signature"></span>pointables[]<span class="type-signature"> :<a href="Leap.Pointable.html">Leap.Pointable</a></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The list of Pointable objects (fingers and tools) detected in this frame<br />that are associated with this hand, given in arbitrary order. The list<br />can be empty if no fingers or tools associated with this hand are detected.</p>
-
-<p>Use the <a href="Leap.Pointable.html">Leap.Pointable</a> tool property to determine<br />whether or not an item in the list represents a tool or finger.<br />You can also get only the tools using the Hand.tools[] list or<br />only the fingers using the Hand.fingers[] list.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
         
-	
-	
-	
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 106</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#palmNormal">
+        	<abbr title="Leap.Hand#palmNormal">
+        		palmNormal
+        	</abbr>
+        </a>
         
-            
-<dt>
-    <h4 class="name" id="sphereCenter"><span class="type-signature"></span>sphereCenter<span class="type-signature"> :Array: [x,y,z]</span></h4>
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
     
     
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The center of a sphere fit to the curvature of this hand.</p>
 
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#palmPosition">
+        	<abbr title="Leap.Hand#palmPosition">
+        		palmPosition
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#palmVeclocity">
+        	<abbr title="Leap.Hand#palmVeclocity">
+        		palmVeclocity
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#pointables[]">
+        	<abbr title="Leap.Hand#pointables[]">
+        		pointables[]
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#sphereCenter">
+        	<abbr title="Leap.Hand#sphereCenter">
+        		sphereCenter
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Number
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#sphereRadius">
+        	<abbr title="Leap.Hand#sphereRadius">
+        		sphereRadius
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#tools[]">
+        	<abbr title="Leap.Hand#tools[]">
+        		tools[]
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+
+    <tr class="public">
+      <td class="type">
+      	<span>
+      	
+      	</span>
+        	
+      	<span>
+        Boolean
+        </span>
+      </td>
+      
+      <td class="last">
+        <a href="#valid">
+        	<abbr title="Leap.Hand#valid">
+        		valid
+        	</abbr>
+        </a>
+        
+        <span class="value">
+        
+        </span>
+        
+        
+		
+		
+		
+		
+      <td>
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+    
+  </tbody>
+</table>
+			
+
+			<!-- CLASS STATIC METHODS SUMMARY -->
+			
+
+			<!-- CLASS METHODS SUMMARY -->
+			
+			<h2>
+				<a name='methods'></a>
+				Methods
+				<small><a href="#">Top</a></small>
+			</h2>
+			<table>
+  <tbody>
+  
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#finger">
+				<abbr title="Leap.Hand#finger">
+					finger
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(String id)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	Number
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#rotationAngle">
+				<abbr title="Leap.Hand#rotationAngle">
+					rotationAngle
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#rotationAxis">
+				<abbr title="Leap.Hand#rotationAxis">
+					rotationAxis
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#rotationMatrix">
+				<abbr title="Leap.Hand#rotationMatrix">
+					rotationMatrix
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	Number
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#scaleFactor">
+				<abbr title="Leap.Hand#scaleFactor">
+					scaleFactor
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	String
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#toString">
+				<abbr title="Leap.Hand#toString">
+					toString
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		()
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#translation">
+				<abbr title="Leap.Hand#translation">
+					translation
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+    
+  </tbody>
+</table>
+
+			
+
+
+			<!-- CLASS EVENTS SUMMARY -->
+			
+
+			<!--
+			################################################################################
+			## DETAILS
+			################################################################################
+			-->
+
+			<!-- CLASS CONSTRUCTOR DETAILS -->
+			<h2>
+				<a name='constructor_details'></a>
+				Constructor details
+				<small><a href="#">Top</a></small>
+				<h3 id="Hand"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno6">hand.js</a> at line 6
+
+  </div>
+	
+	<div class="signature">
+		
+  
+		<strong>Hand</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>Constructs a Hand object.</p>
+<p>An uninitialized hand is considered invalid.
+Get valid Hand objects from a Frame object.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
+
+			</h2>
+
+
+			<!-- CLASS STATIC PROPERTIES & ENUMERATIONS DETAIL -->
+			
+			<h2>
+				<a name='static_properties_details'></a>
+				Static Properties & Enumerations Detail
+				<small><a href="#">Top</a></small>
+			</h2>
+			<h3 id="Invalid" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno327">hand.js</a> at line 327
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    static
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Hand.html" ><abbr title="Leap.Hand">Leap.Hand</abbr></a>
+    </span>
+	  
+  
+		<strong>Invalid</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>An invalid Hand object.</p>
+<p>You can use an invalid Hand object in comparisons testing
+whether a given Hand instance is valid or invalid. (You can also use the
+Hand valid property.)</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div>
+			
+
+
+			<!-- CLASS STATIC METHODS DETAIL -->
+			
+
+
+			<!-- CLASS PROPERTIES DETAIL -->
+			
+			<h2>
+				<a name='properties_details'></a>
+				Properties Detail
+				<small><a href="#">Top</a></small>
+			</h2>
+			<h3 id="direction" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno50">hand.js</a> at line 50
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>direction</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The direction from the palm position toward the fingers.</p>
+<p>The direction is expressed as a unit vector pointing in the same
+direction as the directed line from the palm position to the fingers.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="fingers[]" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno127">hand.js</a> at line 127
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+    </span>
+	  
+  
+		<strong>fingers[]</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The list of fingers detected in this frame that are attached to
+this hand, given in arbitrary order.</p>
+<p>The list can be empty if no fingers attached to this hand are detected.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="id" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno28">hand.js</a> at line 28
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      String
+    </span>
+	  
+  
+		<strong>id</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>A unique ID assigned to this Hand object, whose value remains the same
+across consecutive frames while the tracked hand remains visible. If
+tracking is lost (for example, when a hand is occluded by another hand
+or when it is withdrawn from or reaches the edge of the Leap field of view),
+the Leap may assign a new ID when it detects the hand in a future frame.</p>
+<p>Use the ID value with the Frame.hand() function to find this
+Hand object in future frames.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="palmNormal" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno69">hand.js</a> at line 69
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>palmNormal</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The normal vector to the palm. If your hand is flat, this vector will
+point downward, or &quot;out&quot; of the front surface of your palm.</p>
+<p><img src="images/Leap_Palm_Vectors.png" alt="Palm Vectors"></p>
+<p>The direction is expressed as a unit vector pointing in the same
+direction as the palm normal (that is, a vector orthogonal to the palm).</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="palmPosition" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno43">hand.js</a> at line 43
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>palmPosition</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The center position of the palm in millimeters from the Leap origin.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="palmVeclocity" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno61">hand.js</a> at line 61
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>palmVeclocity</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The rate of change of the palm position in millimeters/second.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="pointables[]" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno112">hand.js</a> at line 112
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+    </span>
+	  
+  
+		<strong>pointables[]</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The list of Pointable objects (fingers and tools) detected in this frame
+that are associated with this hand, given in arbitrary order. The list
+can be empty if no fingers or tools associated with this hand are detected.</p>
+<p>Use the Pointable tool property to determine
+whether or not an item in the list represents a tool or finger.
+You can also get only the tools using the Hand.tools[] list or
+only the fingers using the Hand.fingers[] list.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="sphereCenter" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno82">hand.js</a> at line 82
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>sphereCenter</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The center of a sphere fit to the curvature of this hand.</p>
 <p>This sphere is placed roughly as if the hand were holding a ball.</p>
+<p><img src="images/Leap_Hand_Ball.png" alt="Hand Ball"></p></p></div>
 
-<p><img src="images/Leap_Hand_Ball.png"/></p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
 
+<div class="details ">
+	<ul class="Properties">
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 79</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
+	</ul>
+  
+</div><h3 id="sphereRadius" class="public">
+  
+  <div class="location">
 
-    
-    
-</dd>
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno93">hand.js</a> at line 93
 
-        
-            
-<dt>
-    <h4 class="name" id="sphereRadius"><span class="type-signature"></span>sphereRadius<span class="type-signature"> :Number</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The radius of a sphere fit to the curvature of this hand, in millimeters.</p>
-
-<p>This sphere is placed roughly as if the hand were holding a ball. Thus the<br />size of the sphere decreases as the fingers are curled into a fist.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
+  </div>
 	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 89</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="tools[]"><span class="type-signature"></span>tools[]<span class="type-signature"> :<a href="Leap.Pointable.html">Leap.Pointable</a></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The list of tools detected in this frame that are held by this<br />hand, given in arbitrary order.</p>
-
-<p>The list can be empty if no tools held by this hand are detected.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 130</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="valid"><span class="type-signature"></span>valid<span class="type-signature"> :Boolean</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Reports whether this is a valid Hand object.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 99</li></ul></dd>
-	
-    
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
-    
-    
-        <h3 class="subsection-title">Methods</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="finger"><span class="type-signature"></span>finger<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Leap.Pointable.html">Leap.Pointable</a>|<a href="Leap.Pointable.html#Invalid">Leap.Pointable.Invalid</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>The finger with the specified ID attached to this hand.</p>
-
-<p>Use this function to retrieve a Pointable object representing a finger<br />attached to this hand using an ID value obtained from a previous frame.<br />This function always returns a Pointable object, but if no finger<br />with the specified ID is present, an invalid Pointable object is returned.</p>
-
-<p>Note that the ID values assigned to fingers persist across frames, but only<br />until tracking of a particular finger is lost. If tracking of a finger is<br />lost and subsequently regained, the new Finger object representing that<br />finger may have a different ID than that representing the finger in an<br />earlier frame.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
+	<div class="signature">
 		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Number
+    </span>
+	  
+  
+		<strong>sphereRadius</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The radius of a sphere fit to the curvature of this hand, in millimeters.</p>
+<p>This sphere is placed roughly as if the hand were holding a ball. Thus the
+size of the sphere decreases as the fingers are curled into a fist.</p></p></div>
 
 
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The ID value of a finger from a previous frame.</p></td>
-        </tr>
+<div class="details ">
+	<ul class="Properties">
 	
+	</ul>
+  
+</div><h3 id="tools[]" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno138">hand.js</a> at line 138
+
+  </div>
 	
-	</tbody>
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+    </span>
+	  
+  
+		<strong>tools[]</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>The list of tools detected in this frame that are held by this
+hand, given in arbitrary order.</p>
+<p>The list can be empty if no tools held by this hand are detected.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div><h3 id="valid" class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno104">hand.js</a> at line 104
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Boolean
+    </span>
+	  
+  
+		<strong>valid</strong>
+	  
+	  <span class="defaultvalue">
+	    
+	  </span>
+	</div>
+</h3>
+
+<div class="description "><p><p>Reports whether this is a valid Hand object.</p></p></div>
+
+
+<div class="details ">
+	<ul class="Properties">
+	
+	</ul>
+  
+</div>
+			
+
+
+			<!-- CLASS METHODS DETAIL -->
+			
+			<h2>
+				<a name='methods_details'></a>
+				Methods Detail
+				<small><a href="#">Top</a></small>
+			</h2>
+			<h3 id="finger"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno154">hand.js</a> at line 154
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+    </span>
+	  
+  
+		<strong>finger</strong>
+		
+    <span class="params">
+      (String id)
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>The finger with the specified ID attached to this hand.</p>
+<p>Use this function to retrieve a Pointable object representing a finger
+attached to this hand using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no finger
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that the ID values assigned to fingers persist across frames, but only
+until tracking of a particular finger is lost. If tracking of a finger is
+lost and subsequently regained, the new Finger object representing that
+finger may have a different ID than that representing the finger in an
+earlier frame.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				String
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>id</a><p><p>The ID value of a finger from a previous frame.</p></p>
+    </td>
+    
+  
+
+  </tbody>
 </table>
     
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 146</li></ul></dd>
-	
+    <!-- RETURN VALUE -->
     
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>The Finger object with<br />the matching ID if one exists for this hand in this frame; otherwise, an<br />invalid Finger object is returned.</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="Leap.Pointable.html">Leap.Pointable</a></span>
-|
-
-<span class="param-type"><a href="Leap.Pointable.html#Invalid">Leap.Pointable.Invalid</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="matrix"><span class="type-signature"></span>matrix<span class="signature">()</span><span class="type-signature"> &rarr; {Sylvester.Matrix}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>matrix() method description.</p>
-    </div>
+    <h4>Return Value</h4>
     
 
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
+<table>
+  <tbody>
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>motion.js, line 35</li></ul></dd>
-	
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+			</span>
+    </td>
     
+    <td class="last">
+    <p><p>The Finger object with
+the matching ID if one exists for this hand in this frame; otherwise, an
+invalid Finger object is returned.</p></p>
+    </td>
     
-	
-	
-	
-	
-</dl>
+  
 
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>matrix Return description.</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Sylvester.Matrix</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="rotationAngle"><span class="type-signature"></span>rotationAngle<span class="signature">(fromFrame)</span><span class="type-signature"> &rarr; {Number}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>The angle of rotation around the rotation axis derived from the overall<br />rotational motion between the current frame and the specified frame.</p>
-
-<p>The returned angle is expressed in radians measured clockwise around the<br />rotation axis (using the right-hand rule) between the start and end frames.<br />The value is always between 0 and pi radians (0 and 180 degrees).</p>
-
-<p>The Leap derives frame rotation from the relative change in position and<br />orientation of all objects detected in the field of view. It derives<br />hand rotation from the rotation of the hand and any associated fingers<br />and tools.</p>
-
-<p>If either this frame or fromFrame is an invalid Frame object, then the<br />angle of rotation is zero.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>fromFrame</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Leap.Frame.html">Leap.Frame</a></span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The starting frame for computing the<br />relative rotation.</p></td>
-        </tr>
-	
-	
-	</tbody>
+  </tbody>
 </table>
     
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>motion.js, line 86</li></ul></dd>
-	
+    <!-- EXCEPTIONS -->
     
     
-	
-	
-	
-	
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>A positive value containing the heuristically<br />determined rotational change between the current frame and that specified<br />in the fromFrame parameter.</p>
+	</div>
 </div>
+<h3 id="rotationAngle"  class="public">
+  
+  <div class="location">
 
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno180">hand.js</a> at line 180
 
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Number</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="rotationAxis"><span class="type-signature"></span>rotationAxis<span class="signature">(fromFrame)</span><span class="type-signature"> &rarr; {Array: [x,y,z]}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>rotationAxis() description.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+  </div>
 	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>fromFrame</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Leap.Frame.html">Leap.Frame</a></span>
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Number
+    </span>
+	  
+  
+		<strong>rotationAngle</strong>
+		
+    <span class="params">
+      (<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+    </span>
+	</div>
+</h3>
 
 
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>A different frame description.</p></td>
-        </tr>
+<div class="description "><p><p>The angle of rotation around the rotation axis derived from the change in 
+orientation of this hand, and any associated fingers and tools, between the 
+current frame and the specified frame.</p>
+<p>The returned angle is expressed in radians measured clockwise around the 
+rotation axis (using the right-hand rule) between the start and end frames. 
+The value is always between 0 and pi radians (0 and 180 degrees).</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then the angle of rotation is zero.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
 	
-	
-	</tbody>
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>sinceFrame</a><p><p>The starting frame for computing the relative rotation.</p></p>
+    </td>
+    
+  
+
+  </tbody>
 </table>
     
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>motion.js, line 73</li></ul></dd>
-	
+    <!-- RETURN VALUE -->
     
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>rotationAxis Return description.</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Array: [x,y,z]</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="rotationMatrix"><span class="type-signature"></span>rotationMatrix<span class="signature">(fromFrame)</span><span class="type-signature"> &rarr; {Sylvester.Matrix}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>The transform matrix expressing the rotation derived from the overall<br />rotational motion between the current frame and the specified frame.</p>
-
-<p>The Leap derives frame rotation from the relative change in position and<br />orientation of all objects detected in the field of view. It derives hand<br />rotation from the rotation of a hand and any associated fingers and tools.</p>
-
-<p>If either this frame or fromFrame is an invalid Frame object, then this<br />method returns an identity matrix.</p>
-    </div>
+    <h4>Return Value</h4>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
+<table>
+  <tbody>
 
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>fromFrame</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Leap.Frame.html">Leap.Frame</a></span>
+  
+  <tr>
+    <td class="type">
+			<span>
+				Number
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>A positive value representing the heuristically determined 
+rotational change of the hand between the current frame and that specified in 
+the sinceFrame parameter.</p></p>
+    </td>
+    
+  
 
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The starting frame for computing the<br />relative rotation.</p></td>
-        </tr>
-	
-	
-	</tbody>
+  </tbody>
 </table>
     
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>motion.js, line 116</li></ul></dd>
-	
+    <!-- EXCEPTIONS -->
     
     
-	
-	
-	
-	
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>A transformation matrix containing the<br />heuristically determined rotational change between the current frame and<br />that specified in the fromFrame parameter.</p>
+	</div>
 </div>
+<h3 id="rotationAxis"  class="public">
+  
+  <div class="location">
 
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno211">hand.js</a> at line 211
 
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Sylvester.Matrix</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="scaleFactor"><span class="type-signature"></span>scaleFactor<span class="signature">(fromFrame)</span><span class="type-signature"> &rarr; {Number}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>The scale factor derived from the motion between the current frame<br />and the specified frame.</p>
-
-<p>The scale factor is always positive. A value of 1.0 indicates no<br />scaling took place. Values between 0.0 and 1.0 indicate contraction<br />and values greater than 1.0 indicate expansion.</p>
-
-<p>The Leap derives scaling for a frame from the relative inward or outward<br />motion of all objects detected in the field of view (independent of<br />translation and rotation). It derives scaling for a hand from the spread<br />of the associated hands and fingers.</p>
-
-<p>If either this frame or fromFrame is an invalid Frame object, then this<br />method returns 1.0.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+  </div>
 	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>fromFrame</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Leap.Frame.html">Leap.Frame</a></span>
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>rotationAxis</strong>
+		
+    <span class="params">
+      (<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+    </span>
+	</div>
+</h3>
 
 
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The starting frame for computing the<br />relative scaling.</p></td>
-        </tr>
+<div class="description "><p><p>The axis of rotation derived from the change in orientation of this hand, and 
+any associated fingers and tools, between the current frame and the specified frame.</p>
+<p>The returned direction vector is normalized.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then this method returns a zero vector.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
 	
-	
-	</tbody>
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>sinceFrame</a><p><p>The starting frame for computing the relative rotation.</p></p>
+    </td>
+    
+  
+
+  </tbody>
 </table>
     
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>motion.js, line 138</li></ul></dd>
-	
+    <!-- RETURN VALUE -->
     
-    
-	
-	
-	
-	
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>scaleFactor A positive value representing the<br />heuristically determined scaling change ratio between the current frame<br />and that specified in the fromFrame parameter.</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Number</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>A string containing a brief, human readable description of the Hand object.</p>
-    </div>
+    <h4>Return Value</h4>
     
 
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
+<table>
+  <tbody>
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>hand.js, line 171</li></ul></dd>
-	
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+			</span>
+    </td>
     
+    <td class="last">
+    <p><p>A normalized direction Vector representing the axis of the heuristically determined 
+rotational change of the hand between the current frame and that specified in the sinceFrame parameter.</p></p>
+    </td>
     
-	
-	
-	
-	
-</dl>
+  
 
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>A description of the Hand as a string.</p>
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">String</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="translation"><span class="type-signature"></span>translation<span class="signature">(fromFrame)</span><span class="type-signature"> &rarr; {Array: [x,y,z]}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>The change of position derived from the linear motion between<br />the current frame and the specified frame.</p>
-
-<p>The returned translation vector provides the magnitude and direction of<br />the movement in millimeters.</p>
-
-<p>The Leap derives frame translation from the linear motion of<br />all objects detected in the field of view. It derives hand translation<br />from the linear motion of the hand and any associated fingers and tools.</p>
-
-<p>If either this frame or fromFrame is an invalid Frame object, then this<br />method returns a zero vector.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>fromFrame</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Leap.Frame.html">Leap.Frame</a></span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The starting frame for computing the<br />relative translation.</p></td>
-        </tr>
-	
-	
-	</tbody>
+  </tbody>
 </table>
     
-    
-    
-<dl class="details">
-    
-        
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>motion.js, line 44</li></ul></dd>
-	
+    <!-- EXCEPTIONS -->
     
     
-	
-	
-	
-	
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>A vector representing the heuristically<br />determined change in position of all objects between the current frame<br />and that specified in the fromFrame parameter.</p>
+	</div>
 </div>
+<h3 id="rotationMatrix"  class="public">
+  
+  <div class="location">
 
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno238">hand.js</a> at line 238
 
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
+  </div>
+	
+	<div class="signature">
 		
-<span class="param-type">Array: [x,y,z]</span>
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+    </span>
+	  
+  
+		<strong>rotationMatrix</strong>
+		
+    <span class="params">
+      (<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+    </span>
+	</div>
+</h3>
 
 
-	</dd>
-</dl>
+<div class="description "><p><p>The transform matrix expressing the rotation derived from the change in 
+orientation of this hand, and any associated fingers and tools, between 
+the current frame and the specified frame.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either 
+this frame or sinceFrame are invalid Frame objects, then this method returns 
+an identity matrix.</p></p></div>
 
-        
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>sinceFrame</a><p><p>The starting frame for computing the relative rotation.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>A transformation Matrix containing the heuristically determined 
+rotational change of the hand between the current frame and that specified in the sinceFrame parameter.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
     
     
-</dd>
+	</div>
+</div>
+<h3 id="scaleFactor"  class="public">
+  
+  <div class="location">
 
-        </dl>
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno265">hand.js</a> at line 265
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      Number
+    </span>
+	  
+  
+		<strong>scaleFactor</strong>
+		
+    <span class="params">
+      (<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>The scale factor derived from the hand's motion between the current frame and the specified frame.</p>
+<p>The scale factor is always positive. A value of 1.0 indicates no scaling took place. 
+Values between 0.0 and 1.0 indicate contraction and values greater than 1.0 indicate expansion.</p>
+<p>The Leap derives scaling from the relative inward or outward motion of a hand 
+and its associated fingers and tools (independent of translation and rotation).</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either this frame or sinceFrame 
+are invalid Frame objects, then this method returns 1.0.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>sinceFrame</a><p><p>The starting frame for computing the relative scaling.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				Number
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>A positive value representing the heuristically determined 
+scaling change ratio of the hand between the current frame and that specified in the sinceFrame parameter.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
     
     
+	</div>
+</div>
+<h3 id="toString"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno317">hand.js</a> at line 317
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      String
+    </span>
+	  
+  
+		<strong>toString</strong>
+		
+    <span class="params">
+      ()
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>A string containing a brief, human readable description of the Hand object.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				String
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>A description of the Hand as a string.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
     
     
+	</div>
+</div>
+<h3 id="translation"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_hand_js.html#lineno291">hand.js</a> at line 291
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+    </span>
+	  
+  
+		<strong>translation</strong>
+		
+    <span class="params">
+      (<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>The change of position of this hand between the current frame and the specified frame</p>
+<p>The returned translation vector provides the magnitude and direction of the 
+movement in millimeters.</p>
+<p>If a corresponding Hand object is not found in sinceFrame, or if either this frame or 
+sinceFrame are invalid Frame objects, then this method returns a zero vector.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
     
-</article>
+    <h4>Parameters</h4>
+    
 
-</section>  
+<table>
+  <tbody>
 
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>sinceFrame</a><p><p>The starting frame for computing the relative translation.</p></p>
+    </td>
+    
+  
 
+  </tbody>
+</table>
+    
 
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
 
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Vector.html" ><abbr title="Leap.Vector">Leap.Vector</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>A Vector representing the heuristically determined change in hand 
+position between the current frame and that specified in the sinceFrame parameter.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
 </div>
 
-<nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Leap.Controller.html">Controller</a></li><li><a href="Leap.Frame.html">Frame</a></li><li><a href="Leap.Hand.html">Hand</a></li><li><a href="Leap.Pointable.html">Pointable</a></li></ul>
-</nav>
+			
 
-<br clear="both">
 
-<footer>
-    Copyright &copy; 2012-2013 <a href="https://developer.leapmotion.com">Leap Motion</a>
+			<!-- CLASS EVENTS DETAIL -->
+			
+
+		</div>
+
+		<footer>
+<span>
+Copyright &copy; 2012-2013 <a href="https://developer.leapmotion.com" target="_top">Leap Motion</a>
+</span>
 </footer>
 
-<script> prettyPrint(); </script>
-</body>
+
+	</body>
 </html>
