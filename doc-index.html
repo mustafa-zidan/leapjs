@@ -853,27 +853,6 @@ regained, the new Pointable object representing that finger or tool may have
 a different ID than that representing the finger or tool in an earlier frame.</p>
 				</dd>
 				
-				
-				<dt>
-				<a href="Leap.Frame.html#pointable" ><abbr title="Leap.Frame#pointable">pointable</abbr></a>
-				
-				&nbsp;&mdash;&nbsp;
-				<em>
-					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
-				</em>
-				</dt>
-				<dd>
-					<p>The Pointable object with the specified ID in this frame.</p>
-<p>Use the Frame pointable() function to retrieve the Pointable object from
-this frame using an ID value obtained from a previous frame.
-This function always returns a Pointable object, but if no finger or tool
-with the specified ID is present, an invalid Pointable object is returned.</p>
-<p>Note that ID values persist across frames, but only until tracking of a
-particular object is lost. If tracking of a finger or tool is lost and subsequently
-regained, the new Pointable object representing that finger or tool may have
-a different ID than that representing the finger or tool in an earlier frame.</p>
-				</dd>
-				
 			</dl>
 
 			
@@ -1216,6 +1195,27 @@ applied to this matrix, but does not affect translation.</p>
 				<dd>
 					<p>Convert a 4x4 Matrix object to a 16 element row-major float array. </p>
 <p>Translation factors are discarded.</p>
+				</dd>
+				
+				
+				<dt>
+				<a href="Leap.Frame.html#tool" ><abbr title="Leap.Frame#tool">tool</abbr></a>
+				
+				&nbsp;&mdash;&nbsp;
+				<em>
+					public  method in class <a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>
+				</em>
+				</dt>
+				<dd>
+					<p>The tool with the specified ID in this frame.</p>
+<p>Use the Frame tool() function to retrieve a tool from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no tool
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a tool is lost and subsequently
+regained, the new Pointable object representing that tool may have a
+different ID than that representing the tool in an earlier frame.</p>
 				</dd>
 				
 				

@@ -273,7 +273,7 @@ in this frame.</p></td>
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno390">frame.js</a> at line 390
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno389">frame.js</a> at line 389
 							
 							</div> 
 						</td>
@@ -302,7 +302,7 @@ a different ID than that representing the finger in an earlier frame.</p></td>
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno198">frame.js</a> at line 198
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno197">frame.js</a> at line 197
 							
 							</div> 
 						</td>
@@ -386,7 +386,7 @@ a different ID than that representing the physical hand in an earlier frame.</p>
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno223">frame.js</a> at line 223
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno222">frame.js</a> at line 222
 							
 							</div> 
 						</td>
@@ -630,36 +630,7 @@ a different ID than that representing the finger or tool in an earlier frame.</p
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno149">frame.js</a> at line 149
-							
-							</div> 
-						</td>
-					</tr>
-					
-					<tr>
-						<td style="text-align:right;">
-							<abbr title="Leap.Frame#pointable">
-								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
-							</abbr>
-					  </td>
-					  <td>
-							<abbr title="Leap.Frame#pointable">
-								<strong><a href="Leap.Frame.html#pointable" ><abbr title="Leap.Frame#pointable">pointable</abbr></a></strong>
-							</abbr>
-						</td>
-						<td><p>The Pointable object with the specified ID in this frame.</p>
-<p>Use the Frame pointable() function to retrieve the Pointable object from
-this frame using an ID value obtained from a previous frame.
-This function always returns a Pointable object, but if no finger or tool
-with the specified ID is present, an invalid Pointable object is returned.</p>
-<p>Note that ID values persist across frames, but only until tracking of a
-particular object is lost. If tracking of a finger or tool is lost and subsequently
-regained, the new Pointable object representing that finger or tool may have
-a different ID than that representing the finger or tool in an earlier frame.</p></td>
-						<td width="15%">
-							<div class="location">
-							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno174">frame.js</a> at line 174
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno173">frame.js</a> at line 173
 							
 							</div> 
 						</td>
@@ -744,7 +715,7 @@ angle of rotation is zero.</p></td>
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno246">frame.js</a> at line 246
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno245">frame.js</a> at line 245
 							
 							</div> 
 						</td>
@@ -799,7 +770,7 @@ rotation is detected between the two frames, a zero vector is returned.</p></td>
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno275">frame.js</a> at line 275
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno274">frame.js</a> at line 274
 							
 							</div> 
 						</td>
@@ -850,7 +821,7 @@ this method returns an identity matrix.</p></td>
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno302">frame.js</a> at line 302
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno301">frame.js</a> at line 301
 							
 							</div> 
 						</td>
@@ -902,7 +873,7 @@ objects detected in the field of view (independent of translation and rotation).
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno327">frame.js</a> at line 327
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno326">frame.js</a> at line 326
 							
 							</div> 
 						</td>
@@ -1061,7 +1032,7 @@ applied to this matrix, but does not affect translation.</p></td>
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno376">frame.js</a> at line 376
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno375">frame.js</a> at line 375
 							
 							</div> 
 						</td>
@@ -1155,6 +1126,35 @@ format: (x, y, z).</p></td>
 					
 					<tr>
 						<td style="text-align:right;">
+							<abbr title="Leap.Frame#tool">
+								<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a>.
+							</abbr>
+					  </td>
+					  <td>
+							<abbr title="Leap.Frame#tool">
+								<strong><a href="Leap.Frame.html#tool" ><abbr title="Leap.Frame#tool">tool</abbr></a></strong>
+							</abbr>
+						</td>
+						<td><p>The tool with the specified ID in this frame.</p>
+<p>Use the Frame tool() function to retrieve a tool from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no tool
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a tool is lost and subsequently
+regained, the new Pointable object representing that tool may have a
+different ID than that representing the tool in an earlier frame.</p></td>
+						<td width="15%">
+							<div class="location">
+							
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno148">frame.js</a> at line 148
+							
+							</div> 
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="text-align:right;">
 							<abbr title="Leap.Matrix#transformDirection">
 								<a href="Leap.Matrix.html" ><abbr title="Leap.Matrix">Leap.Matrix</abbr></a>.
 							</abbr>
@@ -1220,7 +1220,7 @@ method returns a zero vector.</p></td>
 						<td width="15%">
 							<div class="location">
 							
-								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno349">frame.js</a> at line 349
+								<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno348">frame.js</a> at line 348
 							
 							</div> 
 						</td>

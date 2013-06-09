@@ -841,7 +841,7 @@ general direction as the pointable object drawing the circle. If you draw
 the circle counterclockwise, the normal points back toward the
 pointable. If the angle between the normal and the pointable object
 drawing the circle is less than 90 degrees, then the circle is clockwise.</p>
-<pre><code class="lang-javascript">   var clockwiseness;
+<pre><code class="prettyprint source javascript">   var clockwiseness;
    if (circle.pointable.direction.angleTo(circle.normal) &lt;= PI/4) {
        clockwiseness = &quot;clockwise&quot;;
    }

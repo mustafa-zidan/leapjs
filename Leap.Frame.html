@@ -683,39 +683,6 @@ their positions, orientations and motions in frames at the Leap frame rate.</p>
     <tr  class="public">
       <td class="type">
       	<span>
-      	<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
-      	</span>
-      </td>
-      
-      <td class="last">
-		
-			<a href="#pointable">
-				<abbr title="Leap.Frame#pointable">
-					pointable
-				</abbr>
-			</a>
-		
-        
-      	<span>
-      		(String id)
-      	</span>
-        
-        
-		
-		
-
-		
-      </td>
-      
-      <td>
-      	
-      </td>
-    </tr>
-    
-
-    <tr  class="public">
-      <td class="type">
-      	<span>
       	Number
       	</span>
       </td>
@@ -830,6 +797,39 @@ their positions, orientations and motions in frames at the Leap frame rate.</p>
         
       	<span>
       		(<a href="Leap.Frame.html" ><abbr title="Leap.Frame">Leap.Frame</abbr></a> sinceFrame)
+      	</span>
+        
+        
+		
+		
+
+		
+      </td>
+      
+      <td>
+      	
+      </td>
+    </tr>
+    
+
+    <tr  class="public">
+      <td class="type">
+      	<span>
+      	<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+      	</span>
+      </td>
+      
+      <td class="last">
+		
+			<a href="#tool">
+				<abbr title="Leap.Frame#tool">
+					tool
+				</abbr>
+			</a>
+		
+        
+      	<span>
+      		(String id)
       	</span>
         
         
@@ -986,7 +986,7 @@ Get valid Frame objects by calling the
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno421">frame.js</a> at line 421
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno420">frame.js</a> at line 420
 
   </div>
 	
@@ -1043,7 +1043,7 @@ whether a given Frame instance is valid or invalid. (You can also check the
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno95">frame.js</a> at line 95
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno94">frame.js</a> at line 94
 
   </div>
 	
@@ -1083,7 +1083,7 @@ The list can be empty if no fingers are detected.</p></p></div>
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno133">frame.js</a> at line 133
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno132">frame.js</a> at line 132
 
   </div>
 	
@@ -1205,7 +1205,7 @@ have consecutive increasing values.</p></p></div>
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno76">frame.js</a> at line 76
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno75">frame.js</a> at line 75
 
   </div>
 	
@@ -1285,7 +1285,7 @@ detected.</p></p></div>
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno86">frame.js</a> at line 86
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno85">frame.js</a> at line 85
 
   </div>
 	
@@ -1359,7 +1359,7 @@ actual tracking data, but you can call its functions without risk of a
 undefined object exception. The invalid Frame mechanism makes it more
 convenient to track individual data across the frame history. For example,
 you can invoke:</p>
-<pre><code class="lang-javascript">var finger = controller.frame(n).finger(fingerID);</code></pre>
+<pre><code class="prettyprint source javascript">var finger = controller.frame(n).finger(fingerID);</code></pre>
 <p>for an arbitrary Frame history value, &quot;n&quot;, without first checking whether
 frame(n) returned a null object. (You should still check that the
 returned Finger instance is valid.)</p></p></div>
@@ -1385,7 +1385,7 @@ returned Finger instance is valid.)</p></p></div>
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno390">frame.js</a> at line 390
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno389">frame.js</a> at line 389
 
   </div>
 	
@@ -1462,7 +1462,7 @@ in this frame.</p></p></div>
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno198">frame.js</a> at line 198
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno197">frame.js</a> at line 197
 
   </div>
 	
@@ -1571,7 +1571,7 @@ object is returned.</p></p>
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno223">frame.js</a> at line 223
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno222">frame.js</a> at line 222
 
   </div>
 	
@@ -1679,116 +1679,7 @@ ID if one exists in this frame; otherwise, an invalid Hand object is returned.</
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno149">frame.js</a> at line 149
-
-  </div>
-	
-	<div class="signature">
-		
-	  <span class="virtual">
-	    
-	  </span>
-	  
-	  <span class="scope">
-	    
-	  </span>
-	  
-	  <span class="accesslevel">
-	    public
-	  </span>
-	  
-    <span class="returnvalues">
-      <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
-    </span>
-	  
-  
-		<strong>pointable</strong>
-		
-    <span class="params">
-      (String id)
-    </span>
-	</div>
-</h3>
-
-
-<div class="description "><p><p>The Pointable object with the specified ID in this frame.</p>
-<p>Use the Frame pointable() function to retrieve the Pointable object from
-this frame using an ID value obtained from a previous frame.
-This function always returns a Pointable object, but if no finger or tool
-with the specified ID is present, an invalid Pointable object is returned.</p>
-<p>Note that ID values persist across frames, but only until tracking of a
-particular object is lost. If tracking of a finger or tool is lost and subsequently
-regained, the new Pointable object representing that finger or tool may have
-a different ID than that representing the finger or tool in an earlier frame.</p></p></div>
-
-
-<div class="details ">
-	<div class="tags">
-	
-    <!-- PARAMS -->
-    
-    <h4>Parameters</h4>
-    
-
-<table>
-  <tbody>
-
-  
-  <tr>
-    <td class="type">
-			<span>
-				String
-			</span>
-    </td>
-    
-    <td class="last">
-    <a>id</a><p><p>The ID value of a Pointable object from a previous frame.</p></p>
-    </td>
-    
-  
-
-  </tbody>
-</table>
-    
-
-    <!-- RETURN VALUE -->
-    
-    <h4>Return Value</h4>
-    
-
-<table>
-  <tbody>
-
-  
-  <tr>
-    <td class="type">
-			<span>
-				<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
-			</span>
-    </td>
-    
-    <td class="last">
-    <p><p>The Pointable object with
-the matching ID if one exists in this frame;
-otherwise, an invalid Pointable object is returned.</p></p>
-    </td>
-    
-  
-
-  </tbody>
-</table>
-    
-
-    <!-- EXCEPTIONS -->
-    
-    
-	</div>
-</div>
-<h3 id="pointable"  class="public">
-  
-  <div class="location">
-
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno174">frame.js</a> at line 174
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno173">frame.js</a> at line 173
 
   </div>
 	
@@ -1897,7 +1788,7 @@ otherwise, an invalid Pointable object is returned.</p></p>
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno246">frame.js</a> at line 246
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno245">frame.js</a> at line 245
 
   </div>
 	
@@ -2005,7 +1896,7 @@ rotational change between the current frame and that specified in the sinceFrame
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno275">frame.js</a> at line 275
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno274">frame.js</a> at line 274
 
   </div>
 	
@@ -2111,7 +2002,7 @@ rotational change between the current frame and that specified in the sinceFrame
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno302">frame.js</a> at line 302
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno301">frame.js</a> at line 301
 
   </div>
 	
@@ -2216,7 +2107,7 @@ rotational change between the current frame and that specified in the sinceFrame
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno327">frame.js</a> at line 327
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno326">frame.js</a> at line 326
 
   </div>
 	
@@ -2317,11 +2208,120 @@ scaling change ratio between the current frame and that specified in the sinceFr
     
 	</div>
 </div>
+<h3 id="tool"  class="public">
+  
+  <div class="location">
+
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno148">frame.js</a> at line 148
+
+  </div>
+	
+	<div class="signature">
+		
+	  <span class="virtual">
+	    
+	  </span>
+	  
+	  <span class="scope">
+	    
+	  </span>
+	  
+	  <span class="accesslevel">
+	    public
+	  </span>
+	  
+    <span class="returnvalues">
+      <a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+    </span>
+	  
+  
+		<strong>tool</strong>
+		
+    <span class="params">
+      (String id)
+    </span>
+	</div>
+</h3>
+
+
+<div class="description "><p><p>The tool with the specified ID in this frame.</p>
+<p>Use the Frame tool() function to retrieve a tool from
+this frame using an ID value obtained from a previous frame.
+This function always returns a Pointable object, but if no tool
+with the specified ID is present, an invalid Pointable object is returned.</p>
+<p>Note that ID values persist across frames, but only until tracking of a
+particular object is lost. If tracking of a tool is lost and subsequently
+regained, the new Pointable object representing that tool may have a
+different ID than that representing the tool in an earlier frame.</p></p></div>
+
+
+<div class="details ">
+	<div class="tags">
+	
+    <!-- PARAMS -->
+    
+    <h4>Parameters</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				String
+			</span>
+    </td>
+    
+    <td class="last">
+    <a>id</a><p><p>The ID value of a Tool object from a previous frame.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- RETURN VALUE -->
+    
+    <h4>Return Value</h4>
+    
+
+<table>
+  <tbody>
+
+  
+  <tr>
+    <td class="type">
+			<span>
+				<a href="Leap.Pointable.html" ><abbr title="Leap.Pointable">Leap.Pointable</abbr></a>
+			</span>
+    </td>
+    
+    <td class="last">
+    <p><p>The tool with the
+matching ID if one exists in this frame; otherwise, an invalid Pointable object
+is returned.</p></p>
+    </td>
+    
+  
+
+  </tbody>
+</table>
+    
+
+    <!-- EXCEPTIONS -->
+    
+    
+	</div>
+</div>
 <h3 id="toString"  class="public">
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno376">frame.js</a> at line 376
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno375">frame.js</a> at line 375
 
   </div>
 	
@@ -2397,7 +2397,7 @@ scaling change ratio between the current frame and that specified in the sinceFr
   
   <div class="location">
 
-  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno349">frame.js</a> at line 349
+  	<a href="_home_jared_GitHub_test_leapjs_lib_frame_js.html#lineno348">frame.js</a> at line 348
 
   </div>
 	
