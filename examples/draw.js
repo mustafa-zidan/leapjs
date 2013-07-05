@@ -23,8 +23,8 @@ function draw() {
         if (!b) continue;
 
         ctx.strokeStyle = color(id);
-        ctx.moveTo(b.tipPosition.x, -b.tipPosition.y);
-        ctx.lineTo(a.tipPosition.x, -a.tipPosition.y);
+        ctx.moveTo(b.tipPosition[0], -b.tipPosition[1]);
+        ctx.lineTo(a.tipPosition[0], -a.tipPosition[1]);
         ctx.stroke();
         ctx.beginPath();
     }

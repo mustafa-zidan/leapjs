@@ -12,8 +12,8 @@ ctx.save();
 Leap.loop(function(obj) {
   if (obj.hands.length < 1) return;
 
-  var x = obj.hands[0].palmNormal.x;
-  var z = obj.hands[0].palmNormal.z;
+  var x = obj.hands[0].palmNormal[0];
+  var z = obj.hands[0].palmNormal[2];
 
   ctx.restore();
   ctx.fillStyle = "rgba(255,255,255,0.4)";

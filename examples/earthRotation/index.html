@@ -147,13 +147,13 @@
           var t = firstValidFrame.translation(frame)
 
           //limit y-axis between 0 and 180 degrees
-          curY = map(t.y, -300, 300, 0, 179)
+          curY = map(t[1], -300, 300, 0, 179)
 
           //assign rotation coordinates
-          rotateX = t.x
+          rotateX = t[0]
           rotateY = -curY
 
-          zoom = Math.max(0, t.z + 200);
+          zoom = Math.max(0, t[2] + 200);
           zoomFactor = 1/(1 + (zoom / 150));
 
           //adjust 3D spherical coordinates of the camera

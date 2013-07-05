@@ -25,9 +25,9 @@ function draw(obj) {
     var pos = pointable.tipPosition;
 
     // create a circle for each pointable
-    var radius = Math.min(600/Math.abs(pos.z),20);
+    var radius = Math.min(600/Math.abs(pos[2]),20);
     ctx.beginPath();
-    ctx.arc(pos.x-radius/2,-pos.y-radius/2,radius,0,2*Math.PI);
+    ctx.arc(pos[0]-radius/2,-pos[1]-radius/2,radius,0,2*Math.PI);
     ctx.fill();
   }
 };
