@@ -7,7 +7,8 @@
     <script src="js/three.js"></script>
     <script src="../leap.js"></script>
     <script>
-      var SCENE_SIZE = 1000, camera, scene, renderer, stats, clock,geometry, material, mesh,controller, hands= [];
+      var SCENE_SIZE = 1000, camera, scene, renderer, stats, clock, geometry, material, mesh,controller, hands= [];
+
       var init = function () {
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, SCENE_SIZE/1000, SCENE_SIZE );
         camera.position.z = SCENE_SIZE/2;
@@ -54,9 +55,9 @@
       init();
       animate();
       function leapToScene(leapPosition){
-        var x = (leapPosition.x/300)*SCENE_SIZE
-        var y = (((leapPosition.y)-200)/300)*SCENE_SIZE
-        var z = (leapPosition.z/300)*SCENE_SIZE
+        var x = (leapPosition[0]/300)*SCENE_SIZE
+        var y = (((leapPosition[1])-200)/300)*SCENE_SIZE
+        var z = (leapPosition[2]/300)*SCENE_SIZE
         var toReturn = new THREE.Vector3(x,y,z)
         return toReturn
       }
