@@ -1,106 +1,177 @@
+/*!                                                              
+ * LeapJS v0.6.4                                                  
+ * http://github.com/leapmotion/leapjs/                                        
+ *                                                                             
+ * Copyright 2013 LeapMotion, Inc. and other contributors                      
+ * Released under the Apache-2.0 license                                     
+ * http://github.com/leapmotion/leapjs/blob/master/LICENSE.txt                 
+ */
 ;(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
-var chooseProtocol = require('./protocol').chooseProtocol
-  , EventEmitter = require('events').EventEmitter
+var Pointable = require('./pointable'),
+  glMatrix = require("gl-matrix")
+  , vec3 = glMatrix.vec3
+  , mat3 = glMatrix.mat3
+  , mat4 = glMatrix.mat4
   , _ = require('underscore');
 
-var BaseConnection = module.exports = function(opts) {
-  this.opts = _.defaults(opts || {}, {
-    host : '127.0.0.1',
-    enableGestures: false,
-    port: 6437,
-    enableHeartbeat: true,
-    heartbeatInterval: 100,
-    requestProtocolVersion: 3
-  });
-  this.host = opts.host;
-  this.port = opts.port;
-  this.on('ready', function() {
-    this.enableGestures(this.opts.enableGestures);
-    if (this.opts.enableHeartbeat) this.startHeartbeat();
-  });
-  this.on('disconnect', function() {
-    if (this.opts.enableHeartbeat) this.stopHeartbeat();
-  });
-  this.heartbeatTimer = null;
-}
 
-BaseConnection.prototype.getUrl = function() {
-  return "ws://" + this.host + ":" + this.port + "/v" + this.opts.requestProtocolVersion + ".json";
-}
+var Bone = module.exports = function(finger, data) {
+  this.finger = finger;
 
-BaseConnection.prototype.sendHeartbeat = function() {
-  if (this.protocol) {
-    this.setHeartbeatState(true);
-    this.protocol.sendHeartbeat(this);
-  }
-}
+  this._center = null, this._matrix = null;
 
-BaseConnection.prototype.handleOpen = function() {
-  this.emit('connect');
-}
+  /**
+  * An integer code for the name of this bone.
+  *
+  * * 0 -- metacarpal
+  * * 1 -- proximal
+  * * 2 -- medial
+  * * 3 -- distal
+  * * 4 -- arm
+  *
+  * @member type
+  * @type {number}
+  * @memberof Leap.Bone.prototype
+  */
+  this.type = data.type;
 
-BaseConnection.prototype.enableGestures = function(enabled) {
-  this.gesturesEnabled = enabled ? true : false;
-  this.send(this.protocol.encode({"enableGestures": this.gesturesEnabled}));
-}
+  /**
+   * The position of the previous, or base joint of the bone closer to the wrist.
+   * @type {vector3}
+   */
+  this.prevJoint = data.prevJoint;
 
-BaseConnection.prototype.handleClose = function() {
-  this.disconnect();
-  this.startReconnection();
-}
+  /**
+   * The position of the next joint, or the end of the bone closer to the finger tip.
+   * @type {vector3}
+   */
+  this.nextJoint = data.nextJoint;
 
-BaseConnection.prototype.startReconnection = function() {
-  var connection = this;
-  setTimeout(function() { connection.connect() }, 1000);
-}
+  /**
+   * The estimated width of the tool in millimeters.
+   *
+   * The reported width is the average width of the visible portion of the
+   * tool from the hand to the tip. If the width isn't known,
+   * then a value of 0 is returned.
+   *
+   * Pointable objects representing fingers do not have a width property.
+   *
+   * @member width
+   * @type {number}
+   * @memberof Leap.Pointable.prototype
+   */
+  this.width = data.width;
 
-BaseConnection.prototype.disconnect = function() {
-  if (!this.socket) return;
-  this.socket.close();
-  delete this.socket;
-  delete this.protocol;
-  this.emit('disconnect');
-}
+  var displacement = new Array(3);
+  vec3.sub(displacement, data.nextJoint, data.prevJoint);
 
-BaseConnection.prototype.handleData = function(data) {
-  var message = JSON.parse(data);
-  var messageEvent;
-  if (this.protocol === undefined) {
-    messageEvent = this.protocol = chooseProtocol(message);
-    this.emit('ready');
-  } else {
-    messageEvent = this.protocol(message);
-  }
-  this.emit(messageEvent.type, messageEvent);
-}
+  this.length = vec3.length(displacement);
 
-BaseConnection.prototype.connect = function() {
-  if (this.socket) return;
-  this.socket = this.setupSocket();
-  return true;
-}
 
-BaseConnection.prototype.send = function(data) {
-  this.socket.send(data);
-}
-
-BaseConnection.prototype.stopHeartbeat = function() {
-  if (!this.heartbeatTimer) return;
-  clearInterval(this.heartbeatTimer);
-  delete this.heartbeatTimer;
-  this.setHeartbeatState(false);
+  /**
+   *
+   * These fully-specify the orientation of the bone.
+   * See examples/threejs-bones.html for more info
+   * Three vec3s:
+   *  x (red): The rotation axis of the finger, pointing outwards.  (In general, away from the thumb )
+   *  y (green): The "up" vector, orienting the top of the finger
+   *  z (blue): The roll axis of the bone.
+   *
+   *  Most up vectors will be pointing the same direction, except for the thumb, which is more rightwards.
+   *
+   *  The thumb has one fewer bones than the fingers, but there are the same number of joints & joint-bases provided
+   *  the first two appear in the same position, but only the second (proximal) rotates.
+   *
+   *  Normalized.
+   */
+  this.basis = data.basis;
 };
 
-BaseConnection.prototype.setHeartbeatState = function(state) {
-  if (this.heartbeatState === state) return;
-  this.heartbeatState = state;
-  this.emit(this.heartbeatState ? 'focus' : 'blur');
+Bone.prototype.left = function(){
+
+  if (this._left) return this._left;
+
+  this._left =  mat3.determinant(this.basis[0].concat(this.basis[1]).concat(this.basis[2])) < 0;
+
+  return this._left;
+
 };
 
-_.extend(BaseConnection.prototype, EventEmitter.prototype);
 
+/**
+ * The Affine transformation matrix describing the orientation of the bone, in global Leap-space.
+ * It contains a 3x3 rotation matrix (in the "top left"), and center coordinates in the fourth column.
+ *
+ * Unlike the basis, the right and left hands have the same coordinate system.
+ *
+ */
+Bone.prototype.matrix = function(){
 
-},{"./protocol":12,"events":17,"underscore":20}],2:[function(require,module,exports){
+  if (this._matrix) return this._matrix;
+
+  var b = this.basis,
+      t = this._matrix = mat4.create();
+
+  // open transform mat4 from rotation mat3
+  t[0] = b[0][0], t[1] = b[0][1], t[2]  = b[0][2];
+  t[4] = b[1][0], t[5] = b[1][1], t[6]  = b[1][2];
+  t[8] = b[2][0], t[9] = b[2][1], t[10] = b[2][2];
+
+  t[3] = this.center()[0];
+  t[7] = this.center()[1];
+  t[11] = this.center()[2];
+
+  if ( this.left() ) {
+    // flip the basis to be right-handed
+    t[0] *= -1;
+    t[1] *= -1;
+    t[2] *= -1;
+  }
+
+  return this._matrix;
+};
+
+/**
+ * Helper method to linearly interpolate between the two ends of the bone.
+ *
+ * when t = 0, the position of prevJoint will be returned
+ * when t = 1, the position of nextJoint will be returned
+ */
+Bone.prototype.lerp = function(out, t){
+
+  vec3.lerp(out, this.prevJoint, this.nextJoint, t);
+
+};
+
+/**
+ *
+ * The center position of the bone
+ * Returns a vec3 array.
+ *
+ */
+Bone.prototype.center = function(){
+
+  if (this._center) return this._center;
+
+  var center = vec3.create();
+  this.lerp(center, 0.5);
+  this._center = center;
+  return center;
+
+};
+
+// The negative of the z-basis
+Bone.prototype.direction = function(){
+
+ return [
+   this.basis[2][0] * -1,
+   this.basis[2][1] * -1,
+   this.basis[2][2] * -1
+ ];
+
+};
+
+},{"./pointable":14,"gl-matrix":23,"underscore":24}],2:[function(require,module,exports){
 var CircularBuffer = module.exports = function(size) {
   this.pos = 0;
   this._buf = [];
@@ -120,19 +191,223 @@ CircularBuffer.prototype.push = function(o) {
 }
 
 },{}],3:[function(require,module,exports){
-var Connection = module.exports = require('./base_connection')
+var chooseProtocol = require('../protocol').chooseProtocol
+  , EventEmitter = require('events').EventEmitter
+  , _ = require('underscore');
 
-Connection.prototype.setupSocket = function() {
+var BaseConnection = module.exports = function(opts) {
+  this.opts = _.defaults(opts || {}, {
+    host : '127.0.0.1',
+    enableGestures: false,
+    scheme: this.getScheme(),
+    port: this.getPort(),
+    background: false,
+    optimizeHMD: false,
+    requestProtocolVersion: BaseConnection.defaultProtocolVersion
+  });
+  this.host = this.opts.host;
+  this.port = this.opts.port;
+  this.scheme = this.opts.scheme;
+  this.protocolVersionVerified = false;
+  this.background = null;
+  this.optimizeHMD = null;
+  this.on('ready', function() {
+    this.enableGestures(this.opts.enableGestures);
+    this.setBackground(this.opts.background);
+    this.setOptimizeHMD(this.opts.optimizeHMD);
+
+    if (this.opts.optimizeHMD){
+      console.log("Optimized for head mounted display usage.");
+    }else {
+      console.log("Optimized for desktop usage.");
+    }
+
+  });
+};
+
+// The latest available:
+BaseConnection.defaultProtocolVersion = 6;
+
+BaseConnection.prototype.getUrl = function() {
+  return this.scheme + "//" + this.host + ":" + this.port + "/v" + this.opts.requestProtocolVersion + ".json";
+}
+
+
+BaseConnection.prototype.getScheme = function(){
+  return 'ws:'
+}
+
+BaseConnection.prototype.getPort = function(){
+  return 6437
+}
+
+
+BaseConnection.prototype.setBackground = function(state) {
+  this.opts.background = state;
+  if (this.protocol && this.protocol.sendBackground && this.background !== this.opts.background) {
+    this.background = this.opts.background;
+    this.protocol.sendBackground(this, this.opts.background);
+  }
+}
+
+BaseConnection.prototype.setOptimizeHMD = function(state) {
+  this.opts.optimizeHMD = state;
+  if (this.protocol && this.protocol.sendOptimizeHMD && this.optimizeHMD !== this.opts.optimizeHMD) {
+    this.optimizeHMD = this.opts.optimizeHMD;
+    this.protocol.sendOptimizeHMD(this, this.opts.optimizeHMD);
+  }
+}
+
+BaseConnection.prototype.handleOpen = function() {
+  if (!this.connected) {
+    this.connected = true;
+    this.emit('connect');
+  }
+}
+
+BaseConnection.prototype.enableGestures = function(enabled) {
+  this.gesturesEnabled = enabled ? true : false;
+  this.send(this.protocol.encode({"enableGestures": this.gesturesEnabled}));
+}
+
+BaseConnection.prototype.handleClose = function(code, reason) {
+  if (!this.connected) return;
+  this.disconnect();
+
+  // 1001 - an active connection is closed
+  // 1006 - cannot connect
+  if (code === 1001 && this.opts.requestProtocolVersion > 1) {
+    if (this.protocolVersionVerified) {
+      this.protocolVersionVerified = false;
+    }else{
+      this.opts.requestProtocolVersion--;
+    }
+  }
+  this.startReconnection();
+}
+
+BaseConnection.prototype.startReconnection = function() {
+  var connection = this;
+  if(!this.reconnectionTimer){
+    (this.reconnectionTimer = setInterval(function() { connection.reconnect() }, 500));
+  }
+}
+
+BaseConnection.prototype.stopReconnection = function() {
+  this.reconnectionTimer = clearInterval(this.reconnectionTimer);
+}
+
+// By default, disconnect will prevent auto-reconnection.
+// Pass in true to allow the reconnection loop not be interrupted continue
+BaseConnection.prototype.disconnect = function(allowReconnect) {
+  if (!allowReconnect) this.stopReconnection();
+  if (!this.socket) return;
+  this.socket.close();
+  delete this.socket;
+  delete this.protocol;
+  delete this.background; // This is not persisted when reconnecting to the web socket server
+  delete this.optimizeHMD;
+  delete this.focusedState;
+  if (this.connected) {
+    this.connected = false;
+    this.emit('disconnect');
+  }
+  return true;
+}
+
+BaseConnection.prototype.reconnect = function() {
+  if (this.connected) {
+    this.stopReconnection();
+  } else {
+    this.disconnect(true);
+    this.connect();
+  }
+}
+
+BaseConnection.prototype.handleData = function(data) {
+  var message = JSON.parse(data);
+
+  var messageEvent;
+  if (this.protocol === undefined) {
+    messageEvent = this.protocol = chooseProtocol(message);
+    this.protocolVersionVerified = true;
+    this.emit('ready');
+  } else {
+    messageEvent = this.protocol(message);
+  }
+  this.emit(messageEvent.type, messageEvent);
+}
+
+BaseConnection.prototype.connect = function() {
+  if (this.socket) return;
+  this.socket = this.setupSocket();
+  return true;
+}
+
+BaseConnection.prototype.send = function(data) {
+  this.socket.send(data);
+}
+
+BaseConnection.prototype.reportFocus = function(state) {
+  if (!this.connected || this.focusedState === state) return;
+  this.focusedState = state;
+  this.emit(this.focusedState ? 'focus' : 'blur');
+  if (this.protocol && this.protocol.sendFocused) {
+    this.protocol.sendFocused(this, this.focusedState);
+  }
+}
+
+_.extend(BaseConnection.prototype, EventEmitter.prototype);
+},{"../protocol":15,"events":21,"underscore":24}],4:[function(require,module,exports){
+var BaseConnection = module.exports = require('./base')
+  , _ = require('underscore');
+
+
+var BrowserConnection = module.exports = function(opts) {
+  BaseConnection.call(this, opts);
+  var connection = this;
+  this.on('ready', function() { connection.startFocusLoop(); })
+  this.on('disconnect', function() { connection.stopFocusLoop(); })
+}
+
+_.extend(BrowserConnection.prototype, BaseConnection.prototype);
+
+BrowserConnection.__proto__ = BaseConnection;
+
+BrowserConnection.prototype.useSecure = function(){
+  return location.protocol === 'https:'
+}
+
+BrowserConnection.prototype.getScheme = function(){
+  return this.useSecure() ? 'wss:' : 'ws:'
+}
+
+BrowserConnection.prototype.getPort = function(){
+  return this.useSecure() ? 6436 : 6437
+}
+
+BrowserConnection.prototype.setupSocket = function() {
   var connection = this;
   var socket = new WebSocket(this.getUrl());
-  socket.onopen = function() { connection.handleOpen() };
+  socket.onopen = function() { connection.handleOpen(); };
+  socket.onclose = function(data) { connection.handleClose(data['code'], data['reason']); };
   socket.onmessage = function(message) { connection.handleData(message.data) };
-  socket.onclose = function() { connection.handleClose() };
+  socket.onerror = function(error) {
+
+    // attempt to degrade to ws: after one failed attempt for older Leap Service installations.
+    if (connection.useSecure() && connection.scheme === 'wss:'){
+      connection.scheme = 'ws:';
+      connection.port = 6437;
+      connection.disconnect();
+      connection.connect();
+    }
+
+  };
   return socket;
 }
 
-Connection.prototype.startHeartbeat = function() {
-  if (!this.protocol.sendHeartbeat || this.heartbeatTimer) return;
+BrowserConnection.prototype.startFocusLoop = function() {
+  if (this.focusDetectorTimer) return;
   var connection = this;
   var propertyName = null;
   if (typeof document.hidden !== "undefined") {
@@ -147,36 +422,52 @@ Connection.prototype.startHeartbeat = function() {
     propertyName = undefined;
   }
 
-  var windowVisible = true;
+  if (connection.windowVisible === undefined) {
+    connection.windowVisible = propertyName === undefined ? true : document[propertyName] === false;
+  }
 
-  var focusListener = window.addEventListener('focus', function(e) { windowVisible = true; });
-  var blurListener = window.addEventListener('blur', function(e) { windowVisible = false; });
-
-  this.on('disconnect', function() {
-    if (connection.heartbeatTimer) {
-      clearTimeout(connection.heartbeatTimer);
-      delete connection.heartbeatTimer;
-    }
-    window.removeEventListener(focusListener);
-    window.removeEventListener(blurListener);
+  var focusListener = window.addEventListener('focus', function(e) {
+    connection.windowVisible = true;
+    updateFocusState();
   });
 
-  this.heartbeatTimer = setInterval(function() {
+  var blurListener = window.addEventListener('blur', function(e) {
+    connection.windowVisible = false;
+    updateFocusState();
+  });
+
+  this.on('disconnect', function() {
+    window.removeEventListener('focus', focusListener);
+    window.removeEventListener('blur', blurListener);
+  });
+
+  var updateFocusState = function() {
     var isVisible = propertyName === undefined ? true : document[propertyName] === false;
-    if (isVisible && windowVisible) {
-      connection.sendHeartbeat();
-    } else {
-      connection.setHeartbeatState(false);
-    }
-  }, this.opts.heartbeatInterval);
+    connection.reportFocus(isVisible && connection.windowVisible);
+  }
+
+  // save 100ms when resuming focus
+  updateFocusState();
+
+  this.focusDetectorTimer = setInterval(updateFocusState, 100);
 }
 
-},{"./base_connection":1}],4:[function(require,module,exports){
-(function(process){var Frame = require('./frame')
+BrowserConnection.prototype.stopFocusLoop = function() {
+  if (!this.focusDetectorTimer) return;
+  clearTimeout(this.focusDetectorTimer);
+  delete this.focusDetectorTimer;
+}
+
+},{"./base":3,"underscore":24}],5:[function(require,module,exports){
+var process=require("__browserify_process");var Frame = require('./frame')
+  , Hand = require('./hand')
+  , Pointable = require('./pointable')
+  , Finger = require('./finger')
   , CircularBuffer = require("./circular_buffer")
   , Pipeline = require("./pipeline")
   , EventEmitter = require('events').EventEmitter
   , gestureListener = require('./gesture').gestureListener
+  , Dialog = require('./dialog')
   , _ = require('underscore');
 
 /**
@@ -207,9 +498,19 @@ Connection.prototype.startHeartbeat = function() {
  *
  * Polling is an appropriate strategy for applications which already have an
  * intrinsic update loop, such as a game.
+ *
+ * loopWhileDisconnected defaults to true, and maintains a 60FPS frame rate even when Leap Motion is not streaming
+ * data at that rate (such as no hands in frame).  This is important for VR/WebGL apps which rely on rendering for
+ * regular visual updates, including from other input devices.  Flipping this to false should be considered an
+ * optimization for very specific use-cases.
+ *
+ *
  */
+
+
 var Controller = module.exports = function(opts) {
-  var inNode = typeof(process) !== 'undefined' && process.title === 'node';
+  var inNode = (typeof(process) !== 'undefined' && process.versions && process.versions.node),
+    controller = this;
 
   opts = _.defaults(opts || {}, {
     inNode: inNode
@@ -219,23 +520,53 @@ var Controller = module.exports = function(opts) {
 
   opts = _.defaults(opts || {}, {
     frameEventName: this.useAnimationLoop() ? 'animationFrame' : 'deviceFrame',
-    supressAnimationLoop: false,
+    suppressAnimationLoop: !this.useAnimationLoop(),
+    loopWhileDisconnected: true,
+    useAllPlugins: false,
+    checkVersion: true
   });
 
-  this.supressAnimationLoop = opts.supressAnimationLoop;
+  this.animationFrameRequested = false;
+  this.onAnimationFrame = function(timestamp) {
+    if (controller.lastConnectionFrame.valid){
+      controller.emit('animationFrame', controller.lastConnectionFrame);
+    }
+    controller.emit('frameEnd', timestamp);
+    if (
+      controller.loopWhileDisconnected &&
+      ( ( controller.connection.focusedState !== false )  // loop while undefined, pre-ready.
+        || controller.connection.opts.background) ){
+      window.requestAnimationFrame(controller.onAnimationFrame);
+    }else{
+      controller.animationFrameRequested = false;
+    }
+  };
+  this.suppressAnimationLoop = opts.suppressAnimationLoop;
+  this.loopWhileDisconnected = opts.loopWhileDisconnected;
   this.frameEventName = opts.frameEventName;
+  this.useAllPlugins = opts.useAllPlugins;
   this.history = new CircularBuffer(200);
   this.lastFrame = Frame.Invalid;
   this.lastValidFrame = Frame.Invalid;
   this.lastConnectionFrame = Frame.Invalid;
   this.accumulatedGestures = [];
+  this.checkVersion = opts.checkVersion;
   if (opts.connectionType === undefined) {
-    this.connectionType = (this.inBrowser() ? require('./connection') : require('./node_connection'));
+    this.connectionType = (this.inBrowser() ? require('./connection/browser') : require('./connection/node'));
   } else {
     this.connectionType = opts.connectionType;
   }
   this.connection = new this.connectionType(opts);
+  this.streamingCount = 0;
+  this.devices = {};
+  this.plugins = {};
+  this._pluginPipelineSteps = {};
+  this._pluginExtendedMethods = {};
+  if (opts.useAllPlugins) this.useRegisteredPlugins();
+  this.setupFrameEvents(opts);
   this.setupConnectionEvents();
+  
+  this.startAnimationLoop(); // immediately when started
 }
 
 Controller.prototype.gesture = function(type, cb) {
@@ -246,27 +577,64 @@ Controller.prototype.gesture = function(type, cb) {
   return creator;
 }
 
+/*
+ * @returns the controller
+ */
+Controller.prototype.setBackground = function(state) {
+  this.connection.setBackground(state);
+  return this;
+}
+
+Controller.prototype.setOptimizeHMD = function(state) {
+  this.connection.setOptimizeHMD(state);
+  return this;
+}
+
 Controller.prototype.inBrowser = function() {
   return !this.inNode;
 }
 
 Controller.prototype.useAnimationLoop = function() {
-  return this.inBrowser() && typeof(chrome) === "undefined";
+  return this.inBrowser() && !this.inBackgroundPage();
 }
 
+Controller.prototype.inBackgroundPage = function(){
+  // http://developer.chrome.com/extensions/extension#method-getBackgroundPage
+  return (typeof(chrome) !== "undefined") &&
+    chrome.extension &&
+    chrome.extension.getBackgroundPage &&
+    (chrome.extension.getBackgroundPage() === window)
+}
+
+/*
+ * @returns the controller
+ */
 Controller.prototype.connect = function() {
-  var controller = this;
-  if (this.connection.connect() && this.inBrowser() && !controller.supressAnimationLoop) {
-    var callback = function() {
-      controller.emit('animationFrame', controller.lastConnectionFrame);
-      window.requestAnimFrame(callback);
-    }
-    window.requestAnimFrame(callback);
+  this.connection.connect();
+  return this;
+}
+
+Controller.prototype.streaming = function() {
+  return this.streamingCount > 0;
+}
+
+Controller.prototype.connected = function() {
+  return !!this.connection.connected;
+}
+
+Controller.prototype.startAnimationLoop = function(){
+  if (!this.suppressAnimationLoop && !this.animationFrameRequested) {
+    this.animationFrameRequested = true;
+    window.requestAnimationFrame(this.onAnimationFrame);
   }
 }
 
+/*
+ * @returns the controller
+ */
 Controller.prototype.disconnect = function() {
   this.connection.disconnect();
+  return this;
 }
 
 /**
@@ -284,32 +652,22 @@ Controller.prototype.disconnect = function() {
  * @returns {Leap.Frame} The specified frame; or, if no history
  * parameter is specified, the newest frame. If a frame is not available at
  * the specified history position, an invalid Frame is returned.
- */
+ **/
 Controller.prototype.frame = function(num) {
   return this.history.get(num) || Frame.Invalid;
 }
 
 Controller.prototype.loop = function(callback) {
-  switch (callback.length) {
-    case 1:
+  if (callback) {
+    if (typeof callback === 'function'){
       this.on(this.frameEventName, callback);
-      break;
-    case 2:
-      var controller = this;
-      var scheduler = null;
-      var immediateRunnerCallback = function(frame) {
-        callback(frame, function() {
-          if (controller.lastFrame != frame) {
-            immediateRunnerCallback(controller.lastFrame);
-          } else {
-            controller.once(controller.frameEventName, immediateRunnerCallback);
-          }
-        });
-      }
-      this.once(this.frameEventName, immediateRunnerCallback);
-      break;
+    }else{
+      // callback is actually of the form: {eventName: callback}
+      this.setupFrameEvents(callback);
+    }
   }
-  this.connect();
+
+  return this.connect();
 }
 
 Controller.prototype.addStep = function(step) {
@@ -317,18 +675,18 @@ Controller.prototype.addStep = function(step) {
   this.pipeline.addStep(step);
 }
 
+// this is run on every deviceFrame
 Controller.prototype.processFrame = function(frame) {
   if (frame.gestures) {
     this.accumulatedGestures = this.accumulatedGestures.concat(frame.gestures);
   }
-  if (this.pipeline) {
-    frame = this.pipeline.run(frame);
-    if (!frame) frame = Frame.Invalid;
-  }
+  // lastConnectionFrame is used by the animation loop
   this.lastConnectionFrame = frame;
+  this.startAnimationLoop(); // Only has effect if loopWhileDisconnected: false
   this.emit('deviceFrame', frame);
 }
 
+// on a this.deviceEventName (usually 'animationFrame' in browsers), this emits a 'frame'
 Controller.prototype.processFinishedFrame = function(frame) {
   this.lastFrame = frame;
   if (frame.valid) {
@@ -343,36 +701,846 @@ Controller.prototype.processFinishedFrame = function(frame) {
       this.emit("gesture", frame.gestures[gestureIdx], frame);
     }
   }
+  if (this.pipeline) {
+    frame = this.pipeline.run(frame);
+    if (!frame) frame = Frame.Invalid;
+  }
   this.emit('frame', frame);
+  this.emitHandEvents(frame);
 }
 
+/**
+ * The controller will emit 'hand' events for every hand on each frame.  The hand in question will be passed
+ * to the event callback.
+ *
+ * @param frame
+ */
+Controller.prototype.emitHandEvents = function(frame){
+  for (var i = 0; i < frame.hands.length; i++){
+    this.emit('hand', frame.hands[i]);
+  }
+}
+
+Controller.prototype.setupFrameEvents = function(opts){
+  if (opts.frame){
+    this.on('frame', opts.frame);
+  }
+  if (opts.hand){
+    this.on('hand', opts.hand);
+  }
+}
+
+/**
+  Controller events.  The old 'deviceConnected' and 'deviceDisconnected' have been depricated -
+  use 'deviceStreaming' and 'deviceStopped' instead, except in the case of an unexpected disconnect.
+
+  There are 4 pairs of device events recently added/changed:
+  -deviceAttached/deviceRemoved - called when a device's physical connection to the computer changes
+  -deviceStreaming/deviceStopped - called when a device is paused or resumed.
+  -streamingStarted/streamingStopped - called when there is/is no longer at least 1 streaming device.
+									  Always comes after deviceStreaming.
+  
+  The first of all of the above event pairs is triggered as appropriate upon connection.  All of
+  these events receives an argument with the most recent info about the device that triggered it.
+  These events will always be fired in the order they are listed here, with reverse ordering for the
+  matching shutdown call. (ie, deviceStreaming always comes after deviceAttached, and deviceStopped 
+  will come before deviceRemoved).
+  
+  -deviceConnected/deviceDisconnected - These are considered deprecated and will be removed in
+  the next revision.  In contrast to the other events and in keeping with it's original behavior,
+  it will only be fired when a device begins streaming AFTER a connection has been established.
+  It is not paired, and receives no device info.  Nearly identical functionality to
+  streamingStarted/Stopped if you need to port.
+*/
 Controller.prototype.setupConnectionEvents = function() {
   var controller = this;
   this.connection.on('frame', function(frame) {
     controller.processFrame(frame);
   });
+  // either deviceFrame or animationFrame:
   this.on(this.frameEventName, function(frame) {
     controller.processFinishedFrame(frame);
   });
 
+
+  // here we backfill the 0.5.0 deviceEvents as best possible
+  // backfill begin streaming events
+  var backfillStreamingStartedEventsHandler = function(){
+    if (controller.connection.opts.requestProtocolVersion < 5 && controller.streamingCount == 0){
+      controller.streamingCount = 1;
+      var info = {
+        attached: true,
+        streaming: true,
+        type: 'unknown',
+        id: "Lx00000000000"
+      };
+      controller.devices[info.id] = info;
+
+      controller.emit('deviceAttached', info);
+      controller.emit('deviceStreaming', info);
+      controller.emit('streamingStarted', info);
+      controller.connection.removeListener('frame', backfillStreamingStartedEventsHandler)
+    }
+  }
+
+  var backfillStreamingStoppedEvents = function(){
+    if (controller.streamingCount > 0) {
+      for (var deviceId in controller.devices){
+        controller.emit('deviceStopped', controller.devices[deviceId]);
+        controller.emit('deviceRemoved', controller.devices[deviceId]);
+      }
+      // only emit streamingStopped once, with the last device
+      controller.emit('streamingStopped', controller.devices[deviceId]);
+
+      controller.streamingCount = 0;
+
+      for (var deviceId in controller.devices){
+        delete controller.devices[deviceId];
+      }
+    }
+  }
   // Delegate connection events
-  this.connection.on('disconnect', function() {
-    clearTimeout(controller.deviceReadyTimer);
-    delete controller.deviceReadyTimer;
-    controller.emit('disconnect');
+  this.connection.on('focus', function() {
+
+    if ( controller.loopWhileDisconnected ){
+
+      controller.startAnimationLoop();
+
+    }
+
+    controller.emit('focus');
+
   });
-  this.connection.on('ready', function() { controller.emit('ready'); });
-  this.connection.on('connect', function() { controller.emit('connect'); });
-  this.connection.on('focus', function() { controller.emit('focus') });
   this.connection.on('blur', function() { controller.emit('blur') });
-  this.connection.on('protocol', function(protocol) { controller.emit('protocol', protocol); });
-  this.connection.on('deviceConnect', function(evt) { controller.emit(evt.state ? 'deviceConnected' : 'deviceDisconnected'); });
+  this.connection.on('protocol', function(protocol) {
+
+    protocol.on('beforeFrameCreated', function(frameData){
+      controller.emit('beforeFrameCreated', frameData)
+    });
+
+    protocol.on('afterFrameCreated', function(frame, frameData){
+      controller.emit('afterFrameCreated', frame, frameData)
+    });
+
+    controller.emit('protocol', protocol); 
+  });
+
+  this.connection.on('ready', function() {
+
+    if (controller.checkVersion && !controller.inNode){
+      // show dialog only to web users
+      controller.checkOutOfDate();
+    }
+
+    controller.emit('ready');
+  });
+
+  this.connection.on('connect', function() {
+    controller.emit('connect');
+    controller.connection.removeListener('frame', backfillStreamingStartedEventsHandler)
+    controller.connection.on('frame', backfillStreamingStartedEventsHandler);
+  });
+
+  this.connection.on('disconnect', function() {
+    controller.emit('disconnect');
+    backfillStreamingStoppedEvents();
+  });
+
+  // this does not fire when the controller is manually disconnected
+  // or for Leap Service v1.2.0+
+  this.connection.on('deviceConnect', function(evt) {
+    if (evt.state){
+      controller.emit('deviceConnected');
+      controller.connection.removeListener('frame', backfillStreamingStartedEventsHandler)
+      controller.connection.on('frame', backfillStreamingStartedEventsHandler);
+    }else{
+      controller.emit('deviceDisconnected');
+      backfillStreamingStoppedEvents();
+    }
+  });
+
+  // Does not fire for Leap Service pre v1.2.0
+  this.connection.on('deviceEvent', function(evt) {
+    var info = evt.state,
+        oldInfo = controller.devices[info.id];
+
+    //Grab a list of changed properties in the device info
+    var changed = {};
+    for(var property in info) {
+      //If a property i doesn't exist the cache, or has changed...
+      if( !oldInfo || !oldInfo.hasOwnProperty(property) || oldInfo[property] != info[property] ) {
+        changed[property] = true;
+      }
+    }
+
+    //Update the device list
+    controller.devices[info.id] = info;
+
+    //Fire events based on change list
+    if(changed.attached) {
+      controller.emit(info.attached ? 'deviceAttached' : 'deviceRemoved', info);
+    }
+
+    if(!changed.streaming) return;
+
+    if(info.streaming) {
+      controller.streamingCount++;
+      controller.emit('deviceStreaming', info);
+      if( controller.streamingCount == 1 ) {
+        controller.emit('streamingStarted', info);
+      }
+      //if attached & streaming both change to true at the same time, that device was streaming
+      //already when we connected.
+      if(!changed.attached) {
+        controller.emit('deviceConnected');
+      }
+    }
+    //Since when devices are attached all fields have changed, don't send events for streaming being false.
+    else if(!(changed.attached && info.attached)) {
+      controller.streamingCount--;
+      controller.emit('deviceStopped', info);
+      if(controller.streamingCount == 0){
+        controller.emit('streamingStopped', info);
+      }
+      controller.emit('deviceDisconnected');
+    }
+
+  });
+
+
+  this.on('newListener', function(event, listener) {
+    if( event == 'deviceConnected' || event == 'deviceDisconnected' ) {
+      console.warn(event + " events are depricated.  Consider using 'streamingStarted/streamingStopped' or 'deviceStreaming/deviceStopped' instead");
+    }
+  });
+
+};
+
+
+
+
+// Checks if the protocol version is the latest, if if not, shows the dialog.
+Controller.prototype.checkOutOfDate = function(){
+  console.assert(this.connection && this.connection.protocol);
+
+  var serviceVersion = this.connection.protocol.serviceVersion;
+  var protocolVersion = this.connection.protocol.version;
+  var defaultProtocolVersion = this.connectionType.defaultProtocolVersion;
+
+  if (defaultProtocolVersion > protocolVersion){
+
+    console.warn("Your Protocol Version is v" + protocolVersion +
+        ", this app was designed for v" + defaultProtocolVersion);
+
+    Dialog.warnOutOfDate({
+      sV: serviceVersion,
+      pV: protocolVersion
+    });
+    return true
+  }else{
+    return false
+  }
+
+};
+
+
+
+Controller._pluginFactories = {};
+
+/*
+ * Registers a plugin, making is accessible to controller.use later on.
+ *
+ * @member plugin
+ * @memberof Leap.Controller.prototype
+ * @param {String} name The name of the plugin (usually camelCase).
+ * @param {function} factory A factory method which will return an instance of a plugin.
+ * The factory receives an optional hash of options, passed in via controller.use.
+ *
+ * Valid keys for the object include frame, hand, finger, tool, and pointable.  The value
+ * of each key can be either a function or an object.  If given a function, that function
+ * will be called once for every instance of the object, with that instance injected as an
+ * argument.  This allows decoration of objects with additional data:
+ *
+ * ```javascript
+ * Leap.Controller.plugin('testPlugin', function(options){
+ *   return {
+ *     frame: function(frame){
+ *       frame.foo = 'bar';
+ *     }
+ *   }
+ * });
+ * ```
+ *
+ * When hand is used, the callback is called for every hand in `frame.hands`.  Note that
+ * hand objects are recreated with every new frame, so that data saved on the hand will not
+ * persist.
+ *
+ * ```javascript
+ * Leap.Controller.plugin('testPlugin', function(){
+ *   return {
+ *     hand: function(hand){
+ *       console.log('testPlugin running on hand ' + hand.id);
+ *     }
+ *   }
+ * });
+ * ```
+ *
+ * A factory can return an object to add custom functionality to Frames, Hands, or Pointables.
+ * The methods are added directly to the object's prototype.  Finger and Tool cannot be used here, Pointable
+ * must be used instead.
+ * This is encouraged for calculations which may not be necessary on every frame.
+ * Memoization is also encouraged, for cases where the method may be called many times per frame by the application.
+ *
+ * ```javascript
+ * // This plugin allows hand.usefulData() to be called later.
+ * Leap.Controller.plugin('testPlugin', function(){
+ *   return {
+ *     hand: {
+ *       usefulData: function(){
+ *         console.log('usefulData on hand', this.id);
+ *         // memoize the results on to the hand, preventing repeat work:
+ *         this.x || this.x = someExpensiveCalculation();
+ *         return this.x;
+ *       }
+ *     }
+ *   }
+ * });
+ *
+ * Note that the factory pattern allows encapsulation for every plugin instance.
+ *
+ * ```javascript
+ * Leap.Controller.plugin('testPlugin', function(options){
+ *   options || options = {}
+ *   options.center || options.center = [0,0,0]
+ *
+ *   privatePrintingMethod = function(){
+ *     console.log('privatePrintingMethod - options', options);
+ *   }
+ *
+ *   return {
+ *     pointable: {
+ *       publicPrintingMethod: function(){
+ *         privatePrintingMethod();
+ *       }
+ *     }
+ *   }
+ * });
+ *
+ */
+Controller.plugin = function(pluginName, factory) {
+  if (this._pluginFactories[pluginName]) {
+    console.warn("Plugin \"" + pluginName + "\" already registered");
+  }
+  return this._pluginFactories[pluginName] = factory;
+};
+
+/*
+ * Returns a list of registered plugins.
+ * @returns {Array} Plugin Factories.
+ */
+Controller.plugins = function() {
+  return _.keys(this._pluginFactories);
+};
+
+
+
+var setPluginCallbacks = function(pluginName, type, callback){
+  
+  if ( ['beforeFrameCreated', 'afterFrameCreated'].indexOf(type) != -1 ){
+    
+      // todo - not able to "unuse" a plugin currently
+      this.on(type, callback);
+      
+    }else {
+      
+      if (!this.pipeline) this.pipeline = new Pipeline(this);
+    
+      if (!this._pluginPipelineSteps[pluginName]) this._pluginPipelineSteps[pluginName] = [];
+
+      this._pluginPipelineSteps[pluginName].push(
+        
+        this.pipeline.addWrappedStep(type, callback)
+        
+      );
+      
+    }
+  
+};
+
+var setPluginMethods = function(pluginName, type, hash){
+  var klass;
+  
+  if (!this._pluginExtendedMethods[pluginName]) this._pluginExtendedMethods[pluginName] = [];
+
+  switch (type) {
+    case 'frame':
+      klass = Frame;
+      break;
+    case 'hand':
+      klass = Hand;
+      break;
+    case 'pointable':
+      klass = Pointable;
+      _.extend(Finger.prototype, hash);
+      _.extend(Finger.Invalid,   hash);
+      break;
+    case 'finger':
+      klass = Finger;
+      break;
+    default:
+      throw pluginName + ' specifies invalid object type "' + type + '" for prototypical extension'
+  }
+
+  _.extend(klass.prototype, hash);
+  _.extend(klass.Invalid, hash);
+  this._pluginExtendedMethods[pluginName].push([klass, hash])
+  
 }
+
+
+
+/*
+ * Begin using a registered plugin.  The plugin's functionality will be added to all frames
+ * returned by the controller (and/or added to the objects within the frame).
+ *  - The order of plugin execution inside the loop will match the order in which use is called by the application.
+ *  - The plugin be run for both deviceFrames and animationFrames.
+ *
+ *  If called a second time, the options will be merged with those of the already instantiated plugin.
+ *
+ * @method use
+ * @memberOf Leap.Controller.prototype
+ * @param pluginName
+ * @param {Hash} Options to be passed to the plugin's factory.
+ * @returns the controller
+ */
+Controller.prototype.use = function(pluginName, options) {
+  var functionOrHash, pluginFactory, key, pluginInstance;
+
+  pluginFactory = (typeof pluginName == 'function') ? pluginName : Controller._pluginFactories[pluginName];
+
+  if (!pluginFactory) {
+    throw 'Leap Plugin ' + pluginName + ' not found.';
+  }
+
+  options || (options = {});
+
+  if (this.plugins[pluginName]){
+    _.extend(this.plugins[pluginName], options);
+    return this;
+  }
+
+  this.plugins[pluginName] = options;
+
+  pluginInstance = pluginFactory.call(this, options);
+
+  for (key in pluginInstance) {
+
+    functionOrHash = pluginInstance[key];
+
+    if (typeof functionOrHash === 'function') {
+      
+      setPluginCallbacks.call(this, pluginName, key, functionOrHash);
+      
+    } else {
+      
+      setPluginMethods.call(this, pluginName, key, functionOrHash);
+      
+    }
+
+  }
+
+  return this;
+};
+
+
+
+
+/*
+ * Stop using a used plugin.  This will remove any of the plugin's pipeline methods (those called on every frame)
+ * and remove any methods which extend frame-object prototypes.
+ *
+ * @method stopUsing
+ * @memberOf Leap.Controller.prototype
+ * @param pluginName
+ * @returns the controller
+ */
+Controller.prototype.stopUsing = function (pluginName) {
+  var steps = this._pluginPipelineSteps[pluginName],
+      extMethodHashes = this._pluginExtendedMethods[pluginName],
+      i = 0, klass, extMethodHash;
+
+  if (!this.plugins[pluginName]) return;
+
+  if (steps) {
+    for (i = 0; i < steps.length; i++) {
+      this.pipeline.removeStep(steps[i]);
+    }
+  }
+
+  if (extMethodHashes){
+    for (i = 0; i < extMethodHashes.length; i++){
+      klass = extMethodHashes[i][0];
+      extMethodHash = extMethodHashes[i][1];
+      for (var methodName in extMethodHash) {
+        delete klass.prototype[methodName];
+        delete klass.Invalid[methodName];
+      }
+    }
+  }
+
+  delete this.plugins[pluginName];
+
+  return this;
+}
+
+Controller.prototype.useRegisteredPlugins = function(){
+  for (var plugin in Controller._pluginFactories){
+    this.use(plugin);
+  }
+}
+
 
 _.extend(Controller.prototype, EventEmitter.prototype);
 
-})(require("__browserify_process"))
-},{"./circular_buffer":2,"./connection":3,"./frame":5,"./gesture":6,"./node_connection":16,"./pipeline":10,"__browserify_process":18,"events":17,"underscore":20}],5:[function(require,module,exports){
+},{"./circular_buffer":2,"./connection/browser":4,"./connection/node":20,"./dialog":6,"./finger":7,"./frame":8,"./gesture":9,"./hand":10,"./pipeline":13,"./pointable":14,"__browserify_process":22,"events":21,"underscore":24}],6:[function(require,module,exports){
+var process=require("__browserify_process");var Dialog = module.exports = function(message, options){
+  this.options = (options || {});
+  this.message = message;
+
+  this.createElement();
+};
+
+Dialog.prototype.createElement = function(){
+  this.element = document.createElement('div');
+  this.element.className = "leapjs-dialog";
+  this.element.style.position = "fixed";
+  this.element.style.top = '8px';
+  this.element.style.left = 0;
+  this.element.style.right = 0;
+  this.element.style.textAlign = 'center';
+  this.element.style.zIndex = 1000;
+
+  var dialog  = document.createElement('div');
+  this.element.appendChild(dialog);
+  dialog.style.className = "leapjs-dialog";
+  dialog.style.display = "inline-block";
+  dialog.style.margin = "auto";
+  dialog.style.padding = "8px";
+  dialog.style.color = "#222";
+  dialog.style.background = "#eee";
+  dialog.style.borderRadius = "4px";
+  dialog.style.border = "1px solid #999";
+  dialog.style.textAlign = "left";
+  dialog.style.cursor = "pointer";
+  dialog.style.whiteSpace = "nowrap";
+  dialog.style.transition = "box-shadow 1s linear";
+  dialog.innerHTML = this.message;
+
+
+  if (this.options.onclick){
+    dialog.addEventListener('click', this.options.onclick);
+  }
+
+  if (this.options.onmouseover){
+    dialog.addEventListener('mouseover', this.options.onmouseover);
+  }
+
+  if (this.options.onmouseout){
+    dialog.addEventListener('mouseout', this.options.onmouseout);
+  }
+
+  if (this.options.onmousemove){
+    dialog.addEventListener('mousemove', this.options.onmousemove);
+  }
+};
+
+Dialog.prototype.show = function(){
+  document.body.appendChild(this.element);
+  return this;
+};
+
+Dialog.prototype.hide = function(){
+  document.body.removeChild(this.element);
+  return this;
+};
+
+
+
+
+// Shows a DOM dialog box with links to developer.leapmotion.com to upgrade
+// This will work whether or not the Leap is plugged in,
+// As long as it is called after a call to .connect() and the 'ready' event has fired.
+Dialog.warnOutOfDate = function(params){
+  params || (params = {});
+
+  var url = "http://developer.leapmotion.com?";
+
+  params.returnTo = window.location.href;
+
+  for (var key in params){
+    url += key + '=' + encodeURIComponent(params[key]) + '&';
+  }
+
+  var dialog,
+    onclick = function(event){
+
+       if (event.target.id != 'leapjs-decline-upgrade'){
+
+         var popup = window.open(url,
+           '_blank',
+           'height=800,width=1000,location=1,menubar=1,resizable=1,status=1,toolbar=1,scrollbars=1'
+         );
+
+         if (window.focus) {popup.focus()}
+
+       }
+
+       dialog.hide();
+
+       return true;
+    },
+
+
+    message = "This site requires Leap Motion Tracking V2." +
+      "<button id='leapjs-accept-upgrade'  style='color: #444; transition: box-shadow 100ms linear; cursor: pointer; vertical-align: baseline; margin-left: 16px;'>Upgrade</button>" +
+      "<button id='leapjs-decline-upgrade' style='color: #444; transition: box-shadow 100ms linear; cursor: pointer; vertical-align: baseline; margin-left: 8px; '>Not Now</button>";
+
+  dialog = new Dialog(message, {
+      onclick: onclick,
+      onmousemove: function(e){
+        if (e.target == document.getElementById('leapjs-decline-upgrade')){
+          document.getElementById('leapjs-decline-upgrade').style.color = '#000';
+          document.getElementById('leapjs-decline-upgrade').style.boxShadow = '0px 0px 2px #5daa00';
+
+          document.getElementById('leapjs-accept-upgrade').style.color = '#444';
+          document.getElementById('leapjs-accept-upgrade').style.boxShadow = 'none';
+        }else{
+          document.getElementById('leapjs-accept-upgrade').style.color = '#000';
+          document.getElementById('leapjs-accept-upgrade').style.boxShadow = '0px 0px 2px #5daa00';
+
+          document.getElementById('leapjs-decline-upgrade').style.color = '#444';
+          document.getElementById('leapjs-decline-upgrade').style.boxShadow = 'none';
+        }
+      },
+      onmouseout: function(){
+        document.getElementById('leapjs-decline-upgrade').style.color = '#444';
+        document.getElementById('leapjs-decline-upgrade').style.boxShadow = 'none';
+        document.getElementById('leapjs-accept-upgrade').style.color = '#444';
+        document.getElementById('leapjs-accept-upgrade').style.boxShadow = 'none';
+      }
+    }
+  );
+
+  return dialog.show();
+};
+
+
+// Tracks whether we've warned for lack of bones API.  This will be shown only for early private-beta members.
+Dialog.hasWarnedBones = false;
+
+Dialog.warnBones = function(){
+  if (this.hasWarnedBones) return;
+  this.hasWarnedBones = true;
+
+  console.warn("Your Leap Service is out of date");
+
+  if ( !(typeof(process) !== 'undefined' && process.versions && process.versions.node) ){
+    this.warnOutOfDate({reason: 'bones'});
+  }
+
+}
+},{"__browserify_process":22}],7:[function(require,module,exports){
+var Pointable = require('./pointable'),
+  Bone = require('./bone')
+  , Dialog = require('./dialog')
+  , _ = require('underscore');
+
+/**
+* Constructs a Finger object.
+*
+* An uninitialized finger is considered invalid.
+* Get valid Finger objects from a Frame or a Hand object.
+*
+* @class Finger
+* @memberof Leap
+* @classdesc
+* The Finger class reports the physical characteristics of a finger.
+*
+* Both fingers and tools are classified as Pointable objects. Use the
+* Pointable.tool property to determine whether a Pointable object represents a
+* tool or finger. The Leap classifies a detected entity as a tool when it is
+* thinner, straighter, and longer than a typical finger.
+*
+* Note that Finger objects can be invalid, which means that they do not
+* contain valid tracking data and do not correspond to a physical entity.
+* Invalid Finger objects can be the result of asking for a Finger object
+* using an ID from an earlier frame when no Finger objects with that ID
+* exist in the current frame. A Finger object created from the Finger
+* constructor is also invalid. Test for validity with the Pointable.valid
+* property.
+*/
+var Finger = module.exports = function(data) {
+  Pointable.call(this, data); // use pointable as super-constructor
+  
+  /**
+  * The position of the distal interphalangeal joint of the finger.
+  * This joint is closest to the tip.
+  * 
+  * The distal interphalangeal joint is located between the most extreme segment
+  * of the finger (the distal phalanx) and the middle segment (the medial
+  * phalanx).
+  *
+  * @member dipPosition
+  * @type {number[]}
+  * @memberof Leap.Finger.prototype
+  */  
+  this.dipPosition = data.dipPosition;
+
+  /**
+  * The position of the proximal interphalangeal joint of the finger. This joint is the middle
+  * joint of a finger.
+  *
+  * The proximal interphalangeal joint is located between the two finger segments
+  * closest to the hand (the proximal and the medial phalanges). On a thumb,
+  * which lacks an medial phalanx, this joint index identifies the knuckle joint
+  * between the proximal phalanx and the metacarpal bone.
+  *
+  * @member pipPosition
+  * @type {number[]}
+  * @memberof Leap.Finger.prototype
+  */  
+  this.pipPosition = data.pipPosition;
+
+  /**
+  * The position of the metacarpopophalangeal joint, or knuckle, of the finger.
+  *
+  * The metacarpopophalangeal joint is located at the base of a finger between
+  * the metacarpal bone and the first phalanx. The common name for this joint is
+  * the knuckle.
+  *
+  * On a thumb, which has one less phalanx than a finger, this joint index
+  * identifies the thumb joint near the base of the hand, between the carpal
+  * and metacarpal bones.
+  *
+  * @member mcpPosition
+  * @type {number[]}
+  * @memberof Leap.Finger.prototype
+  */  
+  this.mcpPosition = data.mcpPosition;
+
+  /**
+   * The position of the Carpometacarpal joint
+   *
+   * This is at the distal end of the wrist, and has no common name.
+   *
+   */
+  this.carpPosition = data.carpPosition;
+
+  /**
+  * Whether or not this finger is in an extended posture.
+  *
+  * A finger is considered extended if it is extended straight from the hand as if
+  * pointing. A finger is not extended when it is bent down and curled towards the 
+  * palm.
+  * @member extended
+  * @type {Boolean}
+  * @memberof Leap.Finger.prototype
+  */
+  this.extended = data.extended;
+
+  /**
+  * An integer code for the name of this finger.
+  * 
+  * * 0 -- thumb
+  * * 1 -- index finger
+  * * 2 -- middle finger
+  * * 3 -- ring finger
+  * * 4 -- pinky
+  *
+  * @member type
+  * @type {number}
+  * @memberof Leap.Finger.prototype
+  */
+  this.type = data.type;
+
+  this.finger = true;
+  
+  /**
+  * The joint positions of this finger as an array in the order base to tip.
+  *
+  * @member positions
+  * @type {array[]}
+  * @memberof Leap.Finger.prototype
+  */
+  this.positions = [this.carpPosition, this.mcpPosition, this.pipPosition, this.dipPosition, this.tipPosition];
+
+  if (data.bases){
+    this.addBones(data);
+  } else {
+    Dialog.warnBones();
+  }
+
+};
+
+_.extend(Finger.prototype, Pointable.prototype);
+
+
+Finger.prototype.addBones = function(data){
+  /**
+  * Four bones per finger, from wrist outwards:
+  * metacarpal, proximal, medial, and distal.
+  *
+  * See http://en.wikipedia.org/wiki/Interphalangeal_articulations_of_hand
+  */
+  this.metacarpal   = new Bone(this, {
+    type: 0,
+    width: this.width,
+    prevJoint: this.carpPosition,
+    nextJoint: this.mcpPosition,
+    basis: data.bases[0]
+  });
+
+  this.proximal     = new Bone(this, {
+    type: 1,
+    width: this.width,
+    prevJoint: this.mcpPosition,
+    nextJoint: this.pipPosition,
+    basis: data.bases[1]
+  });
+
+  this.medial = new Bone(this, {
+    type: 2,
+    width: this.width,
+    prevJoint: this.pipPosition,
+    nextJoint: this.dipPosition,
+    basis: data.bases[2]
+  });
+
+  /**
+   * Note that the `distal.nextJoint` position is slightly different from the `finger.tipPosition`.
+   * The former is at the very end of the bone, where the latter is the center of a sphere positioned at
+   * the tip of the finger.  The btipPosition "bone tip position" is a few mm closer to the wrist than
+   * the tipPosition.
+   * @type {Bone}
+   */
+  this.distal       = new Bone(this, {
+    type: 3,
+    width: this.width,
+    prevJoint: this.dipPosition,
+    nextJoint: data.btipPosition,
+    basis: data.bases[3]
+  });
+
+  this.bones = [this.metacarpal, this.proximal, this.medial, this.distal];
+};
+
+Finger.prototype.toString = function() {
+    return "Finger [ id:" + this.id + " " + this.length + "mmx | width:" + this.width + "mm | direction:" + this.direction + ' ]';
+};
+
+Finger.Invalid = { valid: false };
+
+},{"./bone":1,"./dialog":6,"./pointable":14,"underscore":24}],8:[function(require,module,exports){
 var Hand = require("./hand")
   , Pointable = require("./pointable")
   , createGesture = require("./gesture").createGesture
@@ -380,6 +1548,7 @@ var Hand = require("./hand")
   , mat3 = glMatrix.mat3
   , vec3 = glMatrix.vec3
   , InteractionBox = require("./interaction_box")
+  , Finger = require('./finger')
   , _ = require("underscore");
 
 /**
@@ -477,6 +1646,13 @@ var Frame = module.exports = function(data) {
    */
   this.fingers = [];
 
+  /**
+   * The InteractionBox associated with the current frame.
+   *
+   * @member interactionBox
+   * @memberof Leap.Frame.prototype
+   * @type {Leap.InteractionBox}
+   */
   if (data.interactionBox) {
     this.interactionBox = new InteractionBox(data.interactionBox);
   }
@@ -488,26 +1664,6 @@ var Frame = module.exports = function(data) {
   this.data = data;
   this.type = 'frame'; // used by event emitting
   this.currentFrameRate = data.currentFrameRate;
-  var handMap = {};
-  for (var handIdx = 0, handCount = data.hands.length; handIdx != handCount; handIdx++) {
-    var hand = new Hand(data.hands[handIdx]);
-    hand.frame = this;
-    this.hands.push(hand);
-    this.handsMap[hand.id] = hand;
-    handMap[hand.id] = handIdx;
-  }
-  for (var pointableIdx = 0, pointableCount = data.pointables.length; pointableIdx != pointableCount; pointableIdx++) {
-    var pointable = new Pointable(data.pointables[pointableIdx]);
-    pointable.frame = this;
-    this.pointables.push(pointable);
-    this.pointablesMap[pointable.id] = pointable;
-    (pointable.tool ? this.tools : this.fingers).push(pointable);
-    if (pointable.handId !== undefined && handMap.hasOwnProperty(pointable.handId)) {
-      var hand = this.hands[handMap[pointable.handId]];
-      hand.pointables.push(pointable);
-      (pointable.tool ? hand.tools : hand.fingers).push(pointable);
-    }
-  }
 
   if (data.gestures) {
    /**
@@ -524,7 +1680,65 @@ var Frame = module.exports = function(data) {
       this.gestures.push(createGesture(data.gestures[gestureIdx]));
     }
   }
-}
+  this.postprocessData(data);
+};
+
+Frame.prototype.postprocessData = function(data){
+  if (!data) {
+    data = this.data;
+  }
+
+  for (var handIdx = 0, handCount = data.hands.length; handIdx != handCount; handIdx++) {
+    var hand = new Hand(data.hands[handIdx]);
+    hand.frame = this;
+    this.hands.push(hand);
+    this.handsMap[hand.id] = hand;
+  }
+
+  data.pointables = _.sortBy(data.pointables, function(pointable) { return pointable.id });
+
+  for (var pointableIdx = 0, pointableCount = data.pointables.length; pointableIdx != pointableCount; pointableIdx++) {
+    var pointableData = data.pointables[pointableIdx];
+    var pointable = pointableData.dipPosition ? new Finger(pointableData) : new Pointable(pointableData);
+    pointable.frame = this;
+    this.addPointable(pointable);
+  }
+};
+
+/**
+ * Adds data from a pointable element into the pointablesMap; 
+ * also adds the pointable to the frame.handsMap hand to which it belongs,
+ * and to the hand's tools or hand's fingers map.
+ * 
+ * @param pointable {Object} a Pointable
+ */
+Frame.prototype.addPointable = function (pointable) {
+  this.pointables.push(pointable);
+  this.pointablesMap[pointable.id] = pointable;
+  (pointable.tool ? this.tools : this.fingers).push(pointable);
+  if (pointable.handId !== undefined && this.handsMap.hasOwnProperty(pointable.handId)) {
+    var hand = this.handsMap[pointable.handId];
+    hand.pointables.push(pointable);
+    (pointable.tool ? hand.tools : hand.fingers).push(pointable);
+    switch (pointable.type){
+      case 0:
+        hand.thumb = pointable;
+        break;
+      case 1:
+        hand.indexFinger = pointable;
+        break;
+      case 2:
+        hand.middleFinger = pointable;
+        break;
+      case 3:
+        hand.ringFinger = pointable;
+        break;
+      case 4:
+        hand.pinky = pointable;
+        break;
+    }
+  }
+};
 
 /**
  * The tool with the specified ID in this frame.
@@ -549,7 +1763,7 @@ var Frame = module.exports = function(data) {
 Frame.prototype.tool = function(id) {
   var pointable = this.pointable(id);
   return pointable.tool ? pointable : Pointable.Invalid;
-}
+};
 
 /**
  * The Pointable object with the specified ID in this frame.
@@ -573,7 +1787,7 @@ Frame.prototype.tool = function(id) {
  */
 Frame.prototype.pointable = function(id) {
   return this.pointablesMap[id] || Pointable.Invalid;
-}
+};
 
 /**
  * The finger with the specified ID in this frame.
@@ -598,7 +1812,7 @@ Frame.prototype.pointable = function(id) {
 Frame.prototype.finger = function(id) {
   var pointable = this.pointable(id);
   return !pointable.tool ? pointable : Pointable.Invalid;
-}
+};
 
 /**
  * The Hand object with the specified ID in this frame.
@@ -621,7 +1835,7 @@ Frame.prototype.finger = function(id) {
  */
 Frame.prototype.hand = function(id) {
   return this.handsMap[id] || Hand.Invalid;
-}
+};
 
 /**
  * The angle of rotation around the rotation axis derived from the overall
@@ -648,7 +1862,7 @@ Frame.prototype.rotationAngle = function(sinceFrame, axis) {
   if (!this.valid || !sinceFrame.valid) return 0.0;
 
   var rot = this.rotationMatrix(sinceFrame);
-  var cs = (rot[0] + rot[4] + rot[8] - 1.0)*0.5
+  var cs = (rot[0] + rot[4] + rot[8] - 1.0)*0.5;
   var angle = Math.acos(cs);
   angle = isNaN(angle) ? 0.0 : angle;
 
@@ -658,7 +1872,7 @@ Frame.prototype.rotationAngle = function(sinceFrame, axis) {
   }
 
   return angle;
-}
+};
 
 /**
  * The axis of rotation derived from the overall rotational motion between
@@ -831,7 +2045,7 @@ Frame.Invalid = {
   translation: function() { return vec3.create(); }
 };
 
-},{"./gesture":6,"./hand":7,"./interaction_box":9,"./pointable":11,"gl-matrix":19,"underscore":20}],6:[function(require,module,exports){
+},{"./finger":7,"./gesture":9,"./hand":10,"./interaction_box":12,"./pointable":14,"gl-matrix":23,"underscore":24}],9:[function(require,module,exports){
 var glMatrix = require("gl-matrix")
   , vec3 = glMatrix.vec3
   , EventEmitter = require('events').EventEmitter
@@ -907,8 +2121,9 @@ var createGesture = exports.createGesture = function(data) {
       gesture = new KeyTapGesture(data);
       break;
     default:
-      throw "unkown gesture type";
+      throw "unknown gesture type";
   }
+
  /**
   * The gesture ID.
   *
@@ -930,7 +2145,7 @@ var createGesture = exports.createGesture = function(data) {
   * @memberof Leap.Gesture.prototype
   * @type {Array}
   */
-  gesture.handIds = data.handIds;
+  gesture.handIds = data.handIds.slice();
  /**
   * The list of fingers and tools associated with this Gesture, if any.
   *
@@ -940,7 +2155,7 @@ var createGesture = exports.createGesture = function(data) {
   * @memberof Leap.Gesture.prototype
   * @type {Array}
   */
-  gesture.pointableIds = data.pointableIds;
+  gesture.pointableIds = data.pointableIds.slice();
  /**
   * The elapsed duration of the recognized movement up to the
   * frame containing this Gesture object, in microseconds.
@@ -991,23 +2206,12 @@ var createGesture = exports.createGesture = function(data) {
   return gesture;
 }
 
+/*
+ * Returns a builder object, which uses method chaining for gesture callback binding.
+ */
 var gestureListener = exports.gestureListener = function(controller, type) {
   var handlers = {};
   var gestureMap = {};
-
-  var gestureCreator = function() {
-    var candidateGesture = gestureMap[gesture.id];
-    if (candidateGesture !== undefined) gesture.update(gesture, frame);
-    if (gesture.state == "start" || gesture.state == "stop") {
-      if (type == gesture.type && gestureMap[gesture.id] === undefined) {
-        gestureMap[gesture.id] = new Gesture(gesture, frame);
-        gesture.update(gesture, frame);
-      }
-      if (gesture.state == "stop") {
-        delete gestureMap[gesture.id];
-      }
-    }
-  };
 
   controller.on('gesture', function(gesture, frame) {
     if (gesture.type == type) {
@@ -1053,9 +2257,15 @@ var Gesture = exports.Gesture = function(gesture, frame) {
 }
 
 Gesture.prototype.update = function(gesture, frame) {
+  this.lastGesture = gesture;
+  this.lastFrame = frame;
   this.gestures.push(gesture);
   this.frames.push(frame);
   this.emit(gesture.state, this);
+}
+
+Gesture.prototype.translation = function() {
+  return vec3.subtract(vec3.create(), this.lastGesture.startPosition, this.lastGesture.position);
 }
 
 _.extend(Gesture.prototype, EventEmitter.prototype);
@@ -1320,8 +2530,9 @@ KeyTapGesture.prototype.toString = function() {
   return "KeyTapGesture ["+JSON.stringify(this)+"]";
 }
 
-},{"events":17,"gl-matrix":19,"underscore":20}],7:[function(require,module,exports){
+},{"events":21,"gl-matrix":23,"underscore":24}],10:[function(require,module,exports){
 var Pointable = require("./pointable")
+  , Bone = require('./bone')
   , glMatrix = require("gl-matrix")
   , mat3 = glMatrix.mat3
   , vec3 = glMatrix.vec3
@@ -1459,6 +2670,19 @@ var Hand = module.exports = function(data) {
    * @type {Leap.Pointable[]}
    */
   this.fingers = [];
+  
+  if (data.armBasis){
+    this.arm = new Bone(this, {
+      type: 4,
+      width: data.armWidth,
+      prevJoint: data.elbow,
+      nextJoint: data.wrist,
+      basis: data.armBasis
+    });
+  }else{
+    this.arm = null;
+  }
+  
   /**
    * The list of tools detected in this frame that are held by this
    * hand, given in arbitrary order.
@@ -1477,7 +2701,9 @@ var Hand = module.exports = function(data) {
   /**
    * Time the hand has been visible in seconds.
    *
-   * @member Hand.prototype.timeVisible {float}
+   * @member timeVisible
+   * @memberof Leap.Hand.prototype
+   * @type {number}
    */
    this.timeVisible = data.timeVisible;
 
@@ -1488,6 +2714,18 @@ var Hand = module.exports = function(data) {
    * @type {number[]}
    */
    this.stabilizedPalmPosition = data.stabilizedPalmPosition;
+
+   /**
+   * Reports whether this is a left or a right hand.
+   *
+   * @member type
+   * @type {String}
+   * @memberof Leap.Hand.prototype
+   */
+   this.type = data.type;
+   this.grabStrength = data.grabStrength;
+   this.pinchStrength = data.pinchStrength;
+   this.confidence = data.confidence;
 }
 
 /**
@@ -1513,7 +2751,7 @@ var Hand = module.exports = function(data) {
  */
 Hand.prototype.finger = function(id) {
   var finger = this.frame.finger(id);
-  return (finger && finger.handId == this.id) ? finger : Pointable.Invalid;
+  return (finger && (finger.handId == this.id)) ? finger : Pointable.Invalid;
 }
 
 /**
@@ -1660,7 +2898,61 @@ Hand.prototype.translation = function(sinceFrame) {
  * @returns {String} A description of the Hand as a string.
  */
 Hand.prototype.toString = function() {
-  return "Hand [ id: "+ this.id + " | palm velocity:"+this.palmVelocity+" | sphere center:"+this.sphereCenter+" ] ";
+  return "Hand (" + this.type + ") [ id: "+ this.id + " | palm velocity:"+this.palmVelocity+" | sphere center:"+this.sphereCenter+" ] ";
+}
+
+/**
+ * The pitch angle in radians.
+ *
+ * Pitch is the angle between the negative z-axis and the projection of
+ * the vector onto the y-z plane. In other words, pitch represents rotation
+ * around the x-axis.
+ * If the vector points upward, the returned angle is between 0 and pi radians
+ * (180 degrees); if it points downward, the angle is between 0 and -pi radians.
+ *
+ * @method pitch
+ * @memberof Leap.Hand.prototype
+ * @returns {number} The angle of this vector above or below the horizon (x-z plane).
+ *
+ */
+Hand.prototype.pitch = function() {
+  return Math.atan2(this.direction[1], -this.direction[2]);
+}
+
+/**
+ *  The yaw angle in radians.
+ *
+ * Yaw is the angle between the negative z-axis and the projection of
+ * the vector onto the x-z plane. In other words, yaw represents rotation
+ * around the y-axis. If the vector points to the right of the negative z-axis,
+ * then the returned angle is between 0 and pi radians (180 degrees);
+ * if it points to the left, the angle is between 0 and -pi radians.
+ *
+ * @method yaw
+ * @memberof Leap.Hand.prototype
+ * @returns {number} The angle of this vector to the right or left of the y-axis.
+ *
+ */
+Hand.prototype.yaw = function() {
+  return Math.atan2(this.direction[0], -this.direction[2]);
+}
+
+/**
+ *  The roll angle in radians.
+ *
+ * Roll is the angle between the y-axis and the projection of
+ * the vector onto the x-y plane. In other words, roll represents rotation
+ * around the z-axis. If the vector points to the left of the y-axis,
+ * then the returned angle is between 0 and pi radians (180 degrees);
+ * if it points to the right, the angle is between 0 and -pi radians.
+ *
+ * @method roll
+ * @memberof Leap.Hand.prototype
+ * @returns {number} The angle of this vector to the right or left of the y-axis.
+ *
+ */
+Hand.prototype.roll = function() {
+  return Math.atan2(this.palmNormal[0], -this.palmNormal[1]);
 }
 
 /**
@@ -1680,6 +2972,7 @@ Hand.Invalid = {
   fingers: [],
   tools: [],
   pointables: [],
+  left: false,
   pointable: function() { return Pointable.Invalid },
   finger: function() { return Pointable.Invalid },
   toString: function() { return "invalid frame" },
@@ -1691,8 +2984,8 @@ Hand.Invalid = {
   translation: function() { return vec3.create(); }
 };
 
-},{"./pointable":11,"gl-matrix":19,"underscore":20}],8:[function(require,module,exports){
-(function(){/**
+},{"./bone":1,"./pointable":14,"gl-matrix":23,"underscore":24}],11:[function(require,module,exports){
+/**
  * Leap is the global namespace of the Leap API.
  * @namespace Leap
  */
@@ -1702,14 +2995,25 @@ module.exports = {
   Gesture: require("./gesture"),
   Hand: require("./hand"),
   Pointable: require("./pointable"),
+  Finger: require("./finger"),
   InteractionBox: require("./interaction_box"),
-  Connection: require("./connection"),
   CircularBuffer: require("./circular_buffer"),
   UI: require("./ui"),
+  JSONProtocol: require("./protocol").JSONProtocol,
   glMatrix: require("gl-matrix"),
   mat3: require("gl-matrix").mat3,
   vec3: require("gl-matrix").vec3,
   loopController: undefined,
+  version: require('./version.js'),
+
+  /**
+   * Expose utility libraries for convenience
+   * Use carefully - they may be subject to upgrade or removal in different versions of LeapJS.
+   *
+   */
+  _: require('underscore'),
+  EventEmitter: require('events').EventEmitter,
+
   /**
    * The Leap.loop() function passes a frame of Leap data to your
    * callback function and then calls window.requestAnimationFrame() after
@@ -1742,17 +3046,32 @@ module.exports = {
    * ```
    */
   loop: function(opts, callback) {
-    if (callback === undefined) {
+    if (opts && callback === undefined &&  ( ({}).toString.call(opts) === '[object Function]' ) ) {
       callback = opts;
       opts = {};
     }
-    if (!this.loopController) this.loopController = new this.Controller(opts);
+
+    if (this.loopController) {
+      if (opts){
+        this.loopController.setupFrameEvents(opts);
+      }
+    }else{
+      this.loopController = new this.Controller(opts);
+    }
+
     this.loopController.loop(callback);
+    return this.loopController;
+  },
+
+  /*
+   * Convenience method for Leap.Controller.plugin
+   */
+  plugin: function(name, options){
+    this.Controller.plugin(name, options)
   }
 }
 
-})()
-},{"./circular_buffer":2,"./connection":3,"./controller":4,"./frame":5,"./gesture":6,"./hand":7,"./interaction_box":9,"./pointable":11,"./ui":13,"gl-matrix":19}],9:[function(require,module,exports){
+},{"./circular_buffer":2,"./controller":5,"./finger":7,"./frame":8,"./gesture":9,"./hand":10,"./interaction_box":12,"./pointable":14,"./protocol":15,"./ui":16,"./version.js":19,"events":21,"gl-matrix":23,"underscore":24}],12:[function(require,module,exports){
 var glMatrix = require("gl-matrix")
   , vec3 = glMatrix.vec3;
 
@@ -1770,6 +3089,8 @@ var glMatrix = require("gl-matrix")
  * The InteractionBox class can make it easier to map positions in the
  * Leap Motion coordinate system to 2D or 3D coordinate systems used
  * for application drawing.
+ *
+ * ![Interaction Box](images/Leap_InteractionBox.png)
  *
  * The InteractionBox region is defined by a center and dimensions along the x, y, and z axes.
  */
@@ -1827,8 +3148,8 @@ var InteractionBox = module.exports = function(data) {
  *
  * @method denormalizePoint
  * @memberof Leap.InteractionBox.prototype
- * @param {Leap.Vector} normalizedPosition The input position in InteractionBox coordinates.
- * @returns {Leap.Vector} The corresponding denormalized position in device coordinates.
+ * @param {number[]} normalizedPosition The input position in InteractionBox coordinates.
+ * @returns {number[]} The corresponding denormalized position in device coordinates.
  */
 InteractionBox.prototype.denormalizePoint = function(normalizedPosition) {
   return vec3.fromValues(
@@ -1847,10 +3168,10 @@ InteractionBox.prototype.denormalizePoint = function(normalizedPosition) {
  *
  * @method normalizePoint
  * @memberof Leap.InteractionBox.prototype
- * @param {Leap.Vector} position The input position in device coordinates.
+ * @param {number[]} position The input position in device coordinates.
  * @param {Boolean} clamp Whether or not to limit the output value to the range [0,1]
  * when the input position is outside the InteractionBox. Defaults to true.
- * @returns {Leap.Vector} The normalized position.
+ * @returns {number[]} The normalized position.
  */
 InteractionBox.prototype.normalizePoint = function(position, clamp) {
   var vec = vec3.fromValues(
@@ -1892,16 +3213,17 @@ InteractionBox.prototype.toString = function() {
  */
 InteractionBox.Invalid = { valid: false };
 
-},{"gl-matrix":19}],10:[function(require,module,exports){
-var Pipeline = module.exports = function() {
+},{"gl-matrix":23}],13:[function(require,module,exports){
+var Pipeline = module.exports = function (controller) {
   this.steps = [];
+  this.controller = controller;
 }
 
-Pipeline.prototype.addStep = function(step) {
+Pipeline.prototype.addStep = function (step) {
   this.steps.push(step);
 }
 
-Pipeline.prototype.run = function(frame) {
+Pipeline.prototype.run = function (frame) {
   var stepsLength = this.steps.length;
   for (var i = 0; i != stepsLength; i++) {
     if (!frame) break;
@@ -1910,7 +3232,42 @@ Pipeline.prototype.run = function(frame) {
   return frame;
 }
 
-},{}],11:[function(require,module,exports){
+Pipeline.prototype.removeStep = function(step){
+  var index = this.steps.indexOf(step);
+  if (index === -1) throw "Step not found in pipeline";
+  this.steps.splice(index, 1);
+}
+
+/*
+ * Wraps a plugin callback method in method which can be run inside the pipeline.
+ * This wrapper method loops the callback over objects within the frame as is appropriate,
+ * calling the callback for each in turn.
+ *
+ * @method createStepFunction
+ * @memberOf Leap.Controller.prototype
+ * @param {Controller} The controller on which the callback is called.
+ * @param {String} type What frame object the callback is run for and receives.
+ *       Can be one of 'frame', 'finger', 'hand', 'pointable', 'tool'
+ * @param {function} callback The method which will be run inside the pipeline loop.  Receives one argument, such as a hand.
+ * @private
+ */
+Pipeline.prototype.addWrappedStep = function (type, callback) {
+  var controller = this.controller,
+    step = function (frame) {
+      var dependencies, i, len;
+      dependencies = (type == 'frame') ? [frame] : (frame[type + 's'] || []);
+
+      for (i = 0, len = dependencies.length; i < len; i++) {
+        callback.call(controller, dependencies[i]);
+      }
+
+      return frame;
+    };
+
+  this.addStep(step);
+  return step;
+};
+},{}],14:[function(require,module,exports){
 var glMatrix = require("gl-matrix")
   , vec3 = glMatrix.vec3;
 
@@ -2018,7 +3375,7 @@ var Pointable = module.exports = function(data) {
    * Stabilized
    *
    * @member stabilizedTipPosition
-   * @type {Leap.Vector}
+   * @type {number[]}
    * @memberof Leap.Pointable.prototype
    */
   this.stabilizedTipPosition = data.stabilizedTipPosition;
@@ -2039,22 +3396,57 @@ var Pointable = module.exports = function(data) {
    */
   this.tipVelocity = data.tipVelocity;
   /**
-   * Human readable string describing the 'Touch Zone' of this pointable
+   * The current touch zone of this Pointable object.
    *
-   * @member Pointable.prototype.touchZone {String}
+   * The Leap Motion software computes the touch zone based on a floating touch
+   * plane that adapts to the user's finger movement and hand posture. The Leap
+   * Motion software interprets purposeful movements toward this plane as potential touch
+   * points. When a Pointable moves close to the adaptive touch plane, it enters the
+   * "hovering" zone. When a Pointable reaches or passes through the plane, it enters
+   * the "touching" zone.
+   *
+   * The possible states include:
+   *
+   * * "none" -- The Pointable is outside the hovering zone.
+   * * "hovering" -- The Pointable is close to, but not touching the touch plane.
+   * * "touching" -- The Pointable has penetrated the touch plane.
+   *
+   * The touchDistance value provides a normalized indication of the distance to
+   * the touch plane when the Pointable is in the hovering or touching zones.
+   *
+   * @member touchZone
+   * @type {String}
+   * @memberof Leap.Pointable.prototype
    */
   this.touchZone = data.touchZone;
   /**
-   * Distance from 'Touch Plane'
+   * A value proportional to the distance between this Pointable object and the
+   * adaptive touch plane.
    *
-   * @member Pointable.prototype.touchDistance {number}
+   * ![Touch Distance](images/Leap_Touch_Plane.png)
+   *
+   * The touch distance is a value in the range [-1, 1]. The value 1.0 indicates the
+   * Pointable is at the far edge of the hovering zone. The value 0 indicates the
+   * Pointable is just entering the touching zone. A value of -1.0 indicates the
+   * Pointable is firmly within the touching zone. Values in between are
+   * proportional to the distance from the plane. Thus, the touchDistance of 0.5
+   * indicates that the Pointable is halfway into the hovering zone.
+   *
+   * You can use the touchDistance value to modulate visual feedback given to the
+   * user as their fingers close in on a touch target, such as a button.
+   *
+   * @member touchDistance
+   * @type {number}
+   * @memberof Leap.Pointable.prototype
    */
   this.touchDistance = data.touchDistance;
 
   /**
-   * Time the pointable has been visible in seconds.
+   * How long the pointable has been visible in seconds.
    *
-   * @member Pointable.prototype.timeVisible {float}
+   * @member timeVisible
+   * @type {number}
+   * @memberof Leap.Pointable.prototype
    */
   this.timeVisible = data.timeVisible;
 }
@@ -2068,11 +3460,14 @@ var Pointable = module.exports = function(data) {
  * @returns {String} A description of the Pointable object as a string.
  */
 Pointable.prototype.toString = function() {
-  if(this.tool == true){
-    return "Pointable [ id:" + this.id + " " + this.length + "mmx | with:" + this.width + "mm | direction:" + this.direction + ' ]';
-  } else {
-    return "Pointable [ id:" + this.id + " " + this.length + "mmx | direction: " + this.direction + ' ]';
-  }
+  return "Pointable [ id:" + this.id + " " + this.length + "mmx | width:" + this.width + "mm | direction:" + this.direction + ' ]';
+}
+
+/**
+ * Returns the hand which the pointable is attached to.
+ */
+Pointable.prototype.hand = function(){
+  return this.frame.hand(this.handId);
 }
 
 /**
@@ -2089,37 +3484,37 @@ Pointable.prototype.toString = function() {
  */
 Pointable.Invalid = { valid: false };
 
-},{"gl-matrix":19}],12:[function(require,module,exports){
+},{"gl-matrix":23}],15:[function(require,module,exports){
 var Frame = require('./frame')
+  , Hand = require('./hand')
+  , Pointable = require('./pointable')
+  , Finger = require('./finger')
+  , _ = require('underscore')
+  , EventEmitter = require('events').EventEmitter;
 
 var Event = function(data) {
   this.type = data.type;
   this.state = data.state;
 };
 
-var chooseProtocol = exports.chooseProtocol = function(header) {
+exports.chooseProtocol = function(header) {
   var protocol;
   switch(header.version) {
     case 1:
-      protocol = JSONProtocol(1, function(data) {
-        return new Frame(data);
-      });
-      break;
     case 2:
-      protocol = JSONProtocol(2, function(data) {
-        return new Frame(data);
-      });
-      protocol.sendHeartbeat = function(connection) {
-        connection.send(protocol.encode({heartbeat: true}));
-      }
-      break;
     case 3:
-      protocol = JSONProtocol(3, function(data) {
-        return data.event ? new Event(data.event) : new Frame(data);
-
-      });
-      protocol.sendHeartbeat = function(connection) {
-        connection.send(protocol.encode({heartbeat: true}));
+    case 4:
+    case 5:
+    case 6:
+      protocol = JSONProtocol(header);
+      protocol.sendBackground = function(connection, state) {
+        connection.send(protocol.encode({background: state}));
+      }
+      protocol.sendFocused = function(connection, state) {
+        connection.send(protocol.encode({focused: state}));
+      }
+      protocol.sendOptimizeHMD = function(connection, state) {
+        connection.send(protocol.encode({optimizeHMD: state}));
       }
       break;
     default:
@@ -2128,23 +3523,49 @@ var chooseProtocol = exports.chooseProtocol = function(header) {
   return protocol;
 }
 
-var JSONProtocol = function(version, cb) {
-  var protocol = cb;
+var JSONProtocol = exports.JSONProtocol = function(header) {
+
+  var protocol = function(frameData) {
+
+    if (frameData.event) {
+
+      return new Event(frameData.event);
+
+    } else {
+
+      protocol.emit('beforeFrameCreated', frameData);
+
+      var frame = new Frame(frameData);
+
+      protocol.emit('afterFrameCreated', frame, frameData);
+
+      return frame;
+
+    }
+
+  };
+
   protocol.encode = function(message) {
     return JSON.stringify(message);
-  }
-  protocol.version = version;
-  protocol.versionLong = 'Version ' + version;
+  };
+  protocol.version = header.version;
+  protocol.serviceVersion = header.serviceVersion;
+  protocol.versionLong = 'Version ' + header.version;
   protocol.type = 'protocol';
+
+  _.extend(protocol, EventEmitter.prototype);
+
   return protocol;
 };
 
-},{"./frame":5}],13:[function(require,module,exports){
+
+
+},{"./finger":7,"./frame":8,"./hand":10,"./pointable":14,"events":21,"underscore":24}],16:[function(require,module,exports){
 exports.UI = {
   Region: require("./ui/region"),
   Cursor: require("./ui/cursor")
 };
-},{"./ui/cursor":14,"./ui/region":15}],14:[function(require,module,exports){
+},{"./ui/cursor":17,"./ui/region":18}],17:[function(require,module,exports){
 var Cursor = module.exports = function() {
   return function(frame) {
     var pointable = frame.pointables.sort(function(a, b) { return a.z - b.z })[0]
@@ -2155,7 +3576,7 @@ var Cursor = module.exports = function() {
   }
 }
 
-},{}],15:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter
   , _ = require('underscore')
 
@@ -2243,10 +3664,18 @@ Region.prototype.mapToXY = function(position, width, height) {
 }
 
 _.extend(Region.prototype, EventEmitter.prototype)
-},{"events":17,"underscore":20}],16:[function(require,module,exports){
+},{"events":21,"underscore":24}],19:[function(require,module,exports){
+// This file is automatically updated from package.json by grunt.
+module.exports = {
+  full: '0.6.4',
+  major: 0,
+  minor: 6,
+  dot: 4
+}
+},{}],20:[function(require,module,exports){
 
-},{}],17:[function(require,module,exports){
-(function(process){if (!process.EventEmitter) process.EventEmitter = function () {};
+},{}],21:[function(require,module,exports){
+var process=require("__browserify_process");if (!process.EventEmitter) process.EventEmitter = function () {};
 
 var EventEmitter = exports.EventEmitter = process.EventEmitter;
 var isArray = typeof Array.isArray === 'function'
@@ -2430,8 +3859,18 @@ EventEmitter.prototype.listeners = function(type) {
   return this._events[type];
 };
 
-})(require("__browserify_process"))
-},{"__browserify_process":18}],18:[function(require,module,exports){
+EventEmitter.listenerCount = function(emitter, type) {
+  var ret;
+  if (!emitter._events || !emitter._events[type])
+    ret = 0;
+  else if (typeof emitter._events[type] === 'function')
+    ret = 1;
+  else
+    ret = emitter._events[type].length;
+  return ret;
+};
+
+},{"__browserify_process":22}],22:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2450,7 +3889,8 @@ process.nextTick = (function () {
     if (canPost) {
         var queue = [];
         window.addEventListener('message', function (ev) {
-            if (ev.source === window && ev.data === 'process-tick') {
+            var source = ev.source;
+            if ((source === window || source === null) && ev.data === 'process-tick') {
                 ev.stopPropagation();
                 if (queue.length > 0) {
                     var fn = queue.shift();
@@ -2485,15 +3925,59 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],19:[function(require,module,exports){
-(function(){/**
+},{}],23:[function(require,module,exports){
+/**
  * @fileoverview gl-matrix - High performance matrix and vector operations
  * @author Brandon Jones
  * @author Colin MacKenzie IV
- * @version 2.0.0
+ * @version 2.2.1
  */
 
-/* Copyright (c) 2012, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
+
+
+(function(_global) {
+  "use strict";
+
+  var shim = {};
+  if (typeof(exports) === 'undefined') {
+    if(typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
+      shim.exports = {};
+      define(function() {
+        return shim.exports;
+      });
+    } else {
+      // gl-matrix lives in a browser, define its namespaces in global
+      shim.exports = typeof(window) !== 'undefined' ? window : _global;
+    }
+  }
+  else {
+    // gl-matrix lives in commonjs, define its namespaces in exports
+    shim.exports = exports;
+  }
+
+  (function(exports) {
+    /* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -2516,28 +4000,49 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 
-(function() {
-  "use strict";
+if(!GLMAT_EPSILON) {
+    var GLMAT_EPSILON = 0.000001;
+}
 
-  var shim = {};
-  if (typeof(exports) === 'undefined') {
-    if(typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
-      shim.exports = {};
-      define(function() {
-        return shim.exports;
-      });
-    } else {
-      // gl-matrix lives in a browser, define its namespaces in global
-      shim.exports = window;
-    }    
-  }
-  else {
-    // gl-matrix lives in commonjs, define its namespaces in exports
-    shim.exports = exports;
-  }
+if(!GLMAT_ARRAY_TYPE) {
+    var GLMAT_ARRAY_TYPE = (typeof Float32Array !== 'undefined') ? Float32Array : Array;
+}
 
-  (function(exports) {
-    /* Copyright (c) 2012, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+if(!GLMAT_RANDOM) {
+    var GLMAT_RANDOM = Math.random;
+}
+
+/**
+ * @class Common utilities
+ * @name glMatrix
+ */
+var glMatrix = {};
+
+/**
+ * Sets the type of array used when creating new vectors and matricies
+ *
+ * @param {Type} type Array type, such as Float32Array or Array
+ */
+glMatrix.setMatrixArrayType = function(type) {
+    GLMAT_ARRAY_TYPE = type;
+}
+
+if(typeof(exports) !== 'undefined') {
+    exports.glMatrix = glMatrix;
+}
+
+var degree = Math.PI / 180;
+
+/**
+* Convert Degree To Radian
+*
+* @param {Number} Angle in Degrees
+*/
+glMatrix.toRadian = function(a){
+     return a * degree;
+}
+;
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -2566,17 +4071,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 var vec2 = {};
 
-if(!GLMAT_EPSILON) {
-    var GLMAT_EPSILON = 0.000001;
-}
- 
 /**
  * Creates a new, empty vec2
  *
  * @returns {vec2} a new 2D vector
  */
 vec2.create = function() {
-    return new Float32Array(2);
+    var out = new GLMAT_ARRAY_TYPE(2);
+    out[0] = 0;
+    out[1] = 0;
+    return out;
 };
 
 /**
@@ -2586,7 +4090,7 @@ vec2.create = function() {
  * @returns {vec2} a new 2D vector
  */
 vec2.clone = function(a) {
-    var out = new Float32Array(2);
+    var out = new GLMAT_ARRAY_TYPE(2);
     out[0] = a[0];
     out[1] = a[1];
     return out;
@@ -2600,7 +4104,7 @@ vec2.clone = function(a) {
  * @returns {vec2} a new 2D vector
  */
 vec2.fromValues = function(x, y) {
-    var out = new Float32Array(2);
+    var out = new GLMAT_ARRAY_TYPE(2);
     out[0] = x;
     out[1] = y;
     return out;
@@ -2648,18 +4152,24 @@ vec2.add = function(out, a, b) {
 };
 
 /**
- * Subtracts two vec2's
+ * Subtracts vector b from vector a
  *
  * @param {vec2} out the receiving vector
  * @param {vec2} a the first operand
  * @param {vec2} b the second operand
  * @returns {vec2} out
  */
-vec2.sub = vec2.subtract = function(out, a, b) {
+vec2.subtract = function(out, a, b) {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     return out;
 };
+
+/**
+ * Alias for {@link vec2.subtract}
+ * @function
+ */
+vec2.sub = vec2.subtract;
 
 /**
  * Multiplies two vec2's
@@ -2669,11 +4179,17 @@ vec2.sub = vec2.subtract = function(out, a, b) {
  * @param {vec2} b the second operand
  * @returns {vec2} out
  */
-vec2.mul = vec2.multiply = function(out, a, b) {
+vec2.multiply = function(out, a, b) {
     out[0] = a[0] * b[0];
     out[1] = a[1] * b[1];
     return out;
 };
+
+/**
+ * Alias for {@link vec2.multiply}
+ * @function
+ */
+vec2.mul = vec2.multiply;
 
 /**
  * Divides two vec2's
@@ -2683,11 +4199,17 @@ vec2.mul = vec2.multiply = function(out, a, b) {
  * @param {vec2} b the second operand
  * @returns {vec2} out
  */
-vec2.div = vec2.divide = function(out, a, b) {
+vec2.divide = function(out, a, b) {
     out[0] = a[0] / b[0];
     out[1] = a[1] / b[1];
     return out;
 };
+
+/**
+ * Alias for {@link vec2.divide}
+ * @function
+ */
+vec2.div = vec2.divide;
 
 /**
  * Returns the minimum of two vec2's
@@ -2722,12 +4244,27 @@ vec2.max = function(out, a, b) {
  *
  * @param {vec2} out the receiving vector
  * @param {vec2} a the vector to scale
- * @param {vec2} b amount to scale the vector by
+ * @param {Number} b amount to scale the vector by
  * @returns {vec2} out
  */
 vec2.scale = function(out, a, b) {
     out[0] = a[0] * b;
     out[1] = a[1] * b;
+    return out;
+};
+
+/**
+ * Adds two vec2's after scaling the second operand by a scalar value
+ *
+ * @param {vec2} out the receiving vector
+ * @param {vec2} a the first operand
+ * @param {vec2} b the second operand
+ * @param {Number} scale the amount to scale b by before adding
+ * @returns {vec2} out
+ */
+vec2.scaleAndAdd = function(out, a, b, scale) {
+    out[0] = a[0] + (b[0] * scale);
+    out[1] = a[1] + (b[1] * scale);
     return out;
 };
 
@@ -2738,11 +4275,17 @@ vec2.scale = function(out, a, b) {
  * @param {vec2} b the second operand
  * @returns {Number} distance between a and b
  */
-vec2.dist = vec2.distance = function(a, b) {
+vec2.distance = function(a, b) {
     var x = b[0] - a[0],
         y = b[1] - a[1];
     return Math.sqrt(x*x + y*y);
 };
+
+/**
+ * Alias for {@link vec2.distance}
+ * @function
+ */
+vec2.dist = vec2.distance;
 
 /**
  * Calculates the squared euclidian distance between two vec2's
@@ -2751,35 +4294,53 @@ vec2.dist = vec2.distance = function(a, b) {
  * @param {vec2} b the second operand
  * @returns {Number} squared distance between a and b
  */
-vec2.sqrDist = vec2.squaredDistance = function(a, b) {
+vec2.squaredDistance = function(a, b) {
     var x = b[0] - a[0],
         y = b[1] - a[1];
     return x*x + y*y;
 };
 
 /**
- * Caclulates the length of a vec2
+ * Alias for {@link vec2.squaredDistance}
+ * @function
+ */
+vec2.sqrDist = vec2.squaredDistance;
+
+/**
+ * Calculates the length of a vec2
  *
  * @param {vec2} a vector to calculate length of
  * @returns {Number} length of a
  */
-vec2.len = vec2.length = function (a) {
+vec2.length = function (a) {
     var x = a[0],
         y = a[1];
     return Math.sqrt(x*x + y*y);
 };
 
 /**
- * Caclulates the squared length of a vec2
+ * Alias for {@link vec2.length}
+ * @function
+ */
+vec2.len = vec2.length;
+
+/**
+ * Calculates the squared length of a vec2
  *
  * @param {vec2} a vector to calculate squared length of
  * @returns {Number} squared length of a
  */
-vec2.sqrLen = vec2.squaredLength = function (a) {
+vec2.squaredLength = function (a) {
     var x = a[0],
         y = a[1];
     return x*x + y*y;
 };
+
+/**
+ * Alias for {@link vec2.squaredLength}
+ * @function
+ */
+vec2.sqrLen = vec2.squaredLength;
 
 /**
  * Negates the components of a vec2
@@ -2815,7 +4376,7 @@ vec2.normalize = function(out, a) {
 };
 
 /**
- * Caclulates the dot product of two vec2's
+ * Calculates the dot product of two vec2's
  *
  * @param {vec2} a the first operand
  * @param {vec2} b the second operand
@@ -2844,7 +4405,7 @@ vec2.cross = function(out, a, b) {
 /**
  * Performs a linear interpolation between two vec2's
  *
- * @param {vec3} out the receiving vector
+ * @param {vec2} out the receiving vector
  * @param {vec2} a the first operand
  * @param {vec2} b the second operand
  * @param {Number} t interpolation amount between the two inputs
@@ -2859,6 +4420,21 @@ vec2.lerp = function (out, a, b, t) {
 };
 
 /**
+ * Generates a random vector with the given scale
+ *
+ * @param {vec2} out the receiving vector
+ * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned
+ * @returns {vec2} out
+ */
+vec2.random = function (out, scale) {
+    scale = scale || 1.0;
+    var r = GLMAT_RANDOM() * 2.0 * Math.PI;
+    out[0] = Math.cos(r) * scale;
+    out[1] = Math.sin(r) * scale;
+    return out;
+};
+
+/**
  * Transforms the vec2 with a mat2
  *
  * @param {vec2} out the receiving vector
@@ -2869,8 +4445,59 @@ vec2.lerp = function (out, a, b, t) {
 vec2.transformMat2 = function(out, a, m) {
     var x = a[0],
         y = a[1];
-    out[0] = x * m[0] + y * m[1];
-    out[1] = x * m[2] + y * m[3];
+    out[0] = m[0] * x + m[2] * y;
+    out[1] = m[1] * x + m[3] * y;
+    return out;
+};
+
+/**
+ * Transforms the vec2 with a mat2d
+ *
+ * @param {vec2} out the receiving vector
+ * @param {vec2} a the vector to transform
+ * @param {mat2d} m matrix to transform with
+ * @returns {vec2} out
+ */
+vec2.transformMat2d = function(out, a, m) {
+    var x = a[0],
+        y = a[1];
+    out[0] = m[0] * x + m[2] * y + m[4];
+    out[1] = m[1] * x + m[3] * y + m[5];
+    return out;
+};
+
+/**
+ * Transforms the vec2 with a mat3
+ * 3rd vector component is implicitly '1'
+ *
+ * @param {vec2} out the receiving vector
+ * @param {vec2} a the vector to transform
+ * @param {mat3} m matrix to transform with
+ * @returns {vec2} out
+ */
+vec2.transformMat3 = function(out, a, m) {
+    var x = a[0],
+        y = a[1];
+    out[0] = m[0] * x + m[3] * y + m[6];
+    out[1] = m[1] * x + m[4] * y + m[7];
+    return out;
+};
+
+/**
+ * Transforms the vec2 with a mat4
+ * 3rd vector component is implicitly '0'
+ * 4th vector component is implicitly '1'
+ *
+ * @param {vec2} out the receiving vector
+ * @param {vec2} a the vector to transform
+ * @param {mat4} m matrix to transform with
+ * @returns {vec2} out
+ */
+vec2.transformMat4 = function(out, a, m) {
+    var x = a[0], 
+        y = a[1];
+    out[0] = m[0] * x + m[4] * y + m[12];
+    out[1] = m[1] * x + m[5] * y + m[13];
     return out;
 };
 
@@ -2884,9 +4511,10 @@ vec2.transformMat2 = function(out, a, m) {
  * @param {Function} fn Function to call for each vector in the array
  * @param {Object} [arg] additional argument to pass to fn
  * @returns {Array} a
+ * @function
  */
 vec2.forEach = (function() {
-    var vec = new Float32Array(2);
+    var vec = vec2.create();
 
     return function(a, stride, offset, count, fn, arg) {
         var i, l;
@@ -2928,7 +4556,7 @@ if(typeof(exports) !== 'undefined') {
     exports.vec2 = vec2;
 }
 ;
-/* Copyright (c) 2012, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -2957,17 +4585,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 var vec3 = {};
 
-if(!GLMAT_EPSILON) {
-    var GLMAT_EPSILON = 0.000001;
-}
- 
 /**
  * Creates a new, empty vec3
  *
  * @returns {vec3} a new 3D vector
  */
 vec3.create = function() {
-    return new Float32Array(3);
+    var out = new GLMAT_ARRAY_TYPE(3);
+    out[0] = 0;
+    out[1] = 0;
+    out[2] = 0;
+    return out;
 };
 
 /**
@@ -2977,7 +4605,7 @@ vec3.create = function() {
  * @returns {vec3} a new 3D vector
  */
 vec3.clone = function(a) {
-    var out = new Float32Array(3);
+    var out = new GLMAT_ARRAY_TYPE(3);
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -2993,7 +4621,7 @@ vec3.clone = function(a) {
  * @returns {vec3} a new 3D vector
  */
 vec3.fromValues = function(x, y, z) {
-    var out = new Float32Array(3);
+    var out = new GLMAT_ARRAY_TYPE(3);
     out[0] = x;
     out[1] = y;
     out[2] = z;
@@ -3046,19 +4674,25 @@ vec3.add = function(out, a, b) {
 };
 
 /**
- * Subtracts two vec3's
+ * Subtracts vector b from vector a
  *
  * @param {vec3} out the receiving vector
  * @param {vec3} a the first operand
  * @param {vec3} b the second operand
  * @returns {vec3} out
  */
-vec3.sub = vec3.subtract = function(out, a, b) {
+vec3.subtract = function(out, a, b) {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     out[2] = a[2] - b[2];
     return out;
 };
+
+/**
+ * Alias for {@link vec3.subtract}
+ * @function
+ */
+vec3.sub = vec3.subtract;
 
 /**
  * Multiplies two vec3's
@@ -3068,12 +4702,18 @@ vec3.sub = vec3.subtract = function(out, a, b) {
  * @param {vec3} b the second operand
  * @returns {vec3} out
  */
-vec3.mul = vec3.multiply = function(out, a, b) {
+vec3.multiply = function(out, a, b) {
     out[0] = a[0] * b[0];
     out[1] = a[1] * b[1];
     out[2] = a[2] * b[2];
     return out;
 };
+
+/**
+ * Alias for {@link vec3.multiply}
+ * @function
+ */
+vec3.mul = vec3.multiply;
 
 /**
  * Divides two vec3's
@@ -3083,12 +4723,18 @@ vec3.mul = vec3.multiply = function(out, a, b) {
  * @param {vec3} b the second operand
  * @returns {vec3} out
  */
-vec3.div = vec3.divide = function(out, a, b) {
+vec3.divide = function(out, a, b) {
     out[0] = a[0] / b[0];
     out[1] = a[1] / b[1];
     out[2] = a[2] / b[2];
     return out;
 };
+
+/**
+ * Alias for {@link vec3.divide}
+ * @function
+ */
+vec3.div = vec3.divide;
 
 /**
  * Returns the minimum of two vec3's
@@ -3125,7 +4771,7 @@ vec3.max = function(out, a, b) {
  *
  * @param {vec3} out the receiving vector
  * @param {vec3} a the vector to scale
- * @param {vec3} b amount to scale the vector by
+ * @param {Number} b amount to scale the vector by
  * @returns {vec3} out
  */
 vec3.scale = function(out, a, b) {
@@ -3136,18 +4782,40 @@ vec3.scale = function(out, a, b) {
 };
 
 /**
+ * Adds two vec3's after scaling the second operand by a scalar value
+ *
+ * @param {vec3} out the receiving vector
+ * @param {vec3} a the first operand
+ * @param {vec3} b the second operand
+ * @param {Number} scale the amount to scale b by before adding
+ * @returns {vec3} out
+ */
+vec3.scaleAndAdd = function(out, a, b, scale) {
+    out[0] = a[0] + (b[0] * scale);
+    out[1] = a[1] + (b[1] * scale);
+    out[2] = a[2] + (b[2] * scale);
+    return out;
+};
+
+/**
  * Calculates the euclidian distance between two vec3's
  *
  * @param {vec3} a the first operand
  * @param {vec3} b the second operand
  * @returns {Number} distance between a and b
  */
-vec3.dist = vec3.distance = function(a, b) {
+vec3.distance = function(a, b) {
     var x = b[0] - a[0],
         y = b[1] - a[1],
         z = b[2] - a[2];
     return Math.sqrt(x*x + y*y + z*z);
 };
+
+/**
+ * Alias for {@link vec3.distance}
+ * @function
+ */
+vec3.dist = vec3.distance;
 
 /**
  * Calculates the squared euclidian distance between two vec3's
@@ -3156,7 +4824,7 @@ vec3.dist = vec3.distance = function(a, b) {
  * @param {vec3} b the second operand
  * @returns {Number} squared distance between a and b
  */
-vec3.sqrDist = vec3.squaredDistance = function(a, b) {
+vec3.squaredDistance = function(a, b) {
     var x = b[0] - a[0],
         y = b[1] - a[1],
         z = b[2] - a[2];
@@ -3164,12 +4832,18 @@ vec3.sqrDist = vec3.squaredDistance = function(a, b) {
 };
 
 /**
- * Caclulates the length of a vec3
+ * Alias for {@link vec3.squaredDistance}
+ * @function
+ */
+vec3.sqrDist = vec3.squaredDistance;
+
+/**
+ * Calculates the length of a vec3
  *
  * @param {vec3} a vector to calculate length of
  * @returns {Number} length of a
  */
-vec3.len = vec3.length = function (a) {
+vec3.length = function (a) {
     var x = a[0],
         y = a[1],
         z = a[2];
@@ -3177,17 +4851,29 @@ vec3.len = vec3.length = function (a) {
 };
 
 /**
- * Caclulates the squared length of a vec3
+ * Alias for {@link vec3.length}
+ * @function
+ */
+vec3.len = vec3.length;
+
+/**
+ * Calculates the squared length of a vec3
  *
  * @param {vec3} a vector to calculate squared length of
  * @returns {Number} squared length of a
  */
-vec3.sqrLen = vec3.squaredLength = function (a) {
+vec3.squaredLength = function (a) {
     var x = a[0],
         y = a[1],
         z = a[2];
     return x*x + y*y + z*z;
 };
+
+/**
+ * Alias for {@link vec3.squaredLength}
+ * @function
+ */
+vec3.sqrLen = vec3.squaredLength;
 
 /**
  * Negates the components of a vec3
@@ -3226,7 +4912,7 @@ vec3.normalize = function(out, a) {
 };
 
 /**
- * Caclulates the dot product of two vec3's
+ * Calculates the dot product of two vec3's
  *
  * @param {vec3} a the first operand
  * @param {vec3} b the second operand
@@ -3274,6 +4960,26 @@ vec3.lerp = function (out, a, b, t) {
 };
 
 /**
+ * Generates a random vector with the given scale
+ *
+ * @param {vec3} out the receiving vector
+ * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned
+ * @returns {vec3} out
+ */
+vec3.random = function (out, scale) {
+    scale = scale || 1.0;
+
+    var r = GLMAT_RANDOM() * 2.0 * Math.PI;
+    var z = (GLMAT_RANDOM() * 2.0) - 1.0;
+    var zScale = Math.sqrt(1.0-z*z) * scale;
+
+    out[0] = Math.cos(r) * zScale;
+    out[1] = Math.sin(r) * zScale;
+    out[2] = z * scale;
+    return out;
+};
+
+/**
  * Transforms the vec3 with a mat4.
  * 4th vector component is implicitly '1'
  *
@@ -3291,6 +4997,22 @@ vec3.transformMat4 = function(out, a, m) {
 };
 
 /**
+ * Transforms the vec3 with a mat3.
+ *
+ * @param {vec3} out the receiving vector
+ * @param {vec3} a the vector to transform
+ * @param {mat4} m the 3x3 matrix to transform with
+ * @returns {vec3} out
+ */
+vec3.transformMat3 = function(out, a, m) {
+    var x = a[0], y = a[1], z = a[2];
+    out[0] = x * m[0] + y * m[3] + z * m[6];
+    out[1] = x * m[1] + y * m[4] + z * m[7];
+    out[2] = x * m[2] + y * m[5] + z * m[8];
+    return out;
+};
+
+/**
  * Transforms the vec3 with a quat
  *
  * @param {vec3} out the receiving vector
@@ -3299,6 +5021,8 @@ vec3.transformMat4 = function(out, a, m) {
  * @returns {vec3} out
  */
 vec3.transformQuat = function(out, a, q) {
+    // benchmarks: http://jsperf.com/quaternion-transform-vec3-implementations
+
     var x = a[0], y = a[1], z = a[2],
         qx = q[0], qy = q[1], qz = q[2], qw = q[3],
 
@@ -3315,6 +5039,90 @@ vec3.transformQuat = function(out, a, q) {
     return out;
 };
 
+/*
+* Rotate a 3D vector around the x-axis
+* @param {vec3} out The receiving vec3
+* @param {vec3} a The vec3 point to rotate
+* @param {vec3} b The origin of the rotation
+* @param {Number} c The angle of rotation
+* @returns {vec3} out
+*/
+vec3.rotateX = function(out, a, b, c){
+   var p = [], r=[];
+	  //Translate point to the origin
+	  p[0] = a[0] - b[0];
+	  p[1] = a[1] - b[1];
+  	p[2] = a[2] - b[2];
+
+	  //perform rotation
+	  r[0] = p[0];
+	  r[1] = p[1]*Math.cos(c) - p[2]*Math.sin(c);
+	  r[2] = p[1]*Math.sin(c) + p[2]*Math.cos(c);
+
+	  //translate to correct position
+	  out[0] = r[0] + b[0];
+	  out[1] = r[1] + b[1];
+	  out[2] = r[2] + b[2];
+
+  	return out;
+};
+
+/*
+* Rotate a 3D vector around the y-axis
+* @param {vec3} out The receiving vec3
+* @param {vec3} a The vec3 point to rotate
+* @param {vec3} b The origin of the rotation
+* @param {Number} c The angle of rotation
+* @returns {vec3} out
+*/
+vec3.rotateY = function(out, a, b, c){
+  	var p = [], r=[];
+  	//Translate point to the origin
+  	p[0] = a[0] - b[0];
+  	p[1] = a[1] - b[1];
+  	p[2] = a[2] - b[2];
+  
+  	//perform rotation
+  	r[0] = p[2]*Math.sin(c) + p[0]*Math.cos(c);
+  	r[1] = p[1];
+  	r[2] = p[2]*Math.cos(c) - p[0]*Math.sin(c);
+  
+  	//translate to correct position
+  	out[0] = r[0] + b[0];
+  	out[1] = r[1] + b[1];
+  	out[2] = r[2] + b[2];
+  
+  	return out;
+};
+
+/*
+* Rotate a 3D vector around the z-axis
+* @param {vec3} out The receiving vec3
+* @param {vec3} a The vec3 point to rotate
+* @param {vec3} b The origin of the rotation
+* @param {Number} c The angle of rotation
+* @returns {vec3} out
+*/
+vec3.rotateZ = function(out, a, b, c){
+  	var p = [], r=[];
+  	//Translate point to the origin
+  	p[0] = a[0] - b[0];
+  	p[1] = a[1] - b[1];
+  	p[2] = a[2] - b[2];
+  
+  	//perform rotation
+  	r[0] = p[0]*Math.cos(c) - p[1]*Math.sin(c);
+  	r[1] = p[0]*Math.sin(c) + p[1]*Math.cos(c);
+  	r[2] = p[2];
+  
+  	//translate to correct position
+  	out[0] = r[0] + b[0];
+  	out[1] = r[1] + b[1];
+  	out[2] = r[2] + b[2];
+  
+  	return out;
+};
+
 /**
  * Perform some operation over an array of vec3s.
  *
@@ -3325,9 +5133,10 @@ vec3.transformQuat = function(out, a, q) {
  * @param {Function} fn Function to call for each vector in the array
  * @param {Object} [arg] additional argument to pass to fn
  * @returns {Array} a
+ * @function
  */
 vec3.forEach = (function() {
-    var vec = new Float32Array(3);
+    var vec = vec3.create();
 
     return function(a, stride, offset, count, fn, arg) {
         var i, l;
@@ -3369,7 +5178,7 @@ if(typeof(exports) !== 'undefined') {
     exports.vec3 = vec3;
 }
 ;
-/* Copyright (c) 2012, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -3398,17 +5207,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 var vec4 = {};
 
-if(!GLMAT_EPSILON) {
-    var GLMAT_EPSILON = 0.000001;
-}
-
 /**
  * Creates a new, empty vec4
  *
  * @returns {vec4} a new 4D vector
  */
 vec4.create = function() {
-    return new Float32Array(4);
+    var out = new GLMAT_ARRAY_TYPE(4);
+    out[0] = 0;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    return out;
 };
 
 /**
@@ -3418,7 +5228,7 @@ vec4.create = function() {
  * @returns {vec4} a new 4D vector
  */
 vec4.clone = function(a) {
-    var out = new Float32Array(4);
+    var out = new GLMAT_ARRAY_TYPE(4);
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -3436,7 +5246,7 @@ vec4.clone = function(a) {
  * @returns {vec4} a new 4D vector
  */
 vec4.fromValues = function(x, y, z, w) {
-    var out = new Float32Array(4);
+    var out = new GLMAT_ARRAY_TYPE(4);
     out[0] = x;
     out[1] = y;
     out[2] = z;
@@ -3494,20 +5304,26 @@ vec4.add = function(out, a, b) {
 };
 
 /**
- * Subtracts two vec4's
+ * Subtracts vector b from vector a
  *
  * @param {vec4} out the receiving vector
  * @param {vec4} a the first operand
  * @param {vec4} b the second operand
  * @returns {vec4} out
  */
-vec4.sub = vec4.subtract = function(out, a, b) {
+vec4.subtract = function(out, a, b) {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     out[2] = a[2] - b[2];
     out[3] = a[3] - b[3];
     return out;
 };
+
+/**
+ * Alias for {@link vec4.subtract}
+ * @function
+ */
+vec4.sub = vec4.subtract;
 
 /**
  * Multiplies two vec4's
@@ -3517,13 +5333,19 @@ vec4.sub = vec4.subtract = function(out, a, b) {
  * @param {vec4} b the second operand
  * @returns {vec4} out
  */
-vec4.mul = vec4.multiply = function(out, a, b) {
+vec4.multiply = function(out, a, b) {
     out[0] = a[0] * b[0];
     out[1] = a[1] * b[1];
     out[2] = a[2] * b[2];
     out[3] = a[3] * b[3];
     return out;
 };
+
+/**
+ * Alias for {@link vec4.multiply}
+ * @function
+ */
+vec4.mul = vec4.multiply;
 
 /**
  * Divides two vec4's
@@ -3533,13 +5355,19 @@ vec4.mul = vec4.multiply = function(out, a, b) {
  * @param {vec4} b the second operand
  * @returns {vec4} out
  */
-vec4.div = vec4.divide = function(out, a, b) {
+vec4.divide = function(out, a, b) {
     out[0] = a[0] / b[0];
     out[1] = a[1] / b[1];
     out[2] = a[2] / b[2];
     out[3] = a[3] / b[3];
     return out;
 };
+
+/**
+ * Alias for {@link vec4.divide}
+ * @function
+ */
+vec4.div = vec4.divide;
 
 /**
  * Returns the minimum of two vec4's
@@ -3578,7 +5406,7 @@ vec4.max = function(out, a, b) {
  *
  * @param {vec4} out the receiving vector
  * @param {vec4} a the vector to scale
- * @param {vec4} b amount to scale the vector by
+ * @param {Number} b amount to scale the vector by
  * @returns {vec4} out
  */
 vec4.scale = function(out, a, b) {
@@ -3590,19 +5418,42 @@ vec4.scale = function(out, a, b) {
 };
 
 /**
+ * Adds two vec4's after scaling the second operand by a scalar value
+ *
+ * @param {vec4} out the receiving vector
+ * @param {vec4} a the first operand
+ * @param {vec4} b the second operand
+ * @param {Number} scale the amount to scale b by before adding
+ * @returns {vec4} out
+ */
+vec4.scaleAndAdd = function(out, a, b, scale) {
+    out[0] = a[0] + (b[0] * scale);
+    out[1] = a[1] + (b[1] * scale);
+    out[2] = a[2] + (b[2] * scale);
+    out[3] = a[3] + (b[3] * scale);
+    return out;
+};
+
+/**
  * Calculates the euclidian distance between two vec4's
  *
  * @param {vec4} a the first operand
  * @param {vec4} b the second operand
  * @returns {Number} distance between a and b
  */
-vec4.dist = vec4.distance = function(a, b) {
+vec4.distance = function(a, b) {
     var x = b[0] - a[0],
         y = b[1] - a[1],
         z = b[2] - a[2],
         w = b[3] - a[3];
     return Math.sqrt(x*x + y*y + z*z + w*w);
 };
+
+/**
+ * Alias for {@link vec4.distance}
+ * @function
+ */
+vec4.dist = vec4.distance;
 
 /**
  * Calculates the squared euclidian distance between two vec4's
@@ -3611,7 +5462,7 @@ vec4.dist = vec4.distance = function(a, b) {
  * @param {vec4} b the second operand
  * @returns {Number} squared distance between a and b
  */
-vec4.sqrDist = vec4.squaredDistance = function(a, b) {
+vec4.squaredDistance = function(a, b) {
     var x = b[0] - a[0],
         y = b[1] - a[1],
         z = b[2] - a[2],
@@ -3620,12 +5471,18 @@ vec4.sqrDist = vec4.squaredDistance = function(a, b) {
 };
 
 /**
- * Caclulates the length of a vec4
+ * Alias for {@link vec4.squaredDistance}
+ * @function
+ */
+vec4.sqrDist = vec4.squaredDistance;
+
+/**
+ * Calculates the length of a vec4
  *
  * @param {vec4} a vector to calculate length of
  * @returns {Number} length of a
  */
-vec4.len = vec4.length = function (a) {
+vec4.length = function (a) {
     var x = a[0],
         y = a[1],
         z = a[2],
@@ -3634,18 +5491,30 @@ vec4.len = vec4.length = function (a) {
 };
 
 /**
- * Caclulates the squared length of a vec4
+ * Alias for {@link vec4.length}
+ * @function
+ */
+vec4.len = vec4.length;
+
+/**
+ * Calculates the squared length of a vec4
  *
  * @param {vec4} a vector to calculate squared length of
  * @returns {Number} squared length of a
  */
-vec4.sqrLen = vec4.squaredLength = function (a) {
+vec4.squaredLength = function (a) {
     var x = a[0],
         y = a[1],
         z = a[2],
         w = a[3];
     return x*x + y*y + z*z + w*w;
 };
+
+/**
+ * Alias for {@link vec4.squaredLength}
+ * @function
+ */
+vec4.sqrLen = vec4.squaredLength;
 
 /**
  * Negates the components of a vec4
@@ -3686,7 +5555,7 @@ vec4.normalize = function(out, a) {
 };
 
 /**
- * Caclulates the dot product of two vec4's
+ * Calculates the dot product of two vec4's
  *
  * @param {vec4} a the first operand
  * @param {vec4} b the second operand
@@ -3714,6 +5583,26 @@ vec4.lerp = function (out, a, b, t) {
     out[1] = ay + t * (b[1] - ay);
     out[2] = az + t * (b[2] - az);
     out[3] = aw + t * (b[3] - aw);
+    return out;
+};
+
+/**
+ * Generates a random vector with the given scale
+ *
+ * @param {vec4} out the receiving vector
+ * @param {Number} [scale] Length of the resulting vector. If ommitted, a unit vector will be returned
+ * @returns {vec4} out
+ */
+vec4.random = function (out, scale) {
+    scale = scale || 1.0;
+
+    //TODO: This is a pretty awful way of doing this. Find something better.
+    out[0] = GLMAT_RANDOM();
+    out[1] = GLMAT_RANDOM();
+    out[2] = GLMAT_RANDOM();
+    out[3] = GLMAT_RANDOM();
+    vec4.normalize(out, out);
+    vec4.scale(out, out, scale);
     return out;
 };
 
@@ -3769,9 +5658,10 @@ vec4.transformQuat = function(out, a, q) {
  * @param {Function} fn Function to call for each vector in the array
  * @param {Object} [arg] additional argument to pass to fn
  * @returns {Array} a
+ * @function
  */
 vec4.forEach = (function() {
-    var vec = new Float32Array(4);
+    var vec = vec4.create();
 
     return function(a, stride, offset, count, fn, arg) {
         var i, l;
@@ -3813,7 +5703,7 @@ if(typeof(exports) !== 'undefined') {
     exports.vec4 = vec4;
 }
 ;
-/* Copyright (c) 2012, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -3842,22 +5732,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 var mat2 = {};
 
-var mat2Identity = new Float32Array([
-    1, 0,
-    0, 1
-]);
-
-if(!GLMAT_EPSILON) {
-    var GLMAT_EPSILON = 0.000001;
-}
-
 /**
  * Creates a new identity mat2
  *
  * @returns {mat2} a new 2x2 matrix
  */
 mat2.create = function() {
-    return new Float32Array(mat2Identity);
+    var out = new GLMAT_ARRAY_TYPE(4);
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 1;
+    return out;
 };
 
 /**
@@ -3867,7 +5753,7 @@ mat2.create = function() {
  * @returns {mat2} a new 2x2 matrix
  */
 mat2.clone = function(a) {
-    var out = new Float32Array(4);
+    var out = new GLMAT_ARRAY_TYPE(4);
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -3954,7 +5840,7 @@ mat2.invert = function(out, a) {
 };
 
 /**
- * Caclulates the adjugate of a mat2
+ * Calculates the adjugate of a mat2
  *
  * @param {mat2} out the receiving matrix
  * @param {mat2} a the source matrix
@@ -3989,32 +5875,38 @@ mat2.determinant = function (a) {
  * @param {mat2} b the second operand
  * @returns {mat2} out
  */
-mat2.mul = mat2.multiply = function (out, a, b) {
+mat2.multiply = function (out, a, b) {
     var a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3];
     var b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3];
-    out[0] = a0 * b0 + a1 * b2;
-    out[1] = a0 * b1 + a1 * b3;
-    out[2] = a2 * b0 + a3 * b2;
-    out[3] = a2 * b1 + a3 * b3;
+    out[0] = a0 * b0 + a2 * b1;
+    out[1] = a1 * b0 + a3 * b1;
+    out[2] = a0 * b2 + a2 * b3;
+    out[3] = a1 * b2 + a3 * b3;
     return out;
 };
+
+/**
+ * Alias for {@link mat2.multiply}
+ * @function
+ */
+mat2.mul = mat2.multiply;
 
 /**
  * Rotates a mat2 by the given angle
  *
  * @param {mat2} out the receiving matrix
  * @param {mat2} a the matrix to rotate
- * @param {mat2} rad the angle to rotate the matrix by
+ * @param {Number} rad the angle to rotate the matrix by
  * @returns {mat2} out
  */
 mat2.rotate = function (out, a, rad) {
     var a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3],
         s = Math.sin(rad),
         c = Math.cos(rad);
-    out[0] = a0 *  c + a1 * s;
-    out[1] = a0 * -s + a1 * c;
-    out[2] = a2 *  c + a3 * s;
-    out[3] = a2 * -s + a3 * c;
+    out[0] = a0 *  c + a2 * s;
+    out[1] = a1 *  c + a3 * s;
+    out[2] = a0 * -s + a2 * c;
+    out[3] = a1 * -s + a3 * c;
     return out;
 };
 
@@ -4023,15 +5915,15 @@ mat2.rotate = function (out, a, rad) {
  *
  * @param {mat2} out the receiving matrix
  * @param {mat2} a the matrix to rotate
- * @param {mat2} v the vec2 to scale the matrix by
+ * @param {vec2} v the vec2 to scale the matrix by
  * @returns {mat2} out
  **/
 mat2.scale = function(out, a, v) {
     var a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3],
         v0 = v[0], v1 = v[1];
     out[0] = a0 * v0;
-    out[1] = a1 * v1;
-    out[2] = a2 * v0;
+    out[1] = a1 * v0;
+    out[2] = a2 * v1;
     out[3] = a3 * v1;
     return out;
 };
@@ -4046,11 +5938,295 @@ mat2.str = function (a) {
     return 'mat2(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + a[3] + ')';
 };
 
+/**
+ * Returns Frobenius norm of a mat2
+ *
+ * @param {mat2} a the matrix to calculate Frobenius norm of
+ * @returns {Number} Frobenius norm
+ */
+mat2.frob = function (a) {
+    return(Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2)))
+};
+
+/**
+ * Returns L, D and U matrices (Lower triangular, Diagonal and Upper triangular) by factorizing the input matrix
+ * @param {mat2} L the lower triangular matrix 
+ * @param {mat2} D the diagonal matrix 
+ * @param {mat2} U the upper triangular matrix 
+ * @param {mat2} a the input matrix to factorize
+ */
+
+mat2.LDU = function (L, D, U, a) { 
+    L[2] = a[2]/a[0]; 
+    U[0] = a[0]; 
+    U[1] = a[1]; 
+    U[3] = a[3] - L[2] * U[1]; 
+    return [L, D, U];       
+}; 
+
 if(typeof(exports) !== 'undefined') {
     exports.mat2 = mat2;
 }
 ;
-/* Copyright (c) 2012, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation 
+    and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
+
+/**
+ * @class 2x3 Matrix
+ * @name mat2d
+ * 
+ * @description 
+ * A mat2d contains six elements defined as:
+ * <pre>
+ * [a, c, tx,
+ *  b, d, ty]
+ * </pre>
+ * This is a short form for the 3x3 matrix:
+ * <pre>
+ * [a, c, tx,
+ *  b, d, ty,
+ *  0, 0, 1]
+ * </pre>
+ * The last row is ignored so the array is shorter and operations are faster.
+ */
+
+var mat2d = {};
+
+/**
+ * Creates a new identity mat2d
+ *
+ * @returns {mat2d} a new 2x3 matrix
+ */
+mat2d.create = function() {
+    var out = new GLMAT_ARRAY_TYPE(6);
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 1;
+    out[4] = 0;
+    out[5] = 0;
+    return out;
+};
+
+/**
+ * Creates a new mat2d initialized with values from an existing matrix
+ *
+ * @param {mat2d} a matrix to clone
+ * @returns {mat2d} a new 2x3 matrix
+ */
+mat2d.clone = function(a) {
+    var out = new GLMAT_ARRAY_TYPE(6);
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[3];
+    out[4] = a[4];
+    out[5] = a[5];
+    return out;
+};
+
+/**
+ * Copy the values from one mat2d to another
+ *
+ * @param {mat2d} out the receiving matrix
+ * @param {mat2d} a the source matrix
+ * @returns {mat2d} out
+ */
+mat2d.copy = function(out, a) {
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[3];
+    out[4] = a[4];
+    out[5] = a[5];
+    return out;
+};
+
+/**
+ * Set a mat2d to the identity matrix
+ *
+ * @param {mat2d} out the receiving matrix
+ * @returns {mat2d} out
+ */
+mat2d.identity = function(out) {
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 1;
+    out[4] = 0;
+    out[5] = 0;
+    return out;
+};
+
+/**
+ * Inverts a mat2d
+ *
+ * @param {mat2d} out the receiving matrix
+ * @param {mat2d} a the source matrix
+ * @returns {mat2d} out
+ */
+mat2d.invert = function(out, a) {
+    var aa = a[0], ab = a[1], ac = a[2], ad = a[3],
+        atx = a[4], aty = a[5];
+
+    var det = aa * ad - ab * ac;
+    if(!det){
+        return null;
+    }
+    det = 1.0 / det;
+
+    out[0] = ad * det;
+    out[1] = -ab * det;
+    out[2] = -ac * det;
+    out[3] = aa * det;
+    out[4] = (ac * aty - ad * atx) * det;
+    out[5] = (ab * atx - aa * aty) * det;
+    return out;
+};
+
+/**
+ * Calculates the determinant of a mat2d
+ *
+ * @param {mat2d} a the source matrix
+ * @returns {Number} determinant of a
+ */
+mat2d.determinant = function (a) {
+    return a[0] * a[3] - a[1] * a[2];
+};
+
+/**
+ * Multiplies two mat2d's
+ *
+ * @param {mat2d} out the receiving matrix
+ * @param {mat2d} a the first operand
+ * @param {mat2d} b the second operand
+ * @returns {mat2d} out
+ */
+mat2d.multiply = function (out, a, b) {
+    var a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3], a4 = a[4], a5 = a[5],
+        b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3], b4 = b[4], b5 = b[5];
+    out[0] = a0 * b0 + a2 * b1;
+    out[1] = a1 * b0 + a3 * b1;
+    out[2] = a0 * b2 + a2 * b3;
+    out[3] = a1 * b2 + a3 * b3;
+    out[4] = a0 * b4 + a2 * b5 + a4;
+    out[5] = a1 * b4 + a3 * b5 + a5;
+    return out;
+};
+
+/**
+ * Alias for {@link mat2d.multiply}
+ * @function
+ */
+mat2d.mul = mat2d.multiply;
+
+
+/**
+ * Rotates a mat2d by the given angle
+ *
+ * @param {mat2d} out the receiving matrix
+ * @param {mat2d} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat2d} out
+ */
+mat2d.rotate = function (out, a, rad) {
+    var a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3], a4 = a[4], a5 = a[5],
+        s = Math.sin(rad),
+        c = Math.cos(rad);
+    out[0] = a0 *  c + a2 * s;
+    out[1] = a1 *  c + a3 * s;
+    out[2] = a0 * -s + a2 * c;
+    out[3] = a1 * -s + a3 * c;
+    out[4] = a4;
+    out[5] = a5;
+    return out;
+};
+
+/**
+ * Scales the mat2d by the dimensions in the given vec2
+ *
+ * @param {mat2d} out the receiving matrix
+ * @param {mat2d} a the matrix to translate
+ * @param {vec2} v the vec2 to scale the matrix by
+ * @returns {mat2d} out
+ **/
+mat2d.scale = function(out, a, v) {
+    var a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3], a4 = a[4], a5 = a[5],
+        v0 = v[0], v1 = v[1];
+    out[0] = a0 * v0;
+    out[1] = a1 * v0;
+    out[2] = a2 * v1;
+    out[3] = a3 * v1;
+    out[4] = a4;
+    out[5] = a5;
+    return out;
+};
+
+/**
+ * Translates the mat2d by the dimensions in the given vec2
+ *
+ * @param {mat2d} out the receiving matrix
+ * @param {mat2d} a the matrix to translate
+ * @param {vec2} v the vec2 to translate the matrix by
+ * @returns {mat2d} out
+ **/
+mat2d.translate = function(out, a, v) {
+    var a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3], a4 = a[4], a5 = a[5],
+        v0 = v[0], v1 = v[1];
+    out[0] = a0;
+    out[1] = a1;
+    out[2] = a2;
+    out[3] = a3;
+    out[4] = a0 * v0 + a2 * v1 + a4;
+    out[5] = a1 * v0 + a3 * v1 + a5;
+    return out;
+};
+
+/**
+ * Returns a string representation of a mat2d
+ *
+ * @param {mat2d} a matrix to represent as a string
+ * @returns {String} string representation of the matrix
+ */
+mat2d.str = function (a) {
+    return 'mat2d(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + 
+                    a[3] + ', ' + a[4] + ', ' + a[5] + ')';
+};
+
+/**
+ * Returns Frobenius norm of a mat2d
+ *
+ * @param {mat2d} a the matrix to calculate Frobenius norm of
+ * @returns {Number} Frobenius norm
+ */
+mat2d.frob = function (a) { 
+    return(Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2) + Math.pow(a[4], 2) + Math.pow(a[5], 2) + 1))
+}; 
+
+if(typeof(exports) !== 'undefined') {
+    exports.mat2d = mat2d;
+}
+;
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -4079,23 +6255,43 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 var mat3 = {};
 
-var mat3Identity = new Float32Array([
-    1, 0, 0,
-    0, 1, 0,
-    0, 0, 1
-]);
-
-if(!GLMAT_EPSILON) {
-    var GLMAT_EPSILON = 0.000001;
-}
-
 /**
  * Creates a new identity mat3
  *
  * @returns {mat3} a new 3x3 matrix
  */
 mat3.create = function() {
-    return new Float32Array(mat3Identity);
+    var out = new GLMAT_ARRAY_TYPE(9);
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 1;
+    out[5] = 0;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 1;
+    return out;
+};
+
+/**
+ * Copies the upper-left 3x3 values into the given mat3.
+ *
+ * @param {mat3} out the receiving 3x3 matrix
+ * @param {mat4} a   the source 4x4 matrix
+ * @returns {mat3} out
+ */
+mat3.fromMat4 = function(out, a) {
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[4];
+    out[4] = a[5];
+    out[5] = a[6];
+    out[6] = a[8];
+    out[7] = a[9];
+    out[8] = a[10];
+    return out;
 };
 
 /**
@@ -4105,7 +6301,7 @@ mat3.create = function() {
  * @returns {mat3} a new 3x3 matrix
  */
 mat3.clone = function(a) {
-    var out = new Float32Array(9);
+    var out = new GLMAT_ARRAY_TYPE(9);
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -4226,7 +6422,7 @@ mat3.invert = function(out, a) {
 };
 
 /**
- * Caclulates the adjugate of a mat3
+ * Calculates the adjugate of a mat3
  *
  * @param {mat3} out the receiving matrix
  * @param {mat3} a the source matrix
@@ -4271,7 +6467,7 @@ mat3.determinant = function (a) {
  * @param {mat3} b the second operand
  * @returns {mat3} out
  */
-mat3.mul = mat3.multiply = function (out, a, b) {
+mat3.multiply = function (out, a, b) {
     var a00 = a[0], a01 = a[1], a02 = a[2],
         a10 = a[3], a11 = a[4], a12 = a[5],
         a20 = a[6], a21 = a[7], a22 = a[8],
@@ -4295,6 +6491,206 @@ mat3.mul = mat3.multiply = function (out, a, b) {
 };
 
 /**
+ * Alias for {@link mat3.multiply}
+ * @function
+ */
+mat3.mul = mat3.multiply;
+
+/**
+ * Translate a mat3 by the given vector
+ *
+ * @param {mat3} out the receiving matrix
+ * @param {mat3} a the matrix to translate
+ * @param {vec2} v vector to translate by
+ * @returns {mat3} out
+ */
+mat3.translate = function(out, a, v) {
+    var a00 = a[0], a01 = a[1], a02 = a[2],
+        a10 = a[3], a11 = a[4], a12 = a[5],
+        a20 = a[6], a21 = a[7], a22 = a[8],
+        x = v[0], y = v[1];
+
+    out[0] = a00;
+    out[1] = a01;
+    out[2] = a02;
+
+    out[3] = a10;
+    out[4] = a11;
+    out[5] = a12;
+
+    out[6] = x * a00 + y * a10 + a20;
+    out[7] = x * a01 + y * a11 + a21;
+    out[8] = x * a02 + y * a12 + a22;
+    return out;
+};
+
+/**
+ * Rotates a mat3 by the given angle
+ *
+ * @param {mat3} out the receiving matrix
+ * @param {mat3} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat3} out
+ */
+mat3.rotate = function (out, a, rad) {
+    var a00 = a[0], a01 = a[1], a02 = a[2],
+        a10 = a[3], a11 = a[4], a12 = a[5],
+        a20 = a[6], a21 = a[7], a22 = a[8],
+
+        s = Math.sin(rad),
+        c = Math.cos(rad);
+
+    out[0] = c * a00 + s * a10;
+    out[1] = c * a01 + s * a11;
+    out[2] = c * a02 + s * a12;
+
+    out[3] = c * a10 - s * a00;
+    out[4] = c * a11 - s * a01;
+    out[5] = c * a12 - s * a02;
+
+    out[6] = a20;
+    out[7] = a21;
+    out[8] = a22;
+    return out;
+};
+
+/**
+ * Scales the mat3 by the dimensions in the given vec2
+ *
+ * @param {mat3} out the receiving matrix
+ * @param {mat3} a the matrix to rotate
+ * @param {vec2} v the vec2 to scale the matrix by
+ * @returns {mat3} out
+ **/
+mat3.scale = function(out, a, v) {
+    var x = v[0], y = v[1];
+
+    out[0] = x * a[0];
+    out[1] = x * a[1];
+    out[2] = x * a[2];
+
+    out[3] = y * a[3];
+    out[4] = y * a[4];
+    out[5] = y * a[5];
+
+    out[6] = a[6];
+    out[7] = a[7];
+    out[8] = a[8];
+    return out;
+};
+
+/**
+ * Copies the values from a mat2d into a mat3
+ *
+ * @param {mat3} out the receiving matrix
+ * @param {mat2d} a the matrix to copy
+ * @returns {mat3} out
+ **/
+mat3.fromMat2d = function(out, a) {
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = 0;
+
+    out[3] = a[2];
+    out[4] = a[3];
+    out[5] = 0;
+
+    out[6] = a[4];
+    out[7] = a[5];
+    out[8] = 1;
+    return out;
+};
+
+/**
+* Calculates a 3x3 matrix from the given quaternion
+*
+* @param {mat3} out mat3 receiving operation result
+* @param {quat} q Quaternion to create matrix from
+*
+* @returns {mat3} out
+*/
+mat3.fromQuat = function (out, q) {
+    var x = q[0], y = q[1], z = q[2], w = q[3],
+        x2 = x + x,
+        y2 = y + y,
+        z2 = z + z,
+
+        xx = x * x2,
+        yx = y * x2,
+        yy = y * y2,
+        zx = z * x2,
+        zy = z * y2,
+        zz = z * z2,
+        wx = w * x2,
+        wy = w * y2,
+        wz = w * z2;
+
+    out[0] = 1 - yy - zz;
+    out[3] = yx - wz;
+    out[6] = zx + wy;
+
+    out[1] = yx + wz;
+    out[4] = 1 - xx - zz;
+    out[7] = zy - wx;
+
+    out[2] = zx - wy;
+    out[5] = zy + wx;
+    out[8] = 1 - xx - yy;
+
+    return out;
+};
+
+/**
+* Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix
+*
+* @param {mat3} out mat3 receiving operation result
+* @param {mat4} a Mat4 to derive the normal matrix from
+*
+* @returns {mat3} out
+*/
+mat3.normalFromMat4 = function (out, a) {
+    var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
+        a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
+        a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11],
+        a30 = a[12], a31 = a[13], a32 = a[14], a33 = a[15],
+
+        b00 = a00 * a11 - a01 * a10,
+        b01 = a00 * a12 - a02 * a10,
+        b02 = a00 * a13 - a03 * a10,
+        b03 = a01 * a12 - a02 * a11,
+        b04 = a01 * a13 - a03 * a11,
+        b05 = a02 * a13 - a03 * a12,
+        b06 = a20 * a31 - a21 * a30,
+        b07 = a20 * a32 - a22 * a30,
+        b08 = a20 * a33 - a23 * a30,
+        b09 = a21 * a32 - a22 * a31,
+        b10 = a21 * a33 - a23 * a31,
+        b11 = a22 * a33 - a23 * a32,
+
+        // Calculate the determinant
+        det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+
+    if (!det) { 
+        return null; 
+    }
+    det = 1.0 / det;
+
+    out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+    out[1] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+    out[2] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+
+    out[3] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+    out[4] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+    out[5] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+
+    out[6] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+    out[7] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+    out[8] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+
+    return out;
+};
+
+/**
  * Returns a string representation of a mat3
  *
  * @param {mat3} mat matrix to represent as a string
@@ -4306,11 +6702,22 @@ mat3.str = function (a) {
                     a[6] + ', ' + a[7] + ', ' + a[8] + ')';
 };
 
+/**
+ * Returns Frobenius norm of a mat3
+ *
+ * @param {mat3} a the matrix to calculate Frobenius norm of
+ * @returns {Number} Frobenius norm
+ */
+mat3.frob = function (a) {
+    return(Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2) + Math.pow(a[4], 2) + Math.pow(a[5], 2) + Math.pow(a[6], 2) + Math.pow(a[7], 2) + Math.pow(a[8], 2)))
+};
+
+
 if(typeof(exports) !== 'undefined') {
     exports.mat3 = mat3;
 }
 ;
-/* Copyright (c) 2012, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -4339,24 +6746,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 var mat4 = {};
 
-var mat4Identity = new Float32Array([
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 1
-]);
-
-if(!GLMAT_EPSILON) {
-    var GLMAT_EPSILON = 0.000001;
-}
-
 /**
  * Creates a new identity mat4
  *
  * @returns {mat4} a new 4x4 matrix
  */
 mat4.create = function() {
-    return new Float32Array(mat4Identity);
+    var out = new GLMAT_ARRAY_TYPE(16);
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = 1;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = 1;
+    out[11] = 0;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+    return out;
 };
 
 /**
@@ -4366,7 +6779,7 @@ mat4.create = function() {
  * @returns {mat4} a new 4x4 matrix
  */
 mat4.clone = function(a) {
-    var out = new Float32Array(16);
+    var out = new GLMAT_ARRAY_TYPE(16);
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -4542,7 +6955,7 @@ mat4.invert = function(out, a) {
 };
 
 /**
- * Caclulates the adjugate of a mat4
+ * Calculates the adjugate of a mat4
  *
  * @param {mat4} out the receiving matrix
  * @param {mat4} a the source matrix
@@ -4610,7 +7023,7 @@ mat4.determinant = function (a) {
  * @param {mat4} b the second operand
  * @returns {mat4} out
  */
-mat4.mul = mat4.multiply = function (out, a, b) {
+mat4.multiply = function (out, a, b) {
     var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
         a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
         a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11],
@@ -4642,6 +7055,12 @@ mat4.mul = mat4.multiply = function (out, a, b) {
     out[15] = b0*a03 + b1*a13 + b2*a23 + b3*a33;
     return out;
 };
+
+/**
+ * Alias for {@link mat4.multiply}
+ * @function
+ */
+mat4.mul = mat4.multiply;
 
 /**
  * Translate a mat4 by the given vector
@@ -4954,6 +7373,45 @@ mat4.fromRotationTranslation = function (out, q, v) {
     return out;
 };
 
+mat4.fromQuat = function (out, q) {
+    var x = q[0], y = q[1], z = q[2], w = q[3],
+        x2 = x + x,
+        y2 = y + y,
+        z2 = z + z,
+
+        xx = x * x2,
+        yx = y * x2,
+        yy = y * y2,
+        zx = z * x2,
+        zy = z * y2,
+        zz = z * z2,
+        wx = w * x2,
+        wy = w * y2,
+        wz = w * z2;
+
+    out[0] = 1 - yy - zz;
+    out[1] = yx + wz;
+    out[2] = zx - wy;
+    out[3] = 0;
+
+    out[4] = yx - wz;
+    out[5] = 1 - xx - zz;
+    out[6] = zy + wx;
+    out[7] = 0;
+
+    out[8] = zx + wy;
+    out[9] = zy - wx;
+    out[10] = 1 - xx - yy;
+    out[11] = 0;
+
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+
+    return out;
+};
+
 /**
  * Generates a frustum matrix with the given bounds
  *
@@ -5156,11 +7614,22 @@ mat4.str = function (a) {
                     a[12] + ', ' + a[13] + ', ' + a[14] + ', ' + a[15] + ')';
 };
 
+/**
+ * Returns Frobenius norm of a mat4
+ *
+ * @param {mat4} a the matrix to calculate Frobenius norm of
+ * @returns {Number} Frobenius norm
+ */
+mat4.frob = function (a) {
+    return(Math.sqrt(Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2) + Math.pow(a[4], 2) + Math.pow(a[5], 2) + Math.pow(a[6], 2) + Math.pow(a[6], 2) + Math.pow(a[7], 2) + Math.pow(a[8], 2) + Math.pow(a[9], 2) + Math.pow(a[10], 2) + Math.pow(a[11], 2) + Math.pow(a[12], 2) + Math.pow(a[13], 2) + Math.pow(a[14], 2) + Math.pow(a[15], 2) ))
+};
+
+
 if(typeof(exports) !== 'undefined') {
     exports.mat4 = mat4;
 }
 ;
-/* Copyright (c) 2012, Brandon Jones, Colin MacKenzie IV. All rights reserved.
+/* Copyright (c) 2013, Brandon Jones, Colin MacKenzie IV. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -5189,26 +7658,98 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 var quat = {};
 
-var quatIdentity = new Float32Array([0, 0, 0, 1]);
-
-if(!GLMAT_EPSILON) {
-    var GLMAT_EPSILON = 0.000001;
-}
-
 /**
  * Creates a new identity quat
  *
  * @returns {quat} a new quaternion
  */
 quat.create = function() {
-    return new Float32Array(quatIdentity);
+    var out = new GLMAT_ARRAY_TYPE(4);
+    out[0] = 0;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 1;
+    return out;
 };
+
+/**
+ * Sets a quaternion to represent the shortest rotation from one
+ * vector to another.
+ *
+ * Both vectors are assumed to be unit length.
+ *
+ * @param {quat} out the receiving quaternion.
+ * @param {vec3} a the initial vector
+ * @param {vec3} b the destination vector
+ * @returns {quat} out
+ */
+quat.rotationTo = (function() {
+    var tmpvec3 = vec3.create();
+    var xUnitVec3 = vec3.fromValues(1,0,0);
+    var yUnitVec3 = vec3.fromValues(0,1,0);
+
+    return function(out, a, b) {
+        var dot = vec3.dot(a, b);
+        if (dot < -0.999999) {
+            vec3.cross(tmpvec3, xUnitVec3, a);
+            if (vec3.length(tmpvec3) < 0.000001)
+                vec3.cross(tmpvec3, yUnitVec3, a);
+            vec3.normalize(tmpvec3, tmpvec3);
+            quat.setAxisAngle(out, tmpvec3, Math.PI);
+            return out;
+        } else if (dot > 0.999999) {
+            out[0] = 0;
+            out[1] = 0;
+            out[2] = 0;
+            out[3] = 1;
+            return out;
+        } else {
+            vec3.cross(tmpvec3, a, b);
+            out[0] = tmpvec3[0];
+            out[1] = tmpvec3[1];
+            out[2] = tmpvec3[2];
+            out[3] = 1 + dot;
+            return quat.normalize(out, out);
+        }
+    };
+})();
+
+/**
+ * Sets the specified quaternion with values corresponding to the given
+ * axes. Each axis is a vec3 and is expected to be unit length and
+ * perpendicular to all other specified axes.
+ *
+ * @param {vec3} view  the vector representing the viewing direction
+ * @param {vec3} right the vector representing the local "right" direction
+ * @param {vec3} up    the vector representing the local "up" direction
+ * @returns {quat} out
+ */
+quat.setAxes = (function() {
+    var matr = mat3.create();
+
+    return function(out, view, right, up) {
+        matr[0] = right[0];
+        matr[3] = right[1];
+        matr[6] = right[2];
+
+        matr[1] = up[0];
+        matr[4] = up[1];
+        matr[7] = up[2];
+
+        matr[2] = -view[0];
+        matr[5] = -view[1];
+        matr[8] = -view[2];
+
+        return quat.normalize(out, quat.fromMat3(out, matr));
+    };
+})();
 
 /**
  * Creates a new quat initialized with values from an existing quaternion
  *
  * @param {quat} a quaternion to clone
  * @returns {quat} a new quaternion
+ * @function
  */
 quat.clone = vec4.clone;
 
@@ -5220,6 +7761,7 @@ quat.clone = vec4.clone;
  * @param {Number} z Z component
  * @param {Number} w W component
  * @returns {quat} a new quaternion
+ * @function
  */
 quat.fromValues = vec4.fromValues;
 
@@ -5229,6 +7771,7 @@ quat.fromValues = vec4.fromValues;
  * @param {quat} out the receiving quaternion
  * @param {quat} a the source quaternion
  * @returns {quat} out
+ * @function
  */
 quat.copy = vec4.copy;
 
@@ -5241,6 +7784,7 @@ quat.copy = vec4.copy;
  * @param {Number} z Z component
  * @param {Number} w W component
  * @returns {quat} out
+ * @function
  */
 quat.set = vec4.set;
 
@@ -5284,6 +7828,7 @@ quat.setAxisAngle = function(out, axis, rad) {
  * @param {quat} a the first operand
  * @param {quat} b the second operand
  * @returns {quat} out
+ * @function
  */
 quat.add = vec4.add;
 
@@ -5295,7 +7840,7 @@ quat.add = vec4.add;
  * @param {quat} b the second operand
  * @returns {quat} out
  */
-quat.mul = quat.multiply = function(out, a, b) {
+quat.multiply = function(out, a, b) {
     var ax = a[0], ay = a[1], az = a[2], aw = a[3],
         bx = b[0], by = b[1], bz = b[2], bw = b[3];
 
@@ -5307,17 +7852,24 @@ quat.mul = quat.multiply = function(out, a, b) {
 };
 
 /**
+ * Alias for {@link quat.multiply}
+ * @function
+ */
+quat.mul = quat.multiply;
+
+/**
  * Scales a quat by a scalar number
  *
  * @param {quat} out the receiving vector
  * @param {quat} a the vector to scale
- * @param {quat} b amount to scale the vector by
+ * @param {Number} b amount to scale the vector by
  * @returns {quat} out
+ * @function
  */
 quat.scale = vec4.scale;
 
 /**
- * Rotates a quaternion by the given angle around the X axis
+ * Rotates a quaternion by the given angle about the X axis
  *
  * @param {quat} out quat receiving operation result
  * @param {quat} a quat to rotate
@@ -5338,7 +7890,7 @@ quat.rotateX = function (out, a, rad) {
 };
 
 /**
- * Rotates a quaternion by the given angle around the X axis
+ * Rotates a quaternion by the given angle about the Y axis
  *
  * @param {quat} out quat receiving operation result
  * @param {quat} a quat to rotate
@@ -5359,7 +7911,7 @@ quat.rotateY = function (out, a, rad) {
 };
 
 /**
- * Rotates a quaternion by the given angle around the X axis
+ * Rotates a quaternion by the given angle about the Z axis
  *
  * @param {quat} out quat receiving operation result
  * @param {quat} a quat to rotate
@@ -5399,11 +7951,12 @@ quat.calculateW = function (out, a) {
 };
 
 /**
- * Caclulates the dot product of two quat's
+ * Calculates the dot product of two quat's
  *
  * @param {quat} a the first operand
  * @param {quat} b the second operand
  * @returns {Number} dot product of a and b
+ * @function
  */
 quat.dot = vec4.dot;
 
@@ -5415,6 +7968,7 @@ quat.dot = vec4.dot;
  * @param {quat} b the second operand
  * @param {Number} t interpolation amount between the two inputs
  * @returns {quat} out
+ * @function
  */
 quat.lerp = vec4.lerp;
 
@@ -5428,44 +7982,43 @@ quat.lerp = vec4.lerp;
  * @returns {quat} out
  */
 quat.slerp = function (out, a, b, t) {
+    // benchmarks:
+    //    http://jsperf.com/quaternion-slerp-implementations
+
     var ax = a[0], ay = a[1], az = a[2], aw = a[3],
-        bx = b[0], by = b[1], bz = b[2], bw = a[3];
+        bx = b[0], by = b[1], bz = b[2], bw = b[3];
 
-    var cosHalfTheta = ax * bx + ay * by + az * bz + aw * bw,
-        halfTheta,
-        sinHalfTheta,
-        ratioA,
-        ratioB;
+    var        omega, cosom, sinom, scale0, scale1;
 
-    if (Math.abs(cosHalfTheta) >= 1.0) {
-        if (out !== a) {
-            out[0] = ax;
-            out[1] = ay;
-            out[2] = az;
-            out[3] = aw;
-        }
-        return out;
+    // calc cosine
+    cosom = ax * bx + ay * by + az * bz + aw * bw;
+    // adjust signs (if necessary)
+    if ( cosom < 0.0 ) {
+        cosom = -cosom;
+        bx = - bx;
+        by = - by;
+        bz = - bz;
+        bw = - bw;
     }
-
-    halfTheta = Math.acos(cosHalfTheta);
-    sinHalfTheta = Math.sqrt(1.0 - cosHalfTheta * cosHalfTheta);
-
-    if (Math.abs(sinHalfTheta) < 0.001) {
-        out[0] = (ax * 0.5 + bx * 0.5);
-        out[1] = (ay * 0.5 + by * 0.5);
-        out[2] = (az * 0.5 + bz * 0.5);
-        out[3] = (aw * 0.5 + bw * 0.5);
-        return out;
+    // calculate coefficients
+    if ( (1.0 - cosom) > 0.000001 ) {
+        // standard case (slerp)
+        omega  = Math.acos(cosom);
+        sinom  = Math.sin(omega);
+        scale0 = Math.sin((1.0 - t) * omega) / sinom;
+        scale1 = Math.sin(t * omega) / sinom;
+    } else {        
+        // "from" and "to" quaternions are very close 
+        //  ... so we can do a linear interpolation
+        scale0 = 1.0 - t;
+        scale1 = t;
     }
-
-    ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta;
-    ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
-
-    out[0] = (ax * ratioA + bx * ratioB);
-    out[1] = (ay * ratioA + by * ratioB);
-    out[2] = (az * ratioA + bz * ratioB);
-    out[3] = (aw * ratioA + bw * ratioB);
-
+    // calculate final values
+    out[0] = scale0 * ax + scale1 * bx;
+    out[1] = scale0 * ay + scale1 * by;
+    out[2] = scale0 * az + scale1 * bz;
+    out[3] = scale0 * aw + scale1 * bw;
+    
     return out;
 };
 
@@ -5507,20 +8060,34 @@ quat.conjugate = function (out, a) {
 };
 
 /**
- * Caclulates the length of a quat
+ * Calculates the length of a quat
  *
  * @param {quat} a vector to calculate length of
  * @returns {Number} length of a
+ * @function
  */
-quat.len = quat.length = vec4.length;
+quat.length = vec4.length;
 
 /**
- * Caclulates the squared length of a quat
+ * Alias for {@link quat.length}
+ * @function
+ */
+quat.len = quat.length;
+
+/**
+ * Calculates the squared length of a quat
  *
  * @param {quat} a vector to calculate squared length of
  * @returns {Number} squared length of a
+ * @function
  */
-quat.sqrLen = quat.squaredLength = vec4.squaredLength;
+quat.squaredLength = vec4.squaredLength;
+
+/**
+ * Alias for {@link quat.squaredLength}
+ * @function
+ */
+quat.sqrLen = quat.squaredLength;
 
 /**
  * Normalize a quat
@@ -5528,8 +8095,55 @@ quat.sqrLen = quat.squaredLength = vec4.squaredLength;
  * @param {quat} out the receiving quaternion
  * @param {quat} a quaternion to normalize
  * @returns {quat} out
+ * @function
  */
 quat.normalize = vec4.normalize;
+
+/**
+ * Creates a quaternion from the given 3x3 rotation matrix.
+ *
+ * NOTE: The resultant quaternion is not normalized, so you should be sure
+ * to renormalize the quaternion yourself where necessary.
+ *
+ * @param {quat} out the receiving quaternion
+ * @param {mat3} m rotation matrix
+ * @returns {quat} out
+ * @function
+ */
+quat.fromMat3 = function(out, m) {
+    // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
+    // article "Quaternion Calculus and Fast Animation".
+    var fTrace = m[0] + m[4] + m[8];
+    var fRoot;
+
+    if ( fTrace > 0.0 ) {
+        // |w| > 1/2, may as well choose w > 1/2
+        fRoot = Math.sqrt(fTrace + 1.0);  // 2w
+        out[3] = 0.5 * fRoot;
+        fRoot = 0.5/fRoot;  // 1/(4w)
+        out[0] = (m[7]-m[5])*fRoot;
+        out[1] = (m[2]-m[6])*fRoot;
+        out[2] = (m[3]-m[1])*fRoot;
+    } else {
+        // |w| <= 1/2
+        var i = 0;
+        if ( m[4] > m[0] )
+          i = 1;
+        if ( m[8] > m[i*3+i] )
+          i = 2;
+        var j = (i+1)%3;
+        var k = (i+2)%3;
+        
+        fRoot = Math.sqrt(m[i*3+i]-m[j*3+j]-m[k*3+k] + 1.0);
+        out[i] = 0.5 * fRoot;
+        fRoot = 0.5 / fRoot;
+        out[3] = (m[k*3+j] - m[j*3+k]) * fRoot;
+        out[j] = (m[j*3+i] + m[i*3+j]) * fRoot;
+        out[k] = (m[k*3+i] + m[i*3+k]) * fRoot;
+    }
+    
+    return out;
+};
 
 /**
  * Returns a string representation of a quatenion
@@ -5555,12 +8169,14 @@ if(typeof(exports) !== 'undefined') {
 
 
 
-  })(shim.exports);
-})();
 
-})()
-},{}],20:[function(require,module,exports){
-(function(){//     Underscore.js 1.4.4
+
+
+  })(shim.exports);
+})(this);
+
+},{}],24:[function(require,module,exports){
+//     Underscore.js 1.4.4
 //     http://underscorejs.org
 //     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud Inc.
 //     Underscore may be freely distributed under the MIT license.
@@ -6787,18 +9403,18 @@ if(typeof(exports) !== 'undefined') {
 
 }).call(this);
 
-})()
-},{}],21:[function(require,module,exports){
-window.requestAnimFrame = (function() {
-  return  window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame   ||
-  window.mozRequestAnimationFrame      ||
-  window.oRequestAnimationFrame        ||
-  window.msRequestAnimationFrame       ||
-  function(callback) { window.setTimeout(callback, 1000 / 60); }
-})();
+},{}],25:[function(require,module,exports){
+if (typeof(window) !== 'undefined' && typeof(window.requestAnimationFrame) !== 'function') {
+  window.requestAnimationFrame = (
+    window.webkitRequestAnimationFrame   ||
+    window.mozRequestAnimationFrame      ||
+    window.oRequestAnimationFrame        ||
+    window.msRequestAnimationFrame       ||
+    function(callback) { setTimeout(callback, 1000 / 60); }
+  );
+}
 
 Leap = require("../lib/index");
 
-},{"../lib/index":8}]},{},[21])
+},{"../lib/index":11}]},{},[25])
 ;
